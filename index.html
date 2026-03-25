@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Login</title>
+  <script src="src/js/index.js" defer></script>
+  <link rel="stylesheet" href="src/css/index.css" />
+</head>
+<body>
+  <div class="login-container" role="form" aria-labelledby="login-title">
+    
+    <h1 class="login-title" id="login-title">Admin Login</h1>
+
+    <div id="error-message" class="error-message" role="alert" aria-live="polite">
+      Invalid email or password. Please try again.
+    </div>
+
+ 
+    <div class="input-group">
+      <input type="email" id="username" name="username" placeholder="Email" autocomplete="email" aria-label="Admin Email" required />
+      <svg class="input-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+      </svg>
+    </div>
+
+    <div class="input-group">
+      <input type="password" id="password" name="password" placeholder="Password" autocomplete="current-password" aria-label="Password" required />
+      <svg class="input-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M12 17a2 2 0 0 0 2-2v-3a2 2 0 1 0-4 0v3a2 2 0 0 0 2 2zm6-3h-1V9a5 5 0 0 0-10 0v5H6a2 2 0 0 0-2 2v3h16v-3a2 2 0 0 0-2-2z"/>
+      </svg>
+    </div>
+
+    <div class="options">
+      <label class="checkbox-group">
+        <input type="checkbox" id="remember" name="remember" />
+        Keep me signed in
+      </label>
+    </div>
+
+    <button type="submit" class="btn-login" id="login-btn" aria-label="Login to admin panel">
+      Access Admin
+    </button>
+
+    <p class="bottom-text">
+      Authorized personnel only
+    </p>
+  </div>
+</body>
+</html>
