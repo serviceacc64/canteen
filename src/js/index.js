@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Redirect to dashboard
-        window.location.href = 'dashboard.html';
+        window.location.href = 'src/pages/dashboard.html';
       } else {
         // Failed login
         showError('Invalid email or password. Please try again.');
