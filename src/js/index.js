@@ -49,8 +49,8 @@ document.addEventListener('DOMContentLoaded', function() {
           localStorage.removeItem('rememberMe');
         }
         
-        // Correct path from index.html to dashboard.html
-        window.location.href = 'src/pages/dashboard.html';
+        // Redirect to dashboard
+        window.location.href = 'dashboard.html';
       } else {
         // Failed login
         showError('Invalid email or password. Please try again.');
