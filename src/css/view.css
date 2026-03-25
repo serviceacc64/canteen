@@ -1,0 +1,623 @@
+/* View page specific overrides - ensure sidebar content visible */
+
+/* Force sidebar expanded initially if needed */
+body:not(.sidebar-collapsed) .sidebar {
+  width: 280px !important;
+}
+
+/* Ensure nav labels visible */
+.nav-label {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Main content adjustments */
+.main-content {
+  margin-left: 280px;
+  transition: margin-left 0.22s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+body.sidebar-collapsed .main-content {
+  margin-left: 72px;
+}
+
+/* Responsive for view page */
+/* Report Styles - Aligned with Modern Design System */
+.report-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 40px 24px;
+    margin-bottom: 0;
+    gap: 24px;
+}
+
+.report-header-flex h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--navy-950);
+    margin: 0 0 8px 0;
+    letter-spacing: -0.02em;
+}
+
+.report-header-flex .subtitle {
+    color: var(--navy-600);
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+/* Report Header Flex - Perfect Alignment */
+.report-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 40px 24px;
+    margin-bottom: 0;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.report-header-flex > div:first-child {
+    flex: 1;
+    min-width: 0; /* Prevents overflow */
+}
+
+/* Actions Container - Fixed Layout */
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+/* Primary Actions - Larger buttons, left-aligned */
+.actions-primary {
+    display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+/* Secondary Actions - Compact buttons, right-aligned */
+.actions-secondary {
+    display: flex;
+    gap: 8px;
+    margin-left: auto; /* Pushes to right */
+    flex-shrink: 0;
+}
+
+/* Primary Buttons (Print/Export) */
+.btn-print, .btn-export {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    min-height: 48px;
+    font-family: inherit;
+}
+
+.btn-print {
+    background: var(--white);
+    color: var(--navy-700);
+    border: 1px solid var(--white-75);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-print:hover {
+    background: var(--white-98);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.btn-export {
+    background: linear-gradient(135deg, var(--blue-700) 0%, var(--blue-600) 100%);
+    color: var(--white);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--blue-500);
+}
+
+.btn-export:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* Secondary Buttons (Edit/Delete) - Compact */
+.btn-edit, .btn-delete {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px; /* Tighter gap for compact buttons */
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 42px;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+/* Edit Button */
+.btn-edit {
+    background: var(--white);
+    color: var(--blue-700);
+    border-color: var(--blue-300);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-edit:hover {
+    background: var(--blue-50, #eff6ff);
+    border-color: var(--blue-400);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+/* Delete Button */
+.btn-delete {
+    background: var(--white);
+    color: var(--red-700, #dc2626);
+    border-color: var(--red-300, #fca5a5);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-delete:hover {
+    background: var(--red-50, #fef2f2);
+    border-color: var(--red-400, #f87171);
+    color: var(--red-700, #dc2626);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+/* Icon Styles - Unified */
+.btn-print svg, .btn-export svg, 
+.btn-edit svg, .btn-delete svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    flex-shrink: 0;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-print:hover svg,
+.btn-edit:hover svg,
+.btn-delete:hover svg {
+    transform: scale(1.05);
+}
+
+/* Color Variables (add to :root if missing) */
+:root {
+    --red-50: #fef2f2;
+    --red-300: #fca5a5;
+    --red-400: #f87171;
+    --red-700: #dc2626;
+    --blue-50: #eff6ff;
+}
+
+/* Responsive - Perfect Mobile Layout */
+@media (max-width: 992px) {
+    .report-header-flex {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+        padding: 0 24px 20px;
+    }
+    
+    .actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    
+    .actions-primary,
+    .actions-secondary {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+    }
+    
+    .actions-primary {
+        order: 1;
+    }
+    
+    .actions-secondary {
+        order: 2;
+    }
+}
+
+@media (max-width: 480px) {
+    .report-header-flex {
+        padding: 0 16px 16px;
+    }
+    
+    .btn-edit, .btn-delete {
+        padding: 12px 16px;
+        gap: 8px;
+    }
+    
+    .btn-print, .btn-export {
+        padding: 12px 20px;
+    }
+}
+/* Main content padding adjustment */
+.top-content main {
+    padding: 0 40px 40px;
+}
+
+/* Report Container - Modern Glassmorphism */
+.report-container {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    color: var(--navy-900);
+    margin-top: 24px;
+    border: 1px solid var(--white-90);
+    backdrop-filter: blur(20px);
+}
+
+.canteen-center-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--white-85);
+}
+
+.school-name { 
+    font-size: 13px; 
+    color: var(--navy-500); 
+    letter-spacing: 0.08em; 
+    text-transform: uppercase; 
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.main-report-title { 
+    font-size: 28px; 
+    margin: 0 0 12px 0; 
+    font-weight: 800; 
+    color: var(--navy-950);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.canteen-id { 
+    color: var(--blue-700); 
+    font-weight: 700; 
+    font-size: 18px; 
+    margin-bottom: 8px;
+    letter-spacing: 0.025em;
+}
+
+.report-date { 
+    color: var(--navy-500); 
+    font-size: 15px; 
+    font-weight: 500;
+}
+
+/* Report Grid Layout - Modern spacing */
+.report-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 48px;
+}
+
+.report-section { 
+    margin-bottom: 32px; 
+}
+
+.section-subtitle { 
+    font-size: 12px; 
+    color: var(--navy-500); 
+    text-transform: uppercase; 
+    font-weight: 700; 
+    margin-bottom: 16px; 
+    display: block;
+    letter-spacing: 0.06em;
+}
+
+.section-title-blue { 
+    color: var(--blue-700); 
+    font-size: 14px; 
+    font-weight: 700; 
+    margin-bottom: 20px; 
+    text-transform: uppercase; 
+    letter-spacing: 0.05em;
+    position: relative;
+}
+
+.section-title-blue::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(135deg, var(--blue-600), var(--blue-500));
+    border-radius: 2px;
+}
+
+/* Report Rows - Enhanced */
+.report-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    font-size: 15px;
+    border-bottom: 1px solid var(--white-90);
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.report-row:hover {
+    background: var(--white-98);
+    border-radius: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.report-row strong {
+    font-weight: 700;
+}
+
+.indent-1 { 
+    padding-left: 28px; 
+    color: var(--navy-600); 
+    font-weight: 500;
+}
+
+.group-label { 
+    font-weight: 700; 
+    margin: 16px 0 12px 0; 
+    font-size: 14px; 
+    background: linear-gradient(135deg, var(--blue-50, #eff6ff) 0%, var(--white-95) 100%);
+    padding: 10px 16px; 
+    border-radius: 10px;
+    border: 1px solid var(--blue-100, #dbeafe);
+    color: var(--navy-700);
+}
+
+/* Highlight States */
+.highlight-green { 
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    padding: 16px 20px; 
+    border-radius: 12px; 
+    margin: 16px 0 0 0; 
+    border: 1px solid #10b981;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+
+.highlight-gray { 
+    background: var(--white-95);
+    padding: 16px 20px; 
+    border-radius: 12px; 
+    border: 1px solid var(--white-80);
+}
+
+.highlight-row {
+    border-top: 2px dashed var(--blue-300);
+    margin-top: 16px;
+    padding-top: 16px;
+}
+
+.note { 
+    color: var(--navy-500); 
+    font-size: 13px; 
+    font-style: italic; 
+    margin-top: 8px; 
+    font-weight: 500;
+}
+
+.total-calc { 
+    font-weight: 800; 
+    border-top: 3px solid var(--navy-900); 
+    margin-top: 12px; 
+    padding-top: 16px; 
+    font-size: 18px; 
+    border-bottom: none;
+    color: var(--navy-950);
+    letter-spacing: -0.015em;
+}
+
+.total-expenses-row {
+    border-top: 2px solid var(--navy-200, #e5e7eb);
+    margin-top: 12px;
+    padding-top: 16px;
+}
+
+/* Salary Box - Modern Design */
+.salary-box {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    padding: 28px;
+    border-radius: 16px;
+    margin-bottom: 32px;
+    border: 1px solid var(--blue-200, #bfdbfe);
+    box-shadow: var(--shadow-md);
+}
+
+.salary-table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    font-size: 14px; 
+    color: var(--navy-800);
+}
+
+.salary-table th { 
+    text-align: left; 
+    color: var(--navy-600); 
+    font-weight: 600;
+    padding: 0 0 16px 0;
+    border-bottom: 2px solid var(--blue-200);
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+}
+
+.salary-table th:last-child {
+    text-align: right;
+}
+
+.salary-table td { 
+    padding: 14px 0; 
+    border-bottom: 1px solid var(--white-85); 
+    vertical-align: top;
+}
+
+.salary-table tbody tr:hover {
+    background: var(--white-98);
+}
+
+.salary-table tfoot { 
+    font-weight: 700; 
+    color: var(--navy-950);
+}
+
+.salary-table tfoot td { 
+    border-top: 3px solid var(--blue-300); 
+    padding: 16px 0 0 0; 
+    font-size: 16px;
+}
+
+.salary-table tfoot td:last-child {
+    text-align: right;
+    color: var(--blue-700);
+}
+
+/* Final Summary - Hero Section */
+.final-summary {
+    background: linear-gradient(135deg, var(--blue-700) 0%, var(--blue-600) 50%, var(--blue-800) 100%);
+    padding: 32px;
+    border-radius: 20px;
+    color: var(--white);
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--blue-500);
+    backdrop-filter: blur(20px);
+}
+
+.final-summary .report-row { 
+    border-bottom: 1px solid rgba(255,255,255,0.15); 
+    color: var(--white-95);
+    font-size: 16px;
+    padding: 16px 0;
+}
+
+.final-summary .report-row:last-child {
+    border-bottom: none;
+}
+
+.note-small { 
+    font-weight: 500; 
+    font-size: 13px; 
+    opacity: 0.9; 
+    margin: 16px 0 24px 0; 
+}
+
+.profit-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 3px solid rgba(255,255,255,0.25);
+    padding-top: 24px;
+    margin-top: 20px;
+}
+
+.profit-val { 
+    font-size: 32px; 
+    font-weight: 800; 
+    background: linear-gradient(135deg, var(--white-98) 0%, var(--white) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.03em;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .top-content main {
+        padding: 0 24px 32px;
+    }
+    
+    .report-header-flex {
+        padding: 0 24px 20px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+    }
+    
+    .actions {
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 992px) {
+    .report-grid { 
+        grid-template-columns: 1fr; 
+        gap: 32px;
+    }
+    
+    .report-container {
+        padding: 28px;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-content {
+        margin-left: 0;
+    }
+    
+    .top-content main {
+        padding: 0 20px 24px;
+    }
+    
+    .report-container {
+        padding: 24px;
+        border-radius: 16px;
+    }
+    
+    .report-header-flex h1 {
+        font-size: 26px;
+    }
+    
+    .canteen-center-header {
+        margin-bottom: 28px;
+        padding-bottom: 20px;
+    }
+    
+    .main-report-title {
+        font-size: 24px;
+    }
+    
+    .profit-val {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .report-header-flex {
+        padding: 0 16px 16px;
+    }
+    
+    .actions {
+        flex-direction: column;
+    }
+    
+    .btn-print, .btn-export {
+        width: 100%;
+    }
+    
+    .report-container {
+        padding: 20px;
+        margin-top: 16px;
+    }
+}

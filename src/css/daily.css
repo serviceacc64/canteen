@@ -1,0 +1,439 @@
+
+  .main-content-inner {
+    padding: 20px 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+
+  /* Title Section */
+  .title-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .title-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .back-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: #f1f5f9;
+    border-radius: 12px;
+    font-size: 20px;
+    color: #64748b;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .back-arrow:hover {
+    background: #e2e8f0;
+    color: #1e3a8a;
+    transform: translateX(-2px);
+  }
+
+  .title-left h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1c2023;
+    line-height: 1.2;
+  }
+
+  .sub-text {
+    margin: 8px 0 0 0;
+    font-size: 16px;
+    color: #64748b;
+    font-weight: 400;
+  }
+
+  /* Button Group */
+  .btn-group {
+    display: flex;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  /* Buttons */
+  .btn {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    border: none;
+    border-radius: 14px;
+    padding: 14px 24px;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 16px rgba(30, 58, 138, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn:hover::before {
+    left: 100%;
+  }
+
+  .btn:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  .btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* Filters Card */
+  .filters-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .filters-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #374151;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .filters-label svg {
+    stroke: #64748b;
+  }
+
+  /* Form Controls */
+  select,
+  input[type="search"] {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 15px;
+    color: #1c2023;
+    transition: all 0.3s ease;
+    min-height: 48px;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 48px;
+  }
+
+  select:hover,
+  input[type="search"]:hover {
+    border-color: #cbd5e1;
+    background-color: #f1f5f9;
+  }
+
+  select:focus,
+  input[type="search"]:focus {
+    border-color: #1e3a8a;
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+    background-color: #ffffff;
+  }
+
+  input[type="search"] {
+    min-width: 280px;
+    flex-grow: 1;
+    max-width: 400px;
+    background-image: none;
+    padding-left: 44px;
+    background-repeat: no-repeat;
+    background-position: 16px center;
+    background-size: 18px;
+  }
+
+  input[type="search"]::placeholder {
+    color: #9ca3af;
+  }
+
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .title-section {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+
+
+.financial-summary {
+  display: flex;
+  justify-content: center;
+  gap: 32px; /* more spacing for elegance */
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  flex: 1 1 0;
+  max-width: 280px;
+  min-width: 200px;
+  border-radius: 16px; /* bigger radius for modern smoothness */
+  padding: 32px 24px;
+  text-align: center;
+  box-sizing: border-box;
+  background-color: #fff;
+  color: inherit;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05); /* subtle shadow */
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  cursor: default;
+}
+
+.card:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+  transform: translateY(-4px);
+}
+
+.card.total-sales {
+  background-color: #e7f9ec; /* lighter green background */
+  color: #069249; /* fresh, vibrant green text */
+}
+
+.card.total-expenses {
+  background-color: #fdecea; /* soft pink background */
+  color: #b42318; /* strong red text */
+}
+
+.card.net-profit {
+  background-color: #e6f0ff; /* gentle blue background */
+  color: #2563eb; /* bright blue text */
+}
+
+.card .title {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.card .amount {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+}
+
+
+
+
+
+
+/* Container aligned with main content */
+.table-container {
+  padding: 20px 10px;
+  max-width: 1200px;
+  margin: 0 auto 40px auto; /* align with main container width and space below */
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Sales Table Styling */
+.sales-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px; /* vertical spacing between rows */
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05); /* subtle ambient shadow */
+  overflow: hidden;
+}
+
+.sales-table thead tr {
+  background-color: #f3f4f6;
+  border-radius: 16px 16px 0 0; /* rounded top corners */
+}
+
+.sales-table thead th {
+  padding: 16px 24px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 14px;
+  color: #6b7280;
+  user-select: none;
+  letter-spacing: 0.03em;
+}
+
+.sales-table tbody tr {
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); /* subtle row shadow */
+  border-radius: 12px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sales-table tbody tr:hover {
+  background-color: #f9fafb;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+}
+
+.sales-table tbody td {
+  padding: 16px 24px;
+  vertical-align: middle;
+  font-size: 14px;
+  color: #374151;
+  border-bottom: none; /* remove internal borders */
+  letter-spacing: 0.02em;
+}
+
+/* Status dot styling */
+.status-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 12px;
+  vertical-align: middle;
+}
+
+.status-dot.green {
+  background-color: #10b981;
+}
+
+.status-dot.blue {
+  background-color: #3b82f6;
+}
+
+.status-dot.orange {
+  background-color: #f59e0b;
+}
+
+.status-dot.red {
+  background-color: #ef4444;
+}
+
+/* Profit text styling */
+.profit {
+  font-weight: 700;
+  color: #22c55e; /* green for positive profit */
+}
+
+/* Actions container */
+.actions {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-start;
+}
+
+/* Buttons - modern icon style */
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  transition: background-color 160ms ease, color 160ms ease, transform 120ms ease, box-shadow 160ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.action-btn svg,
+.action-btn .icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: none;
+}
+
+.action-btn:active {
+  transform: translateY(0);
+}
+
+/* Tones for action types (muted by default, colored on hover) */
+.action-btn.view {
+  color: #475569; /* neutral */
+}
+.action-btn.view:hover {
+  background-color: rgba(37,99,235,0.08);
+  color: #2563eb;
+}
+
+.action-btn.edit {
+  color: #6b7280;
+}
+.action-btn.edit:hover {
+  background-color: rgba(245,158,11,0.08);
+  color: #f59e0b;
+}
+
+.action-btn.delete {
+  color: #6b7280;
+}
+.action-btn.delete:hover {
+  background-color: rgba(239,68,68,0.08);
+  color: #ef4444;
+}
+
+/* Fallback pseudo-element icons (kept for JS-less markup that relies on them) */
+/* Hide pseudo-element fallbacks so buttons render icon-only by default */
+.action-btn::before {
+  display: none;
+}
