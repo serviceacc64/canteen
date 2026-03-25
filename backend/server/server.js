@@ -1,15 +1,27 @@
 const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
+require('dotenv').config(); // Load environment variables from .env
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 🔑 Supabase config
-const supabaseUrl = 'https://YOUR_PROJECT.supabase.co';
-const supabaseKey = 'YOUR_ANON_KEY';
-const supabase = createClient(supabaseUrl, supabaseKey);
+// 🔑 Supabase config (loaded from env vars)
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+
+// Basic validation to ensure env vars are set
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Missing Supabase credentials in environment variables. Check your .env file.');
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
+  } // Optional: Recommended for server-side to avoid unnecessary token refreshes
+});
 
 // =========================
 // CREATE REPORT
@@ -176,6 +188,7 @@ app.delete('/api/reports/:id', async (req, res) => {
 // =========================
 // START SERVER
 // =========================
-app.listen(3000, () => {
-  console.log('Server running on http://localhost:3000');
+const PORT = process.env.PORT || 3000; // Allow PORT to be set via env (good for production)
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
