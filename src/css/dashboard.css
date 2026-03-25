@@ -1,12 +1,15 @@
-  /* Root & Reset */
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    }
+/* Root & Reset - Poppins now loaded from fonts.css */
+@import url('./fonts.css');
+
+/* Remove redundant font-family since fonts.css handles it universally */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
 
     /* Professional Dark Blue Palette */
     :root {
@@ -85,7 +88,7 @@
       margin: 0;
     }
 
-    .brand-info h1 {
+    .brand-info h1{
       font-weight: 800;
       font-size: 32px;
       background: linear-gradient(135deg, var(--white-98) 0%, var(--blue-400) 70%);
@@ -273,7 +276,7 @@
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       gap: 12px;
     }
 
@@ -316,10 +319,10 @@
 
     /* Logout link (clean modern style) */
     .sidebar-footer .sidebar-logout {
-      display: inline-flex;
+      display:flex;
       align-items: center;
       gap: 10px;
-      margin-left: auto;
+      margin-left: 12px;
       align-self: center;
       color: var(--white-65);
       text-decoration: none;

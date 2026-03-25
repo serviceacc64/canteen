@@ -1,4 +1,5 @@
-/* View page specific overrides - ensure sidebar content visible */
+/* View page specific overrides - Poppins via fonts.css */
+@import url('./fonts.css');
 
 /* Force sidebar expanded initially if needed */
 body:not(.sidebar-collapsed) .sidebar {

@@ -1,6 +1,6 @@
 /* Root variables for colors, spacing, fonts - MAXIMIZED & MODERNIZED */
 :root {
-  --font-family: "Poppins", sans-serif;
+  /* --font-family now handled by fonts.css universal selector */
   --color-bg: #f8fafc;
   --color-card-bg: #ffffff;
   --color-text: #111827;
@@ -28,6 +28,8 @@
   --highlight-gray: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   --container-max: 1200px;
 }
+
+@import url('./fonts.css');
 
 /* General Styles - MAX container */
 * {
