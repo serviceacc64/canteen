@@ -26,7 +26,7 @@
   --box-shadow-lg: 0 8px 20px rgba(0,0,0,0.08);
   --highlight-green: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
   --highlight-gray: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  --container-max: 1400px;
+  --container-max: 1200px;
 }
 
 /* General Styles - MAX container */
@@ -54,15 +54,27 @@ h2, h3, h4 { font-weight: 700; }
 p, label, .subtitle, .nav-label { font-weight: 500; }
 
 .container {
+  box-sizing: border-box;
+  display: block;
+  /* Use available width but cap at a sensible max to avoid overly long containers */
+  width: 100%;
   max-width: var(--container-max);
-  width: calc(100% - 40px);
   margin: 0 auto;
   margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
   background: var(--color-card-bg);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow-lg);
   padding: var(--spacing-xl);
   border: 1px solid rgba(229, 231, 235, 0.3);
+}
+
+/* Responsive fallback: on smaller viewports make the container use available space */
+@media (max-width: 1024px) {
+  .container {
+    width: calc(100% - 40px);
+    max-width: 100%;
+  }
 }
 
 @media (min-width: 1440px) {
@@ -120,31 +132,15 @@ p, label, .subtitle, .nav-label { font-weight: 500; }
 }
 
 /* Typography - Modern hierarchy */
-h3.section-title {
-  font-weight: 700;
-  font-size: 14px;
-  margin-bottom: var(--spacing-md);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding-bottom: 8px;
-  border-bottom: 2px solid rgba(59, 130, 246, 0.1);
-  color: var(--color-label);
-}
-  h3.section-title-sm {
-    font-weight: 700;
-    font-size: 14px;
-    margin-bottom: var(--spacing-md);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding-bottom: 8px;
-    border-bottom: 2px solid rgba(59, 130, 246, 0.1);
-    color: var(--color-label);
-  }
-
+/* Unified section title styles to ensure consistent alignment */
+.section-title,
+.section-title-sm,
+h3.section-title,
 h3.section-title-sm {
+  display: block;
   font-weight: 700;
   font-size: 14px;
-  margin-bottom: var(--spacing-md);
+  margin: 0 0 var(--spacing-md) 0;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding-bottom: 8px;
@@ -270,12 +266,13 @@ textarea:focus {
 .add-entry-row,
 .add-entry-row .input-row,
 .input-row.add-entry-row {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  gap: 0 !important;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  gap: var(--spacing-sm);
   margin-bottom: var(--spacing-sm);
+  align-items: center;
 }
 
 /* Modern Highlights */
@@ -432,10 +429,33 @@ textarea:focus {
 }
 
 /* Remarks */
+.remarks-title {
+  margin-bottom: var(--spacing-xs);
+}
+
+h4.section-title-sm {
+  font-weight: 700;
+  font-size: 15px;
+  margin: 0 0 var(--spacing-sm) 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-label);
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.07);
+  display: block;
+}
+
+.remarks {
+  margin-top: var(--spacing-md);
+}
 .remarks textarea {
   width: 100%;
   min-height: 80px;
-  margin-top: var(--spacing-md);
+  margin-top: var(--spacing-sm);
+  padding: 12px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
 }
 
 /* Enhanced Summary */
@@ -472,6 +492,22 @@ textarea:focus {
   margin-top: var(--spacing-sm);
 }
 
+/* Right-align Net Profit row so label and value sit on the right */
+.summary-row.net-profit {
+  justify-content: space-between;
+  padding-top: 8px;
+  padding-bottom: 0;
+}
+.summary-row.net-profit span:first-child {
+  color: var(--color-text);
+  font-weight: 700;
+}
+.summary-row.net-profit .highlight-green {
+  color: var(--color-netprofit);
+  font-weight: 800;
+  text-align: right;
+}
+
 .summary-info {
   font-size: 11px;
   color: var(--color-muted);
@@ -501,7 +537,7 @@ textarea:focus {
   border: 1px solid rgba(229, 231, 235, 0.6);
   color: var(--color-label);
   padding: 12px 20px;
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   font-weight: 600;
   font-size: 12px;
   cursor: pointer;
@@ -521,7 +557,7 @@ textarea:focus {
   color: #fff;
   font-weight: 700;
   padding: 12px 24px;
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   font-size: 12px;
   display: inline-flex;
   align-items: center;
@@ -540,7 +576,7 @@ textarea:focus {
   color: var(--color-accent);
   border: 1px solid rgba(59, 130, 246, 0.2);
   padding: 10px 16px;
-  border-radius: 12px;
+  border-radius: var(--border-radius);
   font-weight: 600;
   font-size: 12px;
   display: inline-flex;
