@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dashboard - RMNHS Canteen System</title>
-  <link rel="stylesheet" href="src/css/sidebar.css" />
-   <link rel="stylesheet" href="../../src/css/dashboard.css" />
+<link rel="stylesheet" href="../css/sidebar.css" />
+<link rel="stylesheet" href="../css/dashboard.css" />
 </head>
 <body>
   <!-- Sidebar (UNCHANGED) -->
@@ -25,7 +25,7 @@
 
     <!-- Main Content -->
     <main class="sidebar-main">
-      <a href="entry.html" class="btn-new-entry nav-item" data-label="New Entry" aria-label="Add New Daily Entry" role="button">
+        <a href="src/pages/entry.html" class="btn-new-entry nav-item" data-label="New Entry" aria-label="Add New Daily Entry" role="button">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path d="M12 5v14m7-7H5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
         </svg>
@@ -48,7 +48,7 @@
 
         <div class="nav-section">
           <div class="nav-section-title">Reports</div>
-          <a href="daily.html" class="nav-item" data-label="Daily Reports">
+          <a href="src/pages/daily.html" class="nav-item" data-label="Daily Reports">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
               <polyline points="14,2 14,8 20,8"/>
@@ -58,7 +58,7 @@
             </svg>
             <span class="nav-label">Daily Reports</span>
           </a>
-          <a href="monthly.html" class="nav-item" data-label="Monthly Reports">
+          <a href="src/pages/monthly.html" class="nav-item" data-label="Monthly Reports">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
               <line x1="16" y1="2" x2="16" y2="6"/>
@@ -67,7 +67,7 @@
             </svg>
             <span class="nav-label">Monthly Reports</span>
           </a>
-          <a href="yearly.html" class="nav-item" data-label="Yearly Reports">
+          <a href="src/pages/yearly.html" class="nav-item" data-label="Yearly Reports">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <rect x="1" y="4" width="22" height="18" rx="2" ry="2"/>
               <rect x="3" y="4" width="4" height="4"/>
@@ -83,7 +83,7 @@
     <!-- Footer -->
     <footer class="sidebar-footer">
       
-      <a href="../../index.html" class="sidebar-logout" aria-label="Logout">
+      <a href="../index.html" class="sidebar-logout" aria-label="Logout">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M16 17l5-5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
           <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
@@ -250,6 +250,7 @@
       });
     });
   </script>
-  <script src="src/js/sidebar.js" defer></script>
+
 </body>
+
 </html>

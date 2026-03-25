@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
       } catch (err) {}
       try { sessionStorage.clear(); } catch (err) {}
       try { localStorage.clear(); } catch (err) {}
-      const href = el.getAttribute('href') || '../../index.html';
+      const href = el.getAttribute('href') || '../index.html';
       window.location.href = href;
     });
   });
