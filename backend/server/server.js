@@ -1,11 +1,13 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config(); // Load environment variables from .env
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '..'))); // Serve static files from project root (src/, pages/, index.html)
 
 // 🔑 Supabase config (loaded from env vars)
 const supabaseUrl = process.env.SUPABASE_URL;
