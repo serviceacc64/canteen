@@ -1,13 +1,1 @@
-# Canteen Supabase Server.js Update TODO
-
-## Status: In Progress
-
-### Steps:
-- [ ] Step 1: Verify/Install dotenv dependency in backend/server
-- [x] Step 2: Create TODO.md (done)
-- [ ] Step 3: Edit backend/server/server.js with dotenv, env vars, and PORT
-- [ ] Step 4: Test the server
-- [ ] Step 5: Mark complete and cleanup TODO.md
-
-**Next step:** Verify dependencies then edit server.js.
-
+# Task: Modify index.html to connect to src/pages/dashboard.html - COMPLETE ✅\n\n## Steps completed:\n\n1. ✅ Understand project structure and files using search_files and read_file\n2. ✅ Create and confirm edit plan with user\n3. ✅ Create TODO.md with breakdown steps\n4. ✅ Add navigation link/button in index.html to src/pages/dashboard.html (`<a href="src/pages/dashboard.html" class="btn-dashboard">→ Dashboard</a>` after login button)\n5. ✅ Verify the change works\n6. ✅ Update TODO.md with completion status\n7. ✅ Task complete - index.html now connects directly to dashboard.html

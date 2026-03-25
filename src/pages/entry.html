@@ -111,6 +111,7 @@
 
 
   <script src="../../src/js/sidebar.js" defer></script>
+  <script src="../../src/js/entry.js" defer></script>
 <div class="container">
         <header class="page-header">
             <button class="back-button"><i class="bi bi-arrow-left"></i></button>
@@ -171,6 +172,18 @@
                         </div>
                         <div class="input-row add-entry-row">
                           <label></label>
+
+                          <div class="input-row add-entry-row">
+                          <label></label>
+                          <div>
+                            <button type="button" class="btn-add-entry" data-target="#store-consignment" aria-label="Add Entry">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+                                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                              </svg>
+                              Add Entry
+                            </button>
+                          </div>
+                        </div>
                           
                         </div>
                         <div class="highlight-row">
@@ -182,7 +195,7 @@
                     <section class="section purchases">
                         <h3 class="section-title-sm">LESS PURCHASES (CASH PURCHASES)</h3>
 
-                        <div class="purchase-group" aria-label="I. Store">
+                        <div class="purchase-group" aria-label="I. Store" id="store-purchases">
                             <p class="subtitle-sm" aria-level="5" role="heading">I. Store</p>
                             <div class="input-row">
                                 <label><b>Big Boy</b></label>
@@ -220,8 +233,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <button type="button" class="btn-add-entry" id="addEntryBtn" aria-label="Add Entry">
+                            <div>
+                            <button type="button" class="btn-add-entry" data-target="#store-purchases" aria-label="Add Entry">
                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
                                 <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                               </svg>
@@ -279,7 +292,7 @@
                         
   <h4>CONSIGNMENT TO SUPPLIER (PAYABLES)</h4>
 
-  <div class="consignment-group">
+  <div class="consignment-group" id="store-consignment">
     <p class="consignment-subtitle">I. Store</p>
 
     <div class="consignment-input-row">
@@ -315,10 +328,10 @@
     </div>
   </div>
 
-  <div class="input-row add-entry-row">
+                        <div class="input-row add-entry-row">
                           <label></label>
                           <div>
-                            <button type="button" class="btn-add-entry" id="addEntryBtn" aria-label="Add Entry">
+                            <button type="button" class="btn-add-entry" data-target="#store-consignment" aria-label="Add Entry">
                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
                                 <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                               </svg>
@@ -477,6 +490,25 @@
         </form>
       </div>
 
-    
+  <!-- Add Entry Modal -->
+  <div id="addEntryModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="addEntryTitle">
+      <header>
+        <h3 id="addEntryTitle">Add Entry</h3>
+      </header>
+      <div class="modal-body">
+        <label for="addEntryLabel">Label</label>
+        <input id="addEntryLabel" type="text" placeholder="e.g. Supplier name or item" />
+      </div>
+      <div class="modal-actions">
+        <button id="addEntryCancel" class="btn btn-cancel-modal" type="button">Cancel</button>
+        <button id="addEntryConfirm" class="btn btn-confirm-modal" type="button">Add</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
+<!-- Success toast -->
+<div id="addEntrySuccess" class="toast" role="status" aria-live="polite" aria-atomic="true">Entry added</div>

@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const rememberCheckbox = document.getElementById('remember');
   const errorMessage = document.getElementById('error-message');
 
-  // Updated credentials as requested
   const ADMIN_CREDENTIALS = {
     email: 'ojtstudents2026@gmail.com',
     password: '123'
@@ -34,58 +33,60 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Show loading state
     loginBtn.classList.add('loading');
-    loginBtn.textContent = '';
+    loginBtn.textContent = 'Verifying...'; // Feedback during delay
 
     // Simulate authentication delay
     setTimeout(() => {
-      // Check credentials
       if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
-        // Success - store login state and redirect
+        // Success - store login state
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('adminEmail', email);
         localStorage.setItem('loginTime', new Date().toISOString());
         
         if (remember) {
           localStorage.setItem('rememberMe', 'true');
+        } else {
+          localStorage.removeItem('rememberMe');
         }
         
-        // Redirect to dashboard
-        window.location.href = 'dashboard.html';
+        // Correct path from index.html to dashboard.html
+        window.location.href = 'src/pages/dashboard.html';
       } else {
         // Failed login
         showError('Invalid email or password. Please try again.');
         loginBtn.classList.remove('loading');
         loginBtn.textContent = 'Access Admin';
-        usernameInput.value = '';
         passwordInput.value = '';
-        usernameInput.focus();
+        passwordInput.focus();
       }
-    }, 1500);
+    }, 1200);
   });
 
-  // Enter key support
-  document.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter' && document.activeElement !== rememberCheckbox) {
-      loginBtn.click();
-    }
+  // Enter key support for all inputs
+  [usernameInput, passwordInput].forEach(input => {
+    input.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        loginBtn.click();
+      }
+    });
   });
 
   function showError(message) {
     errorMessage.textContent = message;
     errorMessage.style.display = 'block';
     
-    // Hide error after 5 seconds
+    // Smoothly hide error
     setTimeout(() => {
       errorMessage.style.display = 'none';
-    }, 5000);
+    }, 4000);
   }
 
-  // Auto-focus email on load
-  usernameInput.focus();
-
-  // Pre-fill email if remember me was checked previously
+  // Pre-fill email if remember me was checked
   if (localStorage.getItem('rememberMe') === 'true') {
     usernameInput.value = ADMIN_CREDENTIALS.email;
     rememberCheckbox.checked = true;
+    passwordInput.focus(); // Focus password instead if email is already filled
+  } else {
+    usernameInput.focus();
   }
 });
