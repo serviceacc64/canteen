@@ -15,8 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
       localStorage.setItem(storageKey, collapsed ? 'true' : 'false');
     });
   });
-<<<<<<< HEAD
-=======
 
   // Logout links/buttons inside sidebar
   const logoutEls = document.querySelectorAll('.sidebar-logout');
@@ -32,5 +30,4 @@ document.addEventListener('DOMContentLoaded', function() {
       window.location.href = href;
     });
   });
->>>>>>> 356b61b7d5f701fbd3fb972f2cbe841caa431512
 });

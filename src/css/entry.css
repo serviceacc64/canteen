@@ -39,17 +39,11 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   margin: 0;
-<<<<<<< HEAD
-  padding: var(--spacing-xl);
-=======
   padding: 0;
->>>>>>> 356b61b7d5f701fbd3fb972f2cbe841caa431512
   line-height: 1.4;
   min-height: 100vh;
 }
 
-<<<<<<< HEAD
-=======
 /* Typographic baseline: consistent weights for readability */
 body {
   font-weight: 500;
@@ -59,15 +53,11 @@ h1 { font-weight: 100; font-size: 28px; }
 h2, h3, h4 { font-weight: 700; }
 p, label, .subtitle, .nav-label { font-weight: 500; }
 
->>>>>>> 356b61b7d5f701fbd3fb972f2cbe841caa431512
 .container {
   max-width: var(--container-max);
   width: calc(100% - 40px);
   margin: 0 auto;
-<<<<<<< HEAD
-=======
   margin-top: var(--spacing-xl);
->>>>>>> 356b61b7d5f701fbd3fb972f2cbe841caa431512
   background: var(--color-card-bg);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow-lg);
@@ -243,11 +233,7 @@ textarea:focus {
 }
 
 .input-row label {
-<<<<<<< HEAD
-  font-weight: 500;
-=======
   font-weight: 200;
->>>>>>> 356b61b7d5f701fbd3fb972f2cbe841caa431512
   font-size: 12px;
   color: var(--color-label);
   min-width: 90px;
@@ -383,17 +369,7 @@ textarea:focus {
 .expenses .input-row label { min-width: 120px; }
 
 /* Salary Breakdown - Card style */
-<<<<<<< HEAD
-.salary-breakdown {
-  background: var(--color-secondary);
-  padding: 20px;
-  border-radius: var(--border-radius);
-  border: 1px solid rgba(229, 231, 235, 0.3);
-  margin-top: var(--spacing-lg);
-}
-=======
 
->>>>>>> 356b61b7d5f701fbd3fb972f2cbe841caa431512
 
 .salary-row {
   display: flex;
@@ -540,11 +516,7 @@ textarea:focus {
 }
 
 .btn-save {
-<<<<<<< HEAD
-  background: linear-gradient(135deg, var(--color-primary) 0%, #059669 100%);
-=======
   background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
->>>>>>> 356b61b7d5f701fbd3fb972f2cbe841caa431512
   border: none;
   color: #fff;
   font-weight: 700;
