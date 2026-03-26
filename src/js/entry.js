@@ -1,5 +1,86 @@
 const STORAGE_KEY = 'canteen_entry_form_data';
 
+// Helper function to create delete button HTML
+function createDeleteButton() {
+	return `
+		<button type="button" class="delete-icon-btn" aria-label="Delete entry" title="Delete entry">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<polyline points="3 6 5 6 21 6"></polyline>
+				<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+				<line x1="10" y1="11" x2="10" y2="17"></line>
+				<line x1="14" y1="11" x2="14" y2="17"></line>
+			</svg>
+		</button>
+	`;
+}
+
+// Helper function to attach delete event listener to a row
+function addDeleteListener(row) {
+	const deleteBtn = row.querySelector('.delete-icon-btn');
+	if (deleteBtn) {
+		deleteBtn.addEventListener('click', (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			showDeleteConfirmModal(row);
+		});
+	}
+}
+
+// Show delete confirmation modal
+function showDeleteConfirmModal(row) {
+	const modal = document.getElementById('deleteConfirmModal');
+	if (!modal) return;
+	
+	modal.classList.add('show');
+	modal.setAttribute('aria-hidden', 'false');
+	
+	const confirmBtn = modal.querySelector('.btn-confirm-delete');
+	const cancelBtn = modal.querySelector('.btn-cancel-delete');
+	const backdrop = modal.querySelector('.modal-backdrop');
+	
+	function closeConfirmModal() {
+		modal.classList.remove('show');
+		modal.setAttribute('aria-hidden', 'true');
+		confirmBtn.removeEventListener('click', handleConfirm);
+		cancelBtn.removeEventListener('click', closeConfirmModal);
+		backdrop.removeEventListener('click', closeConfirmModal);
+	}
+	
+	function handleConfirm() {
+		closeConfirmModal();
+		// Delete the row with animation
+		row.style.transition = 'all 0.2s ease';
+		row.style.opacity = '0';
+		row.style.transform = 'scale(0.95)';
+		setTimeout(() => {
+			row.remove();
+			saveFormData();
+			showDeleteSuccessModal();
+		}, 200);
+	}
+	
+	confirmBtn.addEventListener('click', handleConfirm);
+	cancelBtn.addEventListener('click', closeConfirmModal);
+	backdrop.addEventListener('click', closeConfirmModal);
+}
+
+// Show delete success modal
+function showDeleteSuccessModal() {
+	const modal = document.getElementById('deleteSuccessModal');
+	if (!modal) return;
+	
+	modal.classList.add('show');
+	modal.setAttribute('aria-hidden', 'false');
+	
+	function closeSuccessModal() {
+		modal.classList.remove('show');
+		modal.setAttribute('aria-hidden', 'true');
+	}
+	
+	// Auto-close after 2.5 seconds
+	setTimeout(closeSuccessModal, 2500);
+}
+
 // Save all form data to localStorage
 function saveFormData() {
 	const formData = {};
@@ -76,9 +157,12 @@ function restoreFormData() {
 						row.className = 'input-row';
 						row.innerHTML = `
 							<label><b>${escapeHtml(rowData.label)}</b></label>
-							<div class="input-currency">
-								<span>₱</span>
-								<input type="number" step="0.01" value="${escapeHtml(rowData.value)}" />
+							<div class="input-currency-wrapper">
+								${createDeleteButton()}
+								<div class="input-currency">
+									<span>₱</span>
+									<input type="number" step="0.01" value="${escapeHtml(rowData.value)}" />
+								</div>
 							</div>
 						`;
 						
@@ -87,6 +171,16 @@ function restoreFormData() {
 							section.insertBefore(row, addRow);
 						} else {
 							section.appendChild(row);
+						}
+						
+						// Attach delete listener
+						addDeleteListener(row);
+						
+						// Add auto-save to input
+						const rowInput = row.querySelector('input[type="number"]');
+						if (rowInput) {
+							rowInput.addEventListener('input', saveFormData);
+							rowInput.addEventListener('change', saveFormData);
 						}
 					});
 				}
@@ -144,9 +238,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		row.className = 'input-row';
 		row.innerHTML = `
 			<label><b>${escapeHtml(name)}</b></label>
+		<div class="input-currency-wrapper">
+			${createDeleteButton()}
 			<div class="input-currency">
 				<span>₱</span>
 				<input type="number" step="0.01" value="0.00" />
+			</div>
 			</div>
 		`;
 
@@ -160,6 +257,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			newInput.addEventListener('input', saveFormData);
 			newInput.addEventListener('change', saveFormData);
 		}
+
+		// Attach delete listener
+		addDeleteListener(row);
 
 		// show success toast briefly then close modal
 		showSuccessToast('Entry added');

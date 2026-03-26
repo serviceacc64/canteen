@@ -166,39 +166,7 @@
                         <div class="purchase-group" aria-label="I. Store" id="store-purchases">
                             <p class="subtitle-sm" aria-level="5" role="heading">I. Store</p>
                             <div class="input-row">
-                                <label><b>Big Boy</b></label>
-                                <div class="input-currency">
-                                    <span>₱</span>
-                                    <input type="number" step="0.01" value="0.00" />
-                                </div>
-                            </div>
-                            <div class="input-row">
-                                <label><b>Bans</b></label>
-                                <div class="input-currency">
-                                    <span>₱</span>
-                                    <input type="number" step="0.01" value="0.00" />
-                                </div>
-                            </div>
-                            <div class="input-row">
-                                <label><b>Aqua</b></label>
-                                <div class="input-currency">
-                                    <span>₱</span>
-                                    <input type="number" step="0.01" value="0.00" />
-                                </div>
-                            </div>
-                            <div class="input-row">
-                                <label><b>MSA</b></label>
-                                <div class="input-currency">
-                                    <span>₱</span>
-                                    <input type="number" step="0.01" value="0.00" />
-                                </div>
-                            </div>
-                            <div class="input-row">
-                                <label><b>Others</b></label>
-                                <div class="input-currency">
-                                    <span>₱</span>
-                                    <input type="number" step="0.01" value="0.00" />
-                                </div>
+                              
                             </div>
                         </div>
                             <div>
@@ -472,6 +440,45 @@
       <div class="modal-actions">
         <button id="addEntryCancel" class="btn btn-cancel-modal" type="button">Cancel</button>
         <button id="addEntryConfirm" class="btn btn-confirm-modal" type="button">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteConfirmModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="deleteConfirmTitle">
+      <div class="modal-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          <line x1="10" y1="11" x2="10" y2="17"></line>
+          <line x1="14" y1="11" x2="14" y2="17"></line>
+        </svg>
+      </div>
+      <div class="modal-body">
+        <h4 id="deleteConfirmTitle">Delete Entry?</h4>
+        <p>Are you sure you want to delete this entry? This action cannot be undone.</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel-delete" type="button">Cancel</button>
+        <button class="btn-confirm-delete" type="button">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Success Modal -->
+  <div id="deleteSuccessModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="deleteSuccessTitle">
+      <div class="modal-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <div class="modal-body">
+        <h4 id="deleteSuccessTitle">Successfully Deleted</h4>
+        <p>The entry has been deleted from your form.</p>
       </div>
     </div>
   </div>
