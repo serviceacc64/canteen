@@ -187,10 +187,18 @@ app.delete('/api/reports/:id', async (req, res) => {
   res.json({ message: 'Report deleted' });
 });
 
+// Import entry logic
+const entryLogic = require('./logics/entrylogic');
+
+// =========================
+// CREATE DAILY ENTRY (New endpoint using entrylogic)
+// =========================
+app.post('/api/entry', (req, res) => entryLogic.createDailyEntry(req, res, supabase));
+
 // =========================
 // START SERVER
 // =========================
-const PORT = process.env.PORT || 3000; // Allow PORT to be set via env (good for production)
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

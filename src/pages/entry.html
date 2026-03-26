@@ -111,8 +111,7 @@
 
 
 
-  <script src="../../src/js/sidebar.js" defer></script>
-  <script src="../../src/js/entry.js" defer></script>
+<script src="../../src/js/sidebar.js" defer></script>\n  <script src="../../src/js/entry.js" defer type="module"></script>
 <div class="container">
         <header class="page-header">
             <button class="back-button"><i class="bi bi-arrow-left"></i></button>
@@ -143,34 +142,7 @@
                 <div class="left-column">
                     <section class="section">
                         <h3 class="section-title">CASH SALES</h3>
-                        <div class="input-row">
-                            <label>Store</label>
-                            <div class="input-currency">
-                                <span>₱</span>
-                                <input type="number" step="0.01" value="0.00" />
-                            </div>
-                        </div>
-                        <div class="input-row">
-                            <label>Kitchen</label>
-                            <div class="input-currency">
-                                <span>₱</span>
-                                <input type="number" step="0.01" value="0.00" />
-                            </div>
-                        </div>
-                        <div class="input-row">
-                            <label>Palamig</label>
-                            <div class="input-currency">
-                                <span>₱</span>
-                                <input type="number" step="0.01" value="0.00" />
-                            </div>
-                        </div>
-                        <div class="input-row">
-                            <label>School Supplies</label>
-                            <div class="input-currency">
-                                <span>₱</span>
-                                <input type="number" step="0.01" value="0.00" />
-                            </div>
-                        </div>
+                        
                         <div class="input-row add-entry-row">
                           <label></label>
 
@@ -198,136 +170,9 @@
 
                         <div class="purchase-group" aria-label="I. Store" id="store-purchases">
                             <p class="subtitle-sm" aria-level="5" role="heading">I. Store</p>
-                            <div class="input-row">
-                                <label><b>Big Boy</b></label>
-                                <div class="input-currency">
-                                    <span>₱</span>
-                                    <input type="number" step="0.01" value="0.00" />
-                                </div>
-                            </div>
-                            <div class="input-row">
-                                <label><b>Bans</b></label>
-                                <div class="input-currency">
-                                    <span>₱</span>
-                                    <input type="number" step="0.01" value="0.00" />
-                                </div>
-                            </div>
-                            <div class="input-row">
-                                <label><b>Aqua</b></label>
-                                <div class="input-currency">
-                                    <span>₱</span>
-                                    <input type="number" step="0.01" value="0.00" />
-                                </div>
-                            </div>
-                            <div class="input-row">
-                                <label><b>MSA</b></label>
-                                <div class="input-currency">
-                                    <span>₱</span>
-                                    <input type="number" step="0.01" value="0.00" />
-                                </div>
-                            </div>
-                            <div class="input-row">
-                                <label><b>Others</b></label>
-                                <div class="input-currency">
-                                    <span>₱</span>
-                                    <input type="number" step="0.01" value="0.00" />
-                                </div>
-                            </div>
-                        </div>
-                            <div>
-                            <button type="button" class="btn-add-entry" data-target="#store-purchases" aria-label="Add Entry">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
-                                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                              </svg>
-                              Add Entry
-                            </button>
-                          </div>
+                            
 
-                        <div class="purchase-group" aria-label="II. Kitchen">
-                            <p class="subtitle-sm">II. Kitchen</p>
-                            <div class="input-row">
-                                <label><b>Kitchen</b></label>
-                                <div class="input-currency">
-                                    <span>₱</span>
-                                    <input type="number" step="0.01" value="0.00" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="purchase-group" aria-label="III. Palamig">
-                            <p class="subtitle-sm">III. Palamig</p>
-                            <div class="input-row">
-                                <label><b>Ice</b></label>
-                                <div class="input-currency">
-                                    <span>₱</span>
-                                    <input type="number" step="0.01" value="0.00" />
-                                </div>
-                            </div>
-                            <div class="input-row">
-                                <label><b>Water</b></label>
-                                <div class="input-currency">
-                                    <span>₱</span>
-                                    <input type="number" step="0.01" value="0.00" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="purchase-group" aria-label="IV. School Supplies">
-                            <p class="subtitle-sm">IV. School Supplies</p>
-                            <div class="input-row">
-                                <label><b>School Supplies</b></label>
-                                <div class="input-currency">
-                                    <span>₱</span>
-                                    <input type="number" step="0.01" value="0.00" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="highlight-total">
-                            <span>TOTAL CASH PURCHASES</span>
-                            <span>₱0.00</span>
-                        </div>
-
-                    <section class="consignment-section">
-
-                        
-  <h4>CONSIGNMENT TO SUPPLIER (PAYABLES)</h4>
-
-  <div class="consignment-group" id="store-consignment">
-    <p class="consignment-subtitle">I. Store</p>
-
-    <div class="consignment-input-row">
-      <label for="bigboy">Big Boy</label>
-      <div class="input-currency">
-        <span>₱</span>
-        <input type="number" id="bigboy" step="0.01" value="0.00" />
-      </div>
-    </div>
-
-    <div class="consignment-input-row">
-      <label for="aqua">Aqua</label>
-      <div class="input-currency">
-        <span>₱</span>
-        <input type="number" id="aqua" step="0.01" value="0.00" />
-      </div>
-    </div>
-
-    <div class="consignment-input-row">
-      <label for="msa">MSA</label>
-      <div class="input-currency">
-        <span>₱</span>
-        <input type="number" id="msa" step="0.01" value="0.00" />
-      </div>
-    </div>
-
-    <div class="consignment-input-row">
-      <label for="others-store">Others</label>
-      <div class="input-currency">
-        <span>₱</span>
-        <input type="number" id="others-store" step="0.01" value="0.00" />
-      </div>
-    </div>
-  </div>
+  
 
                         <div class="input-row add-entry-row">
                           <label></label>
