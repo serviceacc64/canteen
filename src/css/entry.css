@@ -885,12 +885,14 @@ h4.section-title-sm {
 }
 
 /* Delete Success Modal */
-#deleteSuccessModal .modal-dialog {
+#deleteSuccessModal .modal-dialog,
+#saveSuccessModal .modal-dialog {
   background: linear-gradient(135deg, #020617 0%, #1e3a8a 100%);
   border: 1px solid rgba(59, 130, 246, 0.2);
 }
 
-#deleteSuccessModal .modal-icon {
+#deleteSuccessModal .modal-icon,
+#saveSuccessModal .modal-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -903,7 +905,8 @@ h4.section-title-sm {
   animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-#deleteSuccessModal .modal-icon svg {
+#deleteSuccessModal .modal-icon svg,
+#saveSuccessModal .modal-icon svg {
   width: 28px;
   height: 28px;
   stroke-width: 2.5;
@@ -923,19 +926,22 @@ h4.section-title-sm {
   }
 }
 
-#deleteSuccessModal .modal-body {
+#deleteSuccessModal .modal-body,
+#saveSuccessModal .modal-body {
   text-align: center;
   margin-bottom: 0;
 }
 
-#deleteSuccessModal .modal-body h4 {
+#deleteSuccessModal .modal-body h4,
+#saveSuccessModal .modal-body h4 {
   margin: 0 0 8px 0;
   font-size: 18px;
   font-weight: 700;
   color: #ffffff;
 }
 
-#deleteSuccessModal .modal-body p {
+#deleteSuccessModal .modal-body p,
+#saveSuccessModal .modal-body p {
   margin: 0;
   font-size: 14px;
   color: rgba(255, 255, 255, 0.65);

@@ -329,7 +329,7 @@
                             <label>Salary of Helpers</label>
                             <div class="input-currency">
                                 <span>₱</span>
-                                <input type="number" step="0.01" value="0.00"/>
+                                <input id="salaryOfHelpers" type="number" step="0.01" value="0.00"/>
                             </div>
                         </div>
                         <div class="input-row">
@@ -479,6 +479,28 @@
       <div class="modal-body">
         <h4 id="deleteSuccessTitle">Successfully Deleted</h4>
         <p>The entry has been deleted from your form.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Success Modal -->
+  <div id="saveSuccessModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="saveSuccessTitle">
+      <div class="modal-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+          <path d="M17 21v-8H7v8"></path>
+          <path d="M7 3v6h8"></path>
+          <polyline points="9 12 11 14 15 10"></polyline>
+        </svg>
+      </div>
+      <div class="modal-body">
+        <h4 id="saveSuccessTitle">Entry Saved</h4>
+        <p>The daily canteen report has been saved.</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-confirm-modal btn-close-save" type="button">OK</button>
       </div>
     </div>
   </div>

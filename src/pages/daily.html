@@ -169,12 +169,6 @@
           </select>
           <input type="search" name="searchDate" placeholder="Search by date..." aria-label="Search by date"/>
         </section>
-
-       
-
-  <script src="../../src/js/sidebar.js" defer></script>
-
-
   <!-- financial summary -->
    <div class="financial-summary">
   <div class="card total-sales">
@@ -207,8 +201,7 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
+            <tbody id="dailyReportsTableBody">
                     <td>Thu, Mar 12, 2026</td>
                     <td><span class="status-dot green"></span>Canteen #1</td>
                     <td>₱6,620.00</td>
@@ -217,7 +210,7 @@
                     <td>₱12,086.00</td>
                     <td class="profit">₱5,364.00</td>
                     <td class="actions">
-                        <a href="../pages/view.html" class="action-btn view" title="View" aria-label="View">
+                        <a href="view.html" class="action-btn view" title="View" aria-label="View">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                             <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6" fill="none"/>
@@ -239,8 +232,12 @@
                         </button>
                     </td>
                 </tr>
-                <tr>
+            </tbody>
+        </table>
+    </div>
+  </div>
 
-    
+  <script src="../../src/js/sidebar.js" defer></script>
+  <script src="../../src/js/daily.js" defer></script>
 </body>
 </html>
