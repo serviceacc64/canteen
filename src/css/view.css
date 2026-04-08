@@ -13,13 +13,14 @@ body:not(.sidebar-collapsed) .sidebar {
 }
 
 /* Main content adjustments */
-.main-content {
-  margin-left: 280px;
-  transition: margin-left 0.22s cubic-bezier(0.2, 0.9, 0.2, 1);
+.top-content main {
+    padding: 0 40px 40px;
+    transition: padding 220ms cubic-bezier(.2, .9, .2, 1);
 }
 
-body.sidebar-collapsed .main-content {
-  margin-left: 72px;
+body.sidebar-collapsed .top-content main {
+    padding-left: 24px;
+    padding-right: 24px;
 }
 
 /* Responsive for view page */
@@ -251,11 +252,6 @@ body.sidebar-collapsed .main-content {
         padding: 12px 20px;
     }
 }
-/* Main content padding adjustment */
-.top-content main {
-    padding: 0 40px 40px;
-}
-
 /* Report Container - Modern Glassmorphism */
 .report-container {
     background: var(--white);
@@ -266,6 +262,11 @@ body.sidebar-collapsed .main-content {
     margin-top: 24px;
     border: 1px solid var(--white-90);
     backdrop-filter: blur(20px);
+    transition: padding 220ms cubic-bezier(.2, .9, .2, 1);
+}
+
+body.sidebar-collapsed .report-container {
+    padding: 32px;
 }
 
 .canteen-center-header {
@@ -573,10 +574,6 @@ body.sidebar-collapsed .main-content {
 }
 
 @media (max-width: 768px) {
-    .top-content {
-        margin-left: 0;
-    }
-    
     .top-content main {
         padding: 0 20px 24px;
     }

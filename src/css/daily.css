@@ -1,10 +1,29 @@
 
+  .top-content {
+    margin-left: 280px;
+    width: calc(100% - 280px);
+    min-height: 100vh;
+    transition: margin-left 220ms cubic-bezier(.2, .9, .2, 1), width 220ms cubic-bezier(.2, .9, .2, 1);
+  }
+
+  body.sidebar-collapsed .top-content {
+    margin-left: 72px;
+    width: calc(100% - 72px);
+  }
+
   .main-content-inner {
     padding: 20px 10px;
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
     box-sizing: border-box;
+    transition: max-width 220ms cubic-bezier(.2, .9, .2, 1), padding 220ms cubic-bezier(.2, .9, .2, 1);
+  }
+
+  body.sidebar-collapsed .main-content-inner {
+    max-width: none;
+    padding-left: 24px;
+    padding-right: 24px;
   }
 
 
@@ -198,9 +217,42 @@
   }
   /* Responsive Design */
   @media (max-width: 1024px) {
+    .top-content {
+      margin-left: 260px;
+      width: calc(100% - 260px);
+    }
+
     .title-section {
       flex-direction: column;
       align-items: stretch;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .top-content,
+    body.sidebar-collapsed .top-content {
+      margin-left: 0;
+      width: 100%;
+    }
+
+    .main-content-inner,
+    body.sidebar-collapsed .main-content-inner {
+      max-width: none;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .financial-summary,
+    body.sidebar-collapsed .financial-summary,
+    .table-container,
+    body.sidebar-collapsed .table-container {
+      max-width: none;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .financial-summary {
+      flex-wrap: wrap;
     }
   }
 
@@ -215,7 +267,14 @@
   padding: 0 20px;
   box-sizing: border-box;
   flex-wrap: nowrap;
+  transition: max-width 220ms cubic-bezier(.2, .9, .2, 1), padding 220ms cubic-bezier(.2, .9, .2, 1);
   /* Poppins inherited from fonts.css */
+}
+
+body.sidebar-collapsed .financial-summary {
+  max-width: none;
+  padding-left: 24px;
+  padding-right: 24px;
 }
 
 .card {
@@ -281,7 +340,14 @@
   max-width: 1200px;
   margin: 0 auto 40px auto; /* align with main container width and space below */
   box-sizing: border-box;
+  transition: max-width 220ms cubic-bezier(.2, .9, .2, 1), padding 220ms cubic-bezier(.2, .9, .2, 1);
   /* Poppins inherited from fonts.css */
+}
+
+body.sidebar-collapsed .table-container {
+  max-width: none;
+  padding-left: 24px;
+  padding-right: 24px;
 }
 
 /* Sales Table Styling */

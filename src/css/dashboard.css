@@ -508,11 +508,18 @@ body.sidebar-collapsed .sidebar-toggle svg { transform: rotate(180deg); }
 /* Dashboard content - main */
 .top-content {
   margin-left: 280px; /* respect sidebar width */
+  width: calc(100% - 280px);
   min-height: 100vh;
   background: #f9fafb; /* slight off-white background */
   padding: 0;
   display: flex;
   flex-direction: column;
+  transition: margin-left 220ms cubic-bezier(.2, .9, .2, 1), width 220ms cubic-bezier(.2, .9, .2, 1);
+}
+
+body.sidebar-collapsed .top-content {
+  margin-left: 72px;
+  width: calc(100% - 72px);
 }
 
 /* Top header */
@@ -570,6 +577,11 @@ main > .subtitle {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
+  transition: max-width 220ms cubic-bezier(.2, .9, .2, 1);
+}
+
+body.sidebar-collapsed .cards-grid {
+  max-width: none;
 }
 
 /* Each Card */
@@ -673,8 +685,9 @@ main > .subtitle {
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
-  .main-content {
+  .top-content {
     margin-left: 260px;
+    width: calc(100% - 260px);
   }
   main > h1 {
     font-size: 26px;
@@ -685,8 +698,10 @@ main > .subtitle {
 }
 
 @media (max-width: 768px) {
-  .main-content {
+  .top-content,
+  body.sidebar-collapsed .top-content {
     margin-left: 0;
+    width: 100%;
   }
   .cards-grid {
     grid-template-columns: 1fr;
@@ -716,6 +731,11 @@ main > .subtitle {
 .chart-card {
   max-width: 1200px;
   margin: 0 40px 48px 40px;
+  transition: max-width 220ms cubic-bezier(.2, .9, .2, 1);
+}
+
+body.sidebar-collapsed .chart-card {
+  max-width: none;
 }
 
 .chart-card .card {
