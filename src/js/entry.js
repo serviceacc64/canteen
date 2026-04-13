@@ -1,5 +1,4 @@
 const DYNAMIC_SECTION_IDS = ['cash-sales', 'store-purchases', 'store-consignment'];
-const DAILY_REPORTS_STORAGE_KEY = 'canteen_daily_reports';
 
 function createDeleteButton() {
 	return `
@@ -21,8 +20,7 @@ function escapeHtml(str) {
 }
 
 function parseAmount(value) {
-	const parsed = parseFloat(value);
-	return Number.isFinite(parsed) ? parsed : 0;
+  return ErrorUtils ? ErrorUtils.safeParseFloat(value, 0) : (Number.isFinite(parseFloat(value)) ? parseFloat(value) : 0);
 }
 
 function formatPeso(value) {
@@ -38,10 +36,10 @@ function sumInputs(inputs) {
 }
 
 function updateText(selector, value) {
-	const element = document.querySelector(selector);
-	if (element) {
-		element.textContent = formatPeso(value);
-	}
+  const element = ErrorUtils ? ErrorUtils.safeQuery(selector) : document.querySelector(selector);
+  if (element) {
+    element.textContent = formatPeso(value);
+  }
 }
 
 function createDynamicRow(label, value = '0.00') {
@@ -233,32 +231,38 @@ function syncSalaryOfHelpers() {
 }
 
 function recalculateAll() {
-	const totalSales = sumInputs(document.querySelectorAll('#cash-sales .input-row input[type="number"]'));
-	const totalCashPurchases = sumInputs(document.querySelectorAll('.purchases .purchase-group .input-row input[type="number"]'));
-	const payableToSupplier = sumInputs(document.querySelectorAll('.consignment-section .consignment-input-row input[type="number"], #store-consignment .input-row input[type="number"]'));
-	const salaryBreakdownTotal = syncSalaryOfHelpers();
-	const totalOperatingExpenses = sumInputs(document.querySelectorAll('.expenses .input-row input[type="number"]'));
-	const totalExpenses = totalCashPurchases + payableToSupplier + totalOperatingExpenses;
-	const netProfit = totalSales - totalExpenses;
-	const summaryRows = document.querySelectorAll('.summary .summary-row');
+  try {
+    const totalSales = sumInputs(document.querySelectorAll('#cash-sales .input-row input[type="number"]'));
+    const totalCashPurchases = sumInputs(document.querySelectorAll('.purchases .purchase-group .input-row input[type="number"]'));
+    const payableToSupplier = sumInputs(document.querySelectorAll('.consignment-section .consignment-input-row input[type="number"], #store-consignment .input-row input[type="number"]'));
+    const salaryBreakdownTotal = syncSalaryOfHelpers();
+    const totalOperatingExpenses = sumInputs(document.querySelectorAll('.expenses .input-row input[type="number"]'));
+    const totalExpenses = totalCashPurchases + payableToSupplier + totalOperatingExpenses;
+    const netProfit = totalSales - totalExpenses;
+    const summaryRows = document.querySelectorAll('.summary .summary-row');
 
-	updateText('#cash-sales .highlight-amount', totalSales);
-	updateText('.purchases .highlight-total span:last-child', totalCashPurchases);
-	updateText('.payable-summary span:last-child', payableToSupplier);
-	updateText('.expenses .highlight-total span:last-child', totalOperatingExpenses);
-	if (summaryRows[0]) summaryRows[0].querySelector('span:last-child').textContent = formatPeso(totalSales);
-	if (summaryRows[1]) summaryRows[1].querySelector('span:last-child').textContent = formatPeso(totalExpenses);
-	updateText('.summary .summary-row.net-profit .highlight-green', netProfit);
+    updateText('#cash-sales .highlight-amount', totalSales);
+    updateText('.purchases .highlight-total span:last-child', totalCashPurchases);
+    updateText('.payable-summary span:last-child', payableToSupplier);
+    updateText('.expenses .highlight-total span:last-child', totalOperatingExpenses);
+    if (summaryRows[0]) summaryRows[0].querySelector('span:last-child').textContent = formatPeso(totalSales);
+    if (summaryRows[1]) summaryRows[1].querySelector('span:last-child').textContent = formatPeso(totalExpenses);
+    updateText('.summary .summary-row.net-profit .highlight-green', netProfit);
 
-	return {
-		totalSales,
-		totalCashPurchases,
-		payableToSupplier,
-		salaryBreakdownTotal,
-		totalOperatingExpenses,
-		totalExpenses,
-		netProfit,
-	};
+    return {
+      totalSales,
+      totalCashPurchases,
+      payableToSupplier,
+      salaryBreakdownTotal,
+      totalOperatingExpenses,
+      totalExpenses,
+      netProfit,
+    };
+  } catch (error) {
+    ErrorUtils?.showErrorToast('Calculation error. Please check your inputs.');
+    ErrorUtils?.logError('recalculateAll', error);
+    return { totalSales: 0, totalExpenses: 0, netProfit: 0 }; // fallback
+  }
 }
 
 function sumRowsByLabel(sectionSelector, labelText) {
@@ -326,11 +330,7 @@ function buildReportEntry(totals) {
 	};
 }
 
-function saveReportEntry(reportEntry) {
-	const currentReports = JSON.parse(localStorage.getItem(DAILY_REPORTS_STORAGE_KEY) || '[]');
-	currentReports.unshift(reportEntry);
-	localStorage.setItem(DAILY_REPORTS_STORAGE_KEY, JSON.stringify(currentReports));
-}
+// saveReportEntry removed - no localStorage persistence
 
 function saveFormData() {
 	return;
@@ -423,15 +423,20 @@ function showSaveSuccessModal() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Load ErrorUtils if available
+  if (typeof ErrorUtils !== 'undefined') {
+    console.log('ErrorUtils loaded');
+  }
+  
 	resetFormState();
 	initializeSalaryBreakdown();
 	recalculateAll();
 
-	const modal = document.getElementById('addEntryModal');
-	const input = document.getElementById('addEntryLabel');
-	const confirmBtn = document.getElementById('addEntryConfirm');
-	const cancelBtn = document.getElementById('addEntryCancel');
-	const form = document.querySelector('.daily-entry-form');
+	const modal = ErrorUtils?.safeGetId('addEntryModal') || document.getElementById('addEntryModal');
+	const input = ErrorUtils?.safeGetId('addEntryLabel') || document.getElementById('addEntryLabel');
+	const confirmBtn = ErrorUtils?.safeGetId('addEntryConfirm') || document.getElementById('addEntryConfirm');
+	const cancelBtn = ErrorUtils?.safeGetId('addEntryCancel') || document.getElementById('addEntryCancel');
+	const form = ErrorUtils?.safeQuery('.daily-entry-form') || document.querySelector('.daily-entry-form');
 	let currentContainer = null;
 
 	if (form) {
@@ -446,7 +451,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		form.addEventListener('submit', (e) => {
 			e.preventDefault();
 			const totals = recalculateAll();
-			saveReportEntry(buildReportEntry(totals));
 			showSaveSuccessModal();
 			resetFormState();
 		});

@@ -1,12 +1,7 @@
-const DAILY_REPORTS_STORAGE_KEY = 'canteen_daily_reports';
 
 function loadReports() {
-	try {
-		return JSON.parse(localStorage.getItem(DAILY_REPORTS_STORAGE_KEY) || '[]');
-	} catch (error) {
-		console.error('Error loading dashboard reports:', error);
-		return [];
-	}
+  const reports = []; // No persistence - always empty
+  return Array.isArray(reports) ? reports : [];
 }
 
 function formatPeso(value) {
@@ -104,73 +99,90 @@ function renderCards(reports) {
 }
 
 function renderChart(reports) {
-	const ctx = document.getElementById('salesExpensesChart');
-	if (!ctx || typeof Chart === 'undefined') return;
+  try {
+    const ctx = ErrorUtils?.safeGetId('salesExpensesChart');
+    if (!ctx || typeof Chart === 'undefined') {
+      ErrorUtils?.logError('Chart Render', 'Chart.js not loaded or canvas missing');
+      return;
+    }
 
-	const chartTitle = document.getElementById('dashboardChartTitle');
-	const grouped = aggregateByDate(reports);
-	const labels = grouped.map((item) => item.label);
-	const salesData = grouped.map((item) => item.totalSales);
-	const expensesData = grouped.map((item) => item.totalExpenses);
+    const chartTitle = ErrorUtils?.safeGetId('dashboardChartTitle');
+    const grouped = aggregateByDate(reports || []);
+    const labels = grouped.map((item) => item?.label || '');
+    const salesData = grouped.map((item) => Number(item?.totalSales) || 0);
+    const expensesData = grouped.map((item) => Number(item?.totalExpenses) || 0);
 
-	if (chartTitle) {
-		chartTitle.textContent = reports.length
-			? `Daily Sales vs Expenses - ${formatMonthLabel(reports[0].date)}`
-			: 'Daily Sales vs Expenses';
-	}
+    if (chartTitle) {
+      chartTitle.textContent = reports.length
+        ? `Daily Sales vs Expenses - ${formatMonthLabel(reports[0]?.date)}`
+        : 'Daily Sales vs Expenses';
+    }
 
-	new Chart(ctx.getContext('2d'), {
-		type: 'bar',
-		data: {
-			labels,
-			datasets: [
-				{
-					label: 'Total Sales',
-					data: salesData,
-					backgroundColor: '#10b981',
-					borderRadius: 6,
-					barThickness: 18,
-				},
-				{
-					label: 'Total Expenses',
-					data: expensesData,
-					backgroundColor: '#ef4444',
-					borderRadius: 6,
-					barThickness: 18,
-				},
-			],
-		},
-		options: {
-			maintainAspectRatio: false,
-			scales: {
-				y: {
-					beginAtZero: true,
-					ticks: {
-						callback(value) {
-							return formatPeso(Number(value));
-						},
-					},
-					grid: { color: 'rgba(0,0,0,0.05)' },
-				},
-				x: { grid: { display: false } },
-			},
-			plugins: {
-				legend: { display: false },
-				tooltip: {
-					callbacks: {
-						label(context) {
-							const value = context.parsed.y ?? context.parsed;
-							return `${context.dataset.label}: ${formatPeso(Number(value))}`;
-						},
-					},
-				},
-			},
-		},
-	});
+    new Chart(ctx.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Total Sales',
+            data: salesData,
+            backgroundColor: '#10b981',
+            borderRadius: 6,
+            barThickness: 18,
+          },
+          {
+            label: 'Total Expenses',
+            data: expensesData,
+            backgroundColor: '#ef4444',
+            borderRadius: 6,
+            barThickness: 18,
+          },
+        ],
+      },
+      options: {
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback(value) {
+                return formatPeso(Number(value));
+              },
+            },
+            grid: { color: 'rgba(0,0,0,0.05)' },
+          },
+          x: { grid: { display: false } },
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label(context) {
+                const value = context.parsed.y ?? context.parsed;
+                return `${context.dataset.label}: ${formatPeso(Number(value))}`;
+              },
+            },
+          },
+        },
+      },
+    });
+  } catch (error) {
+    ErrorUtils?.showErrorToast('Chart failed to load.');
+    ErrorUtils?.logError('renderChart', error);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-	const reports = loadReports().sort((a, b) => new Date(b.createdAt || b.date || 0) - new Date(a.createdAt || a.date || 0));
-	renderCards(reports);
-	renderChart(reports);
+  try {
+    const reports = loadReports().sort((a, b) => {
+      const dateA = ErrorUtils?.safeParseDate(b.createdAt || b.date || '0');
+      const dateB = ErrorUtils?.safeParseDate(a.createdAt || a.date || '0');
+      return dateB - dateA;
+    }).filter(r => r && typeof r === 'object'); // safe filter
+    renderCards(reports);
+    renderChart(reports);
+  } catch (error) {
+    ErrorUtils?.showErrorToast('Dashboard failed to load. Please refresh.');
+    ErrorUtils?.logError('Dashboard Init', error);
+  }
 });

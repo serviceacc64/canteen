@@ -507,5 +507,13 @@
 
 </body>
 </html>
-<!-- Success toast -->
+<!-- Enhanced Toast Container for Error Handling -->
+<div id="appToast" class="toast-container" role="status" aria-live="polite" aria-atomic="true">
+  <div id="appToastMsg" class="toast" style="display: none;">
+    <span></span>
+    <button class="toast-close" aria-label="Close">&times;</button>
+  </div>
+</div>
+
+<!-- Success toast (legacy) -->
 <div id="addEntrySuccess" class="toast" role="status" aria-live="polite" aria-atomic="true">Entry added</div>
