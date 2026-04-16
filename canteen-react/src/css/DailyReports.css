@@ -1,0 +1,194 @@
+/* Daily Reports - modern light UI using canteen palette */
+
+.dailyReports {
+  background: #ffffff;
+  border: 1px solid rgba(40, 90, 72, 0.16);
+  border-radius: 16px;
+  box-shadow:
+    0 10px 28px rgba(9, 20, 19, 0.06),
+    0 2px 8px rgba(9, 20, 19, 0.04);
+}
+
+.dailyReports__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 6px 0 18px;
+  border-bottom: 1px solid rgba(40, 90, 72, 0.12);
+  margin-bottom: 18px;
+}
+
+.dailyReports__title {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.4px;
+  color: #091413;
+}
+
+.dailyReports__subtitle {
+  margin: 6px 0 0;
+  color: rgba(9, 20, 19, 0.65);
+  font-size: 14px;
+}
+
+.dailyReports__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dailyReports__primaryLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+
+  color: #E7F2EF;
+  background: linear-gradient(180deg, #408A71, #285A48);
+  border: 1px solid rgba(40, 90, 72, 0.35);
+  box-shadow:
+    0 10px 18px rgba(9, 20, 19, 0.12),
+    inset 0 1px 0 rgba(231, 242, 239, 0.45);
+  transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+}
+
+.dailyReports__primaryLink:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.02);
+  box-shadow:
+    0 12px 22px rgba(9, 20, 19, 0.14),
+    inset 0 1px 0 rgba(231, 242, 239, 0.5);
+}
+
+.dailyReports__primaryLink:active {
+  transform: translateY(0);
+}
+
+.dailyReports__primaryLink:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(176, 228, 204, 0.55),
+    0 12px 22px rgba(9, 20, 19, 0.14);
+}
+
+.dailyReports__primaryLink--wide {
+  width: 100%;
+}
+
+.dailyReports__empty {
+  padding: 8px 0 4px;
+}
+
+.dailyReports__emptyCard {
+  border-radius: 16px;
+  border: 1px solid rgba(64, 138, 113, 0.18);
+  background: linear-gradient(180deg, rgba(231, 242, 239, 0.9), rgba(231, 242, 239, 0.55));
+  padding: 18px;
+  display: grid;
+  gap: 10px;
+  max-width: 540px;
+}
+
+.dailyReports__emptyCard h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 900;
+  color: #091413;
+}
+
+.dailyReports__emptyCard p {
+  margin: 0;
+  color: rgba(9, 20, 19, 0.65);
+}
+
+.dailyReports__tableCard {
+  margin-top: 6px;
+  border-radius: 16px;
+  border: 1px solid rgba(40, 90, 72, 0.16);
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(9, 20, 19, 0.05);
+}
+
+.dailyReports__tableWrap {
+  overflow: auto;
+  border-radius: 16px;
+}
+
+.dailyReports__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 840px;
+}
+
+.dailyReports__table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  text-align: left;
+  padding: 12px 14px;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: rgba(40, 90, 72, 0.92);
+  background: linear-gradient(180deg, rgba(231, 242, 239, 1), rgba(231, 242, 239, 0.72));
+  border-bottom: 1px solid rgba(40, 90, 72, 0.14);
+}
+
+.dailyReports__table tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(40, 90, 72, 0.12);
+  color: rgba(9, 20, 19, 0.82);
+  background: #ffffff;
+}
+
+.dailyReports__table tbody tr:hover td {
+  background: rgba(176, 228, 204, 0.22);
+}
+
+.dailyReports__rowActions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.dailyReports__link {
+  color: #285A48;
+  font-weight: 800;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(40, 90, 72, 0.25);
+}
+
+.dailyReports__link:hover {
+  color: #091413;
+  border-bottom-color: rgba(64, 138, 113, 0.45);
+}
+
+.dailyReports__link:focus-visible {
+  outline: none;
+  border-radius: 8px;
+  box-shadow: 0 0 0 3px rgba(176, 228, 204, 0.6);
+}
+
+@media (max-width: 720px) {
+  .dailyReports__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .dailyReports__title {
+    font-size: 24px;
+  }
+
+  .dailyReports__emptyCard {
+    max-width: 100%;
+  }
+}

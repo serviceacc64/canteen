@@ -1,0 +1,63 @@
+/* Header - modern light top bar using canteen palette */
+
+.top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+
+  padding: 14px 16px;
+  margin: 0 0 16px;
+
+  border-radius: 16px;
+  border: 1px solid rgba(40, 90, 72, 0.16);
+  background: linear-gradient(180deg, rgba(231, 242, 239, 0.85), rgba(255, 255, 255, 0.95));
+  box-shadow:
+    0 10px 28px rgba(9, 20, 19, 0.06),
+    0 2px 8px rgba(9, 20, 19, 0.04);
+}
+
+.top-header__left {
+  min-width: 0;
+}
+
+.top-header__title {
+  font-weight: 900;
+  letter-spacing: -0.2px;
+  color: #091413;
+  line-height: 1.15;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.top-header__right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+}
+
+.top-header__date {
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(9, 20, 19, 0.75);
+  letter-spacing: 0.2px;
+
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(64, 138, 113, 0.18);
+  background: rgba(176, 228, 204, 0.22);
+}
+
+@media (max-width: 720px) {
+  .top-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .top-header__title {
+    white-space: normal;
+  }
+}

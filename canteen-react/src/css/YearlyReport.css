@@ -1,0 +1,119 @@
+/* Yearly Reports - modern light UI using canteen palette */
+
+.yearlyReports {
+  background: #ffffff;
+  border: 1px solid rgba(40, 90, 72, 0.16);
+  border-radius: 16px;
+  box-shadow:
+    0 10px 28px rgba(9, 20, 19, 0.06),
+    0 2px 8px rgba(9, 20, 19, 0.04);
+}
+
+.yearlyReports__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 6px 0 18px;
+  border-bottom: 1px solid rgba(40, 90, 72, 0.12);
+  margin-bottom: 18px;
+}
+
+.yearlyReports__title {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.4px;
+  color: #091413;
+}
+
+.yearlyReports__subtitle {
+  margin: 6px 0 0;
+  color: rgba(9, 20, 19, 0.65);
+  font-size: 14px;
+}
+
+.yearlyReports__empty {
+  padding: 8px 0 4px;
+}
+
+.yearlyReports__emptyCard {
+  border-radius: 16px;
+  border: 1px solid rgba(64, 138, 113, 0.18);
+  background: linear-gradient(180deg, rgba(231, 242, 239, 0.9), rgba(231, 242, 239, 0.55));
+  padding: 18px;
+  display: grid;
+  gap: 10px;
+  max-width: 560px;
+}
+
+.yearlyReports__emptyCard h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 900;
+  color: #091413;
+}
+
+.yearlyReports__emptyCard p {
+  margin: 0;
+  color: rgba(9, 20, 19, 0.65);
+}
+
+.yearlyReports__tableCard {
+  margin-top: 6px;
+  border-radius: 16px;
+  border: 1px solid rgba(40, 90, 72, 0.16);
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(9, 20, 19, 0.05);
+}
+
+.yearlyReports__tableWrap {
+  overflow: auto;
+  border-radius: 16px;
+}
+
+.yearlyReports__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 760px;
+}
+
+.yearlyReports__table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  text-align: left;
+  padding: 12px 14px;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: rgba(40, 90, 72, 0.92);
+  background: linear-gradient(180deg, rgba(231, 242, 239, 1), rgba(231, 242, 239, 0.72));
+  border-bottom: 1px solid rgba(40, 90, 72, 0.14);
+}
+
+.yearlyReports__table tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(40, 90, 72, 0.12);
+  color: rgba(9, 20, 19, 0.82);
+  background: #ffffff;
+}
+
+.yearlyReports__table tbody tr:hover td {
+  background: rgba(176, 228, 204, 0.22);
+}
+
+@media (max-width: 720px) {
+  .yearlyReports__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .yearlyReports__title {
+    font-size: 24px;
+  }
+
+  .yearlyReports__emptyCard {
+    max-width: 100%;
+  }
+}
