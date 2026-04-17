@@ -28,7 +28,7 @@ create table if not exists public.reports (
   totals jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default timezone('utc', now()),
   updated_at timestamptz not null default timezone('utc', now()),
-  constraint reports_user_date_location_unique unique (user_id, report_date, canteen_location)
+  -- Multiple reports per same user/date/location are allowed for management history.
 );
 
 drop trigger if exists trg_reports_set_updated_at on public.reports;

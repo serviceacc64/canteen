@@ -56,7 +56,7 @@ const buildReportPayload = async (report) => {
   const userId = await getAuthenticatedUserId();
 
   return {
-    id: report.id ?? `${report.date}-${report.canteenLocation}`,
+    id: report.id ?? crypto.randomUUID(),
     user_id: userId,
     report_date: report.date,
     canteen_location: report.canteenLocation,

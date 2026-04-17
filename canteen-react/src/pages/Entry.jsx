@@ -89,7 +89,6 @@ const Entry = () => {
 
     try {
       await createOrUpdateReport({
-        id: `${date}-${canteenLocation}`,
         date,
         canteenLocation,
         cashSalesRows,
