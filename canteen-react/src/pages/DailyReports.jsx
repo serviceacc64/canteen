@@ -8,10 +8,15 @@ import '../css/DailyReports.css';
 const DailyReports = () => {
   const { reports, loading, removeReport } = useReports();
 
-  const onDelete = (id) => {
+  const onDelete = async (id) => {
     const confirmed = window.confirm('Delete this report permanently?');
     if (!confirmed) return;
-    removeReport(id);
+
+    try {
+      await removeReport(id);
+    } catch (error) {
+      window.alert('Unable to delete the report. Please try again.');
+    }
   };
 
   if (loading) {
@@ -23,7 +28,7 @@ const DailyReports = () => {
       <header className="dailyReports__header">
         <div>
           <h1 className="dailyReports__title">Daily Reports</h1>
-          <p className="dailyReports__subtitle">Persisted entries from local storage.</p>
+          <p className="dailyReports__subtitle">Persisted entries in Supabase.</p>
         </div>
         <div className="dailyReports__actions">
           <Link to="/entry" className="dailyReports__primaryLink">

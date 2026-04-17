@@ -1,20 +1,33 @@
-import { getItem, setItem } from './storage';
+import { supabase } from './supabaseClient';
 
-const AUTH_KEY = 'canteen_auth';
 const defaultAuth = {
   isAuthenticated: false,
   user: null,
+  session: null,
 };
 
-let authState = getItem(AUTH_KEY, defaultAuth) ?? defaultAuth;
+let authState = defaultAuth;
 const listeners = new Set();
+
+const notify = () => {
+  listeners.forEach((listener) => listener(authState));
+};
+
+const syncSession = (session) => {
+  const user = session?.user ?? null;
+  authState = {
+    isAuthenticated: Boolean(user),
+    user: user ? { id: user.id, email: user.email } : null,
+    session,
+  };
+  notify();
+};
 
 export const getAuthState = () => authState;
 
 export const setAuthState = (nextAuth) => {
   authState = nextAuth;
-  setItem(AUTH_KEY, authState);
-  listeners.forEach((listener) => listener(authState));
+  notify();
 };
 
 export const subscribe = (listener) => {
@@ -25,8 +38,22 @@ export const subscribe = (listener) => {
   };
 };
 
+export const initializeAuth = async () => {
+  if (!supabase) return;
+
+  const { data, error } = await supabase.auth.getSession();
+  if (!error) {
+    syncSession(data.session);
+  }
+
+  supabase.auth.onAuthStateChange((_event, session) => {
+    syncSession(session);
+  });
+};
+
 export default {
   getAuthState,
   setAuthState,
   subscribe,
+  initializeAuth,
 };

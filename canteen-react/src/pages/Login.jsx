@@ -1,20 +1,34 @@
-import { useState } from "react";
-import { Navigate } from "react-router-dom";
-import Button from "../components/common/Button";
-import useAuth from "../hooks/useAuth";
-import "../css/Login.css";
+import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import Button from '../components/common/Button';
+import useAuth from '../hooks/useAuth';
+import { signIn } from '../services/supabaseAuthApi';
+import '../css/Login.css';
 
 const Login = () => {
   const { isAuthenticated, login } = useAuth();
-  const [name, setName] = useState("Canteen Staff");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
-    login({ name: name.trim() || "Canteen Staff" });
+    setErrorMessage('');
+    setIsLoading(true);
+
+    try {
+      const data = await signIn(email.trim(), password);
+      login({ user: data.user, session: data.session });
+    } catch (error) {
+      setErrorMessage(error?.message || 'Unable to sign in. Please check your email and password.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -27,24 +41,23 @@ const Login = () => {
           <p className="login-subtitle">Secure administrator access for staff only.</p>
         </div>
 
-        <div
-          id="error-message"
-          className="error-message"
-          role="alert"
-          aria-live="polite"
-        >
-          Invalid email or password. Please try again.
-        </div>
+        {errorMessage && (
+          <div className="error-message" role="alert" aria-live="polite">
+            {errorMessage}
+          </div>
+        )}
 
         <form onSubmit={onSubmit} className="login-form" role="form" aria-labelledby="login-title">
           <div className="input-group">
             <input
               type="email"
-              id="username"
-              name="username"
+              id="email"
+              name="email"
               placeholder="Email"
               autoComplete="email"
               aria-label="Admin Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
             <svg
@@ -52,9 +65,7 @@ const Login = () => {
               viewBox="0 0 24 24"
               aria-hidden="true"
               focusable="false"
-            >
-              
-            </svg>
+            />
           </div>
 
           <div className="input-group">
@@ -65,6 +76,8 @@ const Login = () => {
               placeholder="Password"
               autoComplete="current-password"
               aria-label="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
             <svg
@@ -72,14 +85,12 @@ const Login = () => {
               viewBox="0 0 24 24"
               aria-hidden="true"
               focusable="false"
-            >
-              
-            </svg>
+            />
           </div>
 
           <div className="options">
             <label className="checkbox-group">
-              <input type="checkbox" id="remember" name="remember" />
+              <input type="checkbox" id="remember" name="remember" defaultChecked />
               Keep me signed in
             </label>
           </div>
@@ -90,8 +101,9 @@ const Login = () => {
             className="btn-login"
             id="login-btn"
             aria-label="Login to admin panel"
+            disabled={isLoading}
           >
-            Access Admin
+            {isLoading ? 'Signing in...' : 'Access Admin'}
           </Button>
         </form>
 

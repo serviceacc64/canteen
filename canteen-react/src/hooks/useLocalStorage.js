@@ -1,16 +1,7 @@
-import { useEffect, useState } from 'react';
-import { getItem, setItem } from '../services/storage';
+import { useState } from 'react';
 
 const useLocalStorage = (key, initialValue) => {
-  const [value, setValue] = useState(() => {
-    const existing = getItem(key, initialValue);
-    return existing ?? initialValue;
-  });
-
-  useEffect(() => {
-    setItem(key, value);
-  }, [key, value]);
-
+  const [value, setValue] = useState(initialValue);
   return [value, setValue];
 };
 

@@ -1,13 +1,38 @@
 import { Link, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { getReportById } from '../services/reportsApi';
 import { formatPeso } from '../utils/format';
 import '../css/ViewReport.css';
 
 const ViewReport = () => {
   const { id } = useParams();
-  const report = getReportById(id);
+  const [report, setReport] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!report) {
+  useEffect(() => {
+    const loadReport = async () => {
+      setLoading(true);
+      try {
+        const data = await getReportById(id);
+        setReport(data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      loadReport();
+    }
+  }, [id]);
+
+  if (loading) {
+    return <div className="page"><p>Loading report...</p></div>;
+  }
+
+  if (!report || error) {
     return (
       <div className="page viewReport">
         <header className="viewReport__header">

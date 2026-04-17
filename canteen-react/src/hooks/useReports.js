@@ -4,20 +4,29 @@ import { deleteReport, getReports, saveReport } from '../services/reportsApi';
 const useReports = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const refreshReports = useCallback(() => {
-    const all = getReports();
-    setReports(all);
-    setLoading(false);
-    return all;
+  const refreshReports = useCallback(async () => {
+    setLoading(true);
+    try {
+      const all = await getReports();
+      setReports(all);
+      setError(null);
+      return all;
+    } catch (err) {
+      setError(err);
+      return [];
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
     refreshReports();
   }, [refreshReports]);
 
-  const createOrUpdateReport = useCallback((report) => {
-    const saved = saveReport(report);
+  const createOrUpdateReport = useCallback(async (report) => {
+    const saved = await saveReport(report);
     setReports((prev) => {
       const idx = prev.findIndex((item) => item.id === saved.id);
       if (idx >= 0) {
@@ -30,17 +39,16 @@ const useReports = () => {
     return saved;
   }, []);
 
-  const removeReport = useCallback((id) => {
-    const ok = deleteReport(id);
-    if (ok) {
-      setReports((prev) => prev.filter((report) => report.id !== id));
-    }
-    return ok;
+  const removeReport = useCallback(async (id) => {
+    await deleteReport(id);
+    setReports((prev) => prev.filter((report) => report.id !== id));
+    return true;
   }, []);
 
   return {
     reports,
     loading,
+    error,
     refreshReports,
     createOrUpdateReport,
     removeReport,
