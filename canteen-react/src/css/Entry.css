@@ -112,12 +112,12 @@
 
 .main-content {
   display: grid;
-  grid-template-columns: 1.35fr 0.65fr;
+  grid-template-columns: 1fr 1fr;
   gap: 18px;
-  align-items: start;
+  align-items: stretch;
 }
 
-..left-column,
+.left-column,
 .right-column {
   display: grid;
   gap: 18px;

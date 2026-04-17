@@ -1,1 +1,9 @@
-# Vite CSS Fonts Error Fix\n\n## Progress\n✅ **Step 1 Complete**: Created `src/components/css/fonts.css` with Poppins fonts\n\n## Remaining\n### Step 2: Test\n- Run `npm run dev` to verify\n\n### Step 3: Validate & Complete\n- Check no ENOENT error\n- Confirm fonts render
+- [x] Recreate `src/pages/ViewReport.jsx` to show full report details with section tables (not only summary cards)
+- [x] Add section-level and row-level rendering for:
+  - cash sales
+  - store purchases
+  - store consignment
+  - operating expenses
+  - salary breakdown
+- [x] Update `src/css/ViewReport.css` for detailed table layout and responsive behavior
+- [ ] Run quick verification (`npm run build`) and summarize changes

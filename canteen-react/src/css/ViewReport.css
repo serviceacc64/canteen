@@ -1,4 +1,4 @@
-/* View Report - modern light UI using canteen palette */
+/* View Report - detailed layout with full section tables */
 
 .viewReport {
   background: #ffffff;
@@ -34,9 +34,9 @@
 
 .viewReport__meta {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
-  margin: 10px 0 16px;
+  margin: 10px 0 18px;
 }
 
 .viewReport__metaItem {
@@ -65,9 +65,17 @@
   white-space: nowrap;
 }
 
-.viewReport .summary-grid {
+.viewReport__metaValue.is-wrap {
+  white-space: normal;
+  word-break: break-word;
+}
+
+.viewReport__totals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
-  margin-top: 6px;
+  margin-top: 8px;
+  margin-bottom: 18px;
 }
 
 .viewReport .summary-card {
@@ -79,6 +87,7 @@
   box-shadow:
     0 8px 18px rgba(9, 20, 19, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  padding: 14px;
 }
 
 .viewReport .summary-card::before {
@@ -114,11 +123,113 @@
   color: #091413;
 }
 
+.viewReport__sections {
+  display: grid;
+  gap: 16px;
+}
+
+.viewReport__section {
+  border: 1px solid rgba(40, 90, 72, 0.14);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 6px 14px rgba(9, 20, 19, 0.04);
+  padding: 14px;
+}
+
+.viewReport__sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.viewReport__sectionTitle {
+  margin: 0;
+  font-size: 18px;
+  color: #163128;
+}
+
+.viewReport__sectionTotal {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #285a48;
+}
+
+.viewReport__tableWrap {
+  overflow-x: auto;
+}
+
+.viewReport__table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 560px;
+  border: 1px solid rgba(40, 90, 72, 0.12);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.viewReport__table th,
+.viewReport__table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(40, 90, 72, 0.1);
+  text-align: left;
+  font-size: 14px;
+  color: #163128;
+}
+
+.viewReport__table thead th {
+  background: rgba(231, 242, 239, 0.9);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.35px;
+  color: #285a48;
+}
+
+.viewReport__table tfoot td {
+  font-weight: 800;
+  background: rgba(231, 242, 239, 0.55);
+}
+
+.viewReport__table tr:last-child td {
+  border-bottom: none;
+}
+
+.viewReport__itemCell {
+  display: grid;
+  gap: 4px;
+}
+
+.viewReport__muted {
+  color: rgba(22, 49, 40, 0.65);
+  font-size: 12px;
+}
+
+.viewReport__empty {
+  text-align: center;
+  color: rgba(22, 49, 40, 0.6);
+}
+
+.is-right {
+  text-align: right !important;
+}
+
 .viewReport__actions {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 18px;
+}
+
+@media (max-width: 920px) {
+  .viewReport__meta {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .viewReport__totals {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 720px) {
@@ -133,5 +244,10 @@
 
   .viewReport__meta {
     grid-template-columns: 1fr;
+  }
+
+  .viewReport__sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
