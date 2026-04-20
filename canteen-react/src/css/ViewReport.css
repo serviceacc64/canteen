@@ -157,8 +157,17 @@
   color: #285a48;
 }
 
+.viewReport__tableCard {
+  margin-top: 6px;
+  border-radius: 16px;
+  border: 1px solid rgba(40, 90, 72, 0.16);
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(9, 20, 19, 0.05);
+}
+
 .viewReport__tableWrap {
-  overflow-x: auto;
+  overflow: auto;
+  border-radius: 16px;
 }
 
 .viewReport__table {
@@ -220,6 +229,31 @@
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 18px;
+}
+
+.viewReport__rowActions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.viewReport__link {
+  color: #285A48;
+  font-weight: 800;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(40, 90, 72, 0.25);
+}
+
+.viewReport__link:hover {
+  color: #091413;
+  border-bottom-color: rgba(64, 138, 113, 0.45);
+}
+
+.viewReport__link:focus-visible {
+  outline: none;
+  border-radius: 8px;
+  box-shadow: 0 0 0 3px rgba(176, 228, 204, 0.6);
 }
 
 @media (max-width: 920px) {

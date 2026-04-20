@@ -1,4 +1,6 @@
 import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import Button from '../components/common/Button';
 import useReports from '../hooks/useReports';
 import { formatPeso } from '../utils/format';
 import '../css/MonthlyReports.css';
@@ -11,7 +13,7 @@ const monthKey = (dateValue) => {
 };
 
 const MonthlyReports = () => {
-  const { reports, loading } = useReports();
+  const { reports, loading, removeReport } = useReports();
 
   const grouped = useMemo(() => {
     const map = new Map();
@@ -30,6 +32,20 @@ const MonthlyReports = () => {
 
     return [...map.values()].sort((a, b) => a.month.localeCompare(b.month));
   }, [reports]);
+
+  const onDelete = async (month) => {
+    const confirmed = window.confirm(`Delete all reports for ${month} permanently?`);
+    if (!confirmed) return;
+
+    try {
+      const reportsToDelete = reports.filter((report) => monthKey(report.date) === month);
+      for (const report of reportsToDelete) {
+        await removeReport(report.id);
+      }
+    } catch (error) {
+      window.alert('Unable to delete the reports. Please try again.');
+    }
+  };
 
   if (loading) {
     return <div className="page"><p>Loading monthly reports...</p></div>;
@@ -62,6 +78,7 @@ const MonthlyReports = () => {
                 <th>Total Sales</th>
                 <th>Total Expenses</th>
                 <th>Net Profit</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -72,6 +89,14 @@ const MonthlyReports = () => {
                   <td>{formatPeso(row.totalSales)}</td>
                   <td>{formatPeso(row.totalExpenses)}</td>
                   <td>{formatPeso(row.netProfit)}</td>
+                  <td className="monthlyReports__rowActions">
+                    <Link className="monthlyReports__link" to={`/view/monthly/${row.month}`}>
+                      View
+                    </Link>
+                    <Button variant="danger" onClick={() => onDelete(row.month)} aria-label={`Delete reports for ${row.month}`}>
+                      Delete
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>

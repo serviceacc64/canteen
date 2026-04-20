@@ -103,6 +103,31 @@
   background: rgba(176, 228, 204, 0.22);
 }
 
+.monthlyReports__rowActions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.monthlyReports__link {
+  color: #285A48;
+  font-weight: 800;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(40, 90, 72, 0.25);
+}
+
+.monthlyReports__link:hover {
+  color: #091413;
+  border-bottom-color: rgba(64, 138, 113, 0.45);
+}
+
+.monthlyReports__link:focus-visible {
+  outline: none;
+  border-radius: 8px;
+  box-shadow: 0 0 0 3px rgba(176, 228, 204, 0.6);
+}
+
 @media (max-width: 720px) {
   .monthlyReports__header {
     align-items: flex-start;

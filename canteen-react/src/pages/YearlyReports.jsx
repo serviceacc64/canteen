@@ -1,4 +1,6 @@
 import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import Button from '../components/common/Button';
 import useReports from '../hooks/useReports';
 import { formatPeso } from '../utils/format';
 import '../css/YearlyReport.css';
@@ -11,7 +13,7 @@ const yearKey = (dateValue) => {
 };
 
 const YearlyReports = () => {
-  const { reports, loading } = useReports();
+  const { reports, loading, removeReport } = useReports();
 
   const grouped = useMemo(() => {
     const map = new Map();
@@ -30,6 +32,20 @@ const YearlyReports = () => {
 
     return [...map.values()].sort((a, b) => a.year.localeCompare(b.year));
   }, [reports]);
+
+  const onDelete = async (year) => {
+    const confirmed = window.confirm(`Delete all reports for ${year} permanently?`);
+    if (!confirmed) return;
+
+    try {
+      const reportsToDelete = reports.filter((report) => yearKey(report.date) === year);
+      for (const report of reportsToDelete) {
+        await removeReport(report.id);
+      }
+    } catch (error) {
+      window.alert('Unable to delete the reports. Please try again.');
+    }
+  };
 
   if (loading) {
     return <div className="page"><p>Loading yearly reports...</p></div>;
@@ -62,6 +78,7 @@ const YearlyReports = () => {
                 <th>Total Sales</th>
                 <th>Total Expenses</th>
                 <th>Net Profit</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -72,6 +89,14 @@ const YearlyReports = () => {
                   <td>{formatPeso(row.totalSales)}</td>
                   <td>{formatPeso(row.totalExpenses)}</td>
                   <td>{formatPeso(row.netProfit)}</td>
+                  <td className="yearlyReports__rowActions">
+                    <Link className="yearlyReports__link" to={`/view/yearly/${row.year}`}>
+                      View
+                    </Link>
+                    <Button variant="danger" onClick={() => onDelete(row.year)} aria-label={`Delete reports for ${row.year}`}>
+                      Delete
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>

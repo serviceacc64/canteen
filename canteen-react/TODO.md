@@ -1,9 +1,13 @@
-- [x] Recreate `src/pages/ViewReport.jsx` to show full report details with section tables (not only summary cards)
-- [x] Add section-level and row-level rendering for:
-  - cash sales
-  - store purchases
-  - store consignment
-  - operating expenses
-  - salary breakdown
-- [x] Update `src/css/ViewReport.css` for detailed table layout and responsive behavior
-- [ ] Run quick verification (`npm run build`) and summarize changes
+# Excel Export Fix TODO
+
+✅ **Plan Approved** - Update excelExport.js mappings
+
+## Steps:
+- [x] 1. Create TODO.md
+- [ ] 2. Read current excelExport.js (already done)
+- [x] 3. Edit map: Add operatingExpenses + complete consignmentToSupplier
+- [x] 4. Add operatingExpensesRows loop in applyTemplateData()
+- [ ] 5. Test: npm run dev → entry → view → export
+
+- [ ] 6. attempt_completion
+
