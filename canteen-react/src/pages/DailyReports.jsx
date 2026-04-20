@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/common/Button';
 import useReports from '../hooks/useReports';
@@ -7,6 +8,22 @@ import '../css/DailyReports.css';
 
 const DailyReports = () => {
   const { reports, loading, removeReport } = useReports();
+  const [selectedDate, setSelectedDate] = useState('');
+
+  const getFilteredReports = () => {
+    if (!selectedDate) {
+      return reports;
+    }
+    return reports.filter((report) => report.date === selectedDate);
+  };
+
+  const filteredReports = getFilteredReports();
+
+
+
+
+
+
 
   const onDelete = async (id) => {
     const confirmed = window.confirm('Delete this report permanently?');
@@ -31,6 +48,27 @@ const DailyReports = () => {
           <p className="dailyReports__subtitle">Persisted entries in Supabase.</p>
         </div>
         <div className="dailyReports__actions">
+          <div className="dailyReports__filterGroup">
+            <label htmlFor="dateFilter" className="dailyReports__filterLabel">
+              Filter by Date:
+            </label>
+            <input
+              id="dateFilter"
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className="dailyReports__dateInput"
+            />
+            {selectedDate && (
+              <button
+                onClick={() => setSelectedDate('')}
+                className="dailyReports__clearBtn"
+                title="Clear date filter"
+              >
+                Clear
+              </button>
+            )}
+          </div>
           <Link to="/entry" className="dailyReports__primaryLink">
             Create New Entry
           </Link>
@@ -45,6 +83,20 @@ const DailyReports = () => {
             <Link to="/entry" className="dailyReports__primaryLink dailyReports__primaryLink--wide">
               Go to New Entry
             </Link>
+          </div>
+        </div>
+      ) : filteredReports.length === 0 ? (
+        <div className="dailyReports__empty">
+          <div className="dailyReports__emptyCard">
+            <h3>No reports found</h3>
+            <p>No reports match the selected date. Try a different date.</p>
+            <button
+              onClick={() => setSelectedDate('')}
+              className="dailyReports__primaryLink dailyReports__primaryLink--wide"
+              style={{ border: 'none', cursor: 'pointer' }}
+            >
+              View All Reports
+            </button>
           </div>
         </div>
       ) : (
@@ -62,7 +114,7 @@ const DailyReports = () => {
               </tr>
             </thead>
             <tbody>
-              {reports.map((report) => (
+              {filteredReports.map((report) => (
                 <tr key={report.id}>
                   <td>{report.date || '-'}</td>
                   <td>{report.canteenLocation || '-'}</td>
