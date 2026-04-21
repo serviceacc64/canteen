@@ -28,10 +28,9 @@ const Entry = () => {
 
   const [storePurchaseRows, setStorePurchaseRows] = useState([
     createRow('Big Boy', 0, 'Store'),
-    createRow('Bans', 0, 'Store'),
+    
     createRow('Aqua', 0, 'Store'),
-    createRow('MSA', 0, 'Store'),
-    createRow('Others', 0, 'Store'),
+
     createRow('Kitchen', 0, 'Kitchen'),
     createRow('Ice', 0, 'Palamig'),
     createRow('Water', 0, 'Palamig'),
@@ -40,7 +39,7 @@ const Entry = () => {
   const [storeConsignmentRows, setStoreConsignmentRows] = useState([
     createRow('Big Boy', 0),
     createRow('Aqua', 0),
-    createRow('MSA', 0),
+   
   ]);
   const [operatingExpensesRows, setOperatingExpensesRows] = useState([
     createRow('Salary of Helpers', 0),
@@ -225,7 +224,7 @@ const Entry = () => {
 
             <div className="right-column">
               <section className="section">
-                <h3 className="section-title">Operating Expenses</h3>
+                <h3 className="section-title">Summary of Operating Expenses</h3>
                 {operatingExpensesRows.map((row) => (
                   <div className="input-row" key={row.id}>
                     <input
@@ -248,7 +247,7 @@ const Entry = () => {
               </section>
 
               <section className="section">
-                <h3 className="section-title">Summary of Operating Expenses — Salary Breakdown</h3>
+                <h3 className="section-title">Salary Breakdown</h3>
                 {salaryBreakdownRows.map((row) => (
                   <div className="input-row" key={row.id}>
                     <input
@@ -291,6 +290,7 @@ const Entry = () => {
                 </div>
                 <div className="summary-row">
                   <span>Total Expenses</span>
+                  
                   <span>{formatPeso(totals.totalExpenses)}</span>
                 </div>
                 <div className="summary-row net-profit">
