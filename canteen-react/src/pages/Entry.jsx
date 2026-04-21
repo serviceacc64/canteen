@@ -28,9 +28,7 @@ const Entry = () => {
 
   const [storePurchaseRows, setStorePurchaseRows] = useState([
     createRow('Big Boy', 0, 'Store'),
-    
     createRow('Aqua', 0, 'Store'),
-
     createRow('Kitchen', 0, 'Kitchen'),
     createRow('Ice', 0, 'Palamig'),
     createRow('Water', 0, 'Palamig'),

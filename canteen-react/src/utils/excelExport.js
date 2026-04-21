@@ -41,21 +41,15 @@ const map = {
     "LPG": "E39",
     "OTHERS": "E40"
   },
-  operatingExpenses: {
-    "Salary of Helpers": "E36",
-    "Utility Expenses": "E37",
-    "SSS of Helpers": "E38",
-    "LPG": "E39",
-    "Others": "E40"
-  },
+
   salaryBreakdown: {
-    "1": "G36",
-    "2": "G37",
-    "3": "G38",
-    "4": "G39",
-    "5": "G40",
-    "6": "G41",
-    "TOTAL": "G42"
+    name1: "G36", amount1: "I36",
+    name2: "G37", amount2: "I37",
+    name3: "G38", amount3: "I38",
+    name4: "G39", amount4: "I39",
+    name5: "G40", amount5: "I40",
+    name6: "G41", amount6: "I41",
+    TOTAL: "G42"
   },
   totals: {
     totalSales: "G44",
@@ -125,14 +119,22 @@ const applyTemplateData = (worksheet, report) => {
     }
   });
 
-  // Consignment to Supplier
+  // Consignment to Supplier - with OTHERS auto-sum
+  const knownConsignmentLabels = ['BIG BOY', 'AQUA', 'KITCHEN', 'PALAMIG', 'SCHOOL SUPPLIES'];
+  
+  // Sum OTHERS first (unmatched labels)
+  const othersConsignmentRows = (report.storeConsignmentRows ?? [])
+    .filter(item => !knownConsignmentLabels.includes(normalize(item.label)));
+  const othersTotal = othersConsignmentRows.reduce((sum, item) => sum + toNumberSafe(item.amount), 0);
+  setNumberCell(worksheet, map.consignmentToSupplier.OTHERS, othersTotal);
+  
   let payableTotal = 0;
   (report.storeConsignmentRows ?? []).forEach((item) => {
     const key = normalize(item.label);
-    if (map.consignmentToSupplier[key]) {
+    if (map.consignmentToSupplier[key] && key !== 'OTHERS') {
       setNumberCell(worksheet, map.consignmentToSupplier[key], item.amount);
     }
-    payableTotal += toNumberSafe(item.amount); // sum ALL consignment
+    payableTotal += toNumberSafe(item.amount);
   });
   setNumberCell(worksheet, map.consignmentToSupplier.PayableToSupplier, payableTotal);
 
@@ -150,10 +152,14 @@ const applyTemplateData = (worksheet, report) => {
   // Salary Breakdown (index-based)
   let salaryTotal = 0;
   (report.salaryBreakdownRows ?? []).slice(0,6).forEach((item, index) => {
-    const key = String(index + 1);
-    const cellAddress = map.salaryBreakdown[key];
-    if (cellAddress) {
-      setNumberCell(worksheet, cellAddress, item.amount);
+    const idx = index + 1;
+    const nameKey = `name${idx}`;
+    const amountKey = `amount${idx}`;
+    if (map.salaryBreakdown[nameKey]) {
+      setStringCell(worksheet, map.salaryBreakdown[nameKey], item.label);
+    }
+    if (map.salaryBreakdown[amountKey]) {
+      setNumberCell(worksheet, map.salaryBreakdown[amountKey], item.amount);
       salaryTotal += toNumberSafe(item.amount);
     }
   });
