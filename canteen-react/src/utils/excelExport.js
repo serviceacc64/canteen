@@ -18,12 +18,12 @@ const map = {
     "SCHOOL SUPPLIES": "I10"
   },
   storePurchases: {
-    "BIG BOY": "I14",
-    "AQUA": "I15",
-    "OTHERS": "I16",
-    "KITCHEN": "I17",
-    "PALAMIG": "I18",
-    "SCHOOL SUPPLIES": "I19"
+    "BIG BOY": "I15",
+    "AQUA": "I16",
+    "OTHERS": "I17",
+    "KITCHEN": "I18",
+    "PALAMIG": "I19",
+    "SCHOOL SUPPLIES": "I20"
   },
   consignmentToSupplier: {
     "BIG BOY": "G24",
@@ -107,10 +107,20 @@ const applyTemplateData = (worksheet, report) => {
     }
   });
 
-// Store Purchases
+// Store Purchases - with Palamig auto-sum (Ice + Water + Palamig group)
+  // Calculate Palamig total first
+  const palamigRows = (report.storePurchaseRows ?? []).filter(item => 
+    normalize(item.label) === 'ICE' || 
+    normalize(item.label) === 'WATER' || 
+    normalize(item.group) === 'PALAMIG'
+  );
+  const palamigTotal = palamigRows.reduce((sum, item) => sum + toNumberSafe(item.amount), 0);
+  setNumberCell(worksheet, map.storePurchases.PALAMIG, palamigTotal);
+
+  // Individual mappings (skip Palamig overwrites)
   (report.storePurchaseRows ?? []).forEach((item) => {
     const key = normalize(item.label);
-    if (map.storePurchases[key]) {
+    if (map.storePurchases[key] && key !== 'PALAMIG') {
       setNumberCell(worksheet, map.storePurchases[key], item.amount);
     }
   });
