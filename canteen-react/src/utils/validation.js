@@ -1,12 +1,12 @@
 export const requiredText = (value) => String(value ?? '').trim().length > 0;
 
 export const requiredNumber = (value) => {
-  const num = Number.parseFloat(value);
+  const num = Number(value);
   return Number.isFinite(num);
 };
 
 export const minNumber = (value, min = 0) => {
-  const num = Number.parseFloat(value);
+  const num = Number(value) / 100;
   return Number.isFinite(num) && num >= min;
 };
 

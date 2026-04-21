@@ -6,7 +6,10 @@ export const formatPeso = (value) => {
   }).format(amount);
 };
 
-export const parseAmount = (value) => Number.isFinite(parseFloat(value)) ? parseFloat(value) : 0;
+export const parseAmount = (value) => {
+  const cents = Number.isFinite(Number(value)) ? Number(value) : 0;
+  return cents / 100;
+};
 
 export const escapeHtml = (str) => String(str).replace(/[&<>"']/g, (s) => {
   const map = {

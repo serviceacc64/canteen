@@ -69,7 +69,7 @@ const toNumber = (value) => {
 };
 
 const toNumberSafe = (value) => {
-  const n = Number(value);
+  const n = Number(value) / 100;
   return Number.isFinite(n) ? n : 0;
 };
 
