@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 const sumByAmount = (rows = []) =>
-  rows.reduce((total, row) => total + (parseInt(row?.amount) / 100 || 0), 0);
+  rows.reduce((total, row) => total + (Number.parseFloat(row?.amount) || 0), 0);
 
 const useFormCalc = ({ cashSalesRows, storePurchaseRows, storeConsignmentRows, operatingExpensesRows, salaryBreakdownRows }) => {
   const totals = useMemo(() => {
