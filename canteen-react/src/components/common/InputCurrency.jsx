@@ -9,10 +9,10 @@ const InputCurrency = ({
   const [rawInput, setRawInput] = useState('');
   const inputRef = useRef(null);
 
-  // Sync prop value to rawInput on mount/change
+// Sync prop value to rawInput on mount/change (blank if 0)
   useEffect(() => {
     const peso = value / 100;
-    setRawInput(peso.toFixed(2));
+    setRawInput(peso === 0 ? '' : peso.toFixed(2));
   }, [value]);
 
   const handleChange = (e) => {

@@ -7,7 +7,7 @@ import { formatPeso } from '../utils/format';
 import '../css/ViewReport.css';
 
 const toNumber = (value) => {
-  const n = Number(value);
+  const n = Number(value) / 100;
   return Number.isFinite(n) ? n : 0;
 };
 

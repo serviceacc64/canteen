@@ -49,7 +49,7 @@ const map = {
     name4: "G39", amount4: "I39",
     name5: "G40", amount5: "I40",
     name6: "G41", amount6: "I41",
-    TOTAL: "G42"
+    TOTAL: "I42"
   },
   totals: {
     totalSales: "G44",
