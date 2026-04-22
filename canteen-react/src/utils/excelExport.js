@@ -32,9 +32,9 @@ const map = {
     "KITCHEN": "G27",
     "PALAMIG": "G28",
     "SCHOOL SUPPLIES": "G29",
-    "PayableToSupplier": "G30"
   },
   operatingExpenses: {
+
     "SALARY OF HELPERS": "E36",
     "UTILITY EXPENSES": "E37",
     "SSS OF HELPERS": "E38",
@@ -48,13 +48,7 @@ const map = {
     name3: "G38", amount3: "I38",
     name4: "G39", amount4: "I39",
     name5: "G40", amount5: "I40",
-    name6: "G41", amount6: "I41",
-    TOTAL: "I42"
-  },
-  totals: {
-    totalSales: "G44",
-    totalExpenses: "G45",
-    netProfit: "G47"
+    name6: "G41", amount6: "I41"
   }
 };
 
@@ -62,6 +56,7 @@ const map = {
 // 🛠 HELPER FUNCTIONS
 // =========================
 const normalize = (str) => str?.toString().trim().toUpperCase() || '';
+
 
 const toNumber = (value) => {
   const n = Number(value);
@@ -101,42 +96,44 @@ const applyTemplateData = (worksheet, report) => {
     }
   });
 
-// Store Purchases - with Palamig auto-sum (Ice + Water + Palamig group)
-  // Calculate Palamig total first
+// Store Purchases - with Palamig + Store OTHERS auto-sum
+  // 1. PALAMIG auto-sum (Ice + Water + Palamig group)
   const palamigRows = (report.storePurchaseRows ?? []).filter(item => 
     normalize(item.label) === 'ICE' || 
     normalize(item.label) === 'WATER' || 
     normalize(item.group) === 'PALAMIG'
   );
-  const palamigTotal = palamigRows.reduce((sum, item) => sum + toNumberSafe(item.amount), 0);
+  const palamigTotal = palamigRows.reduce((sum, item) => sum + Number(item.amount), 0);
   setNumberCell(worksheet, map.storePurchases.PALAMIG, palamigTotal);
 
-  // Individual mappings (skip Palamig overwrites)
+  // 2. STORE OTHERS I17 = sum(ALL Store group *except* BIG BOY/AQUA)
+  const storeOthersRows = (report.storePurchaseRows ?? []).filter(item => 
+    item.group === 'Store' && 
+    normalize(item.label) !== 'BIG BOY' && 
+    normalize(item.label) !== 'AQUA'
+  );
+  const storeOthersTotal = storeOthersRows.reduce((sum, item) => sum + Number(item.amount), 0);
+  setNumberCell(worksheet, map.storePurchases["OTHERS"], storeOthersTotal);
+
+  // 3. Individual mappings (skip auto-summed)
   (report.storePurchaseRows ?? []).forEach((item) => {
     const key = normalize(item.label);
-    if (map.storePurchases[key] && key !== 'PALAMIG') {
+    if (map.storePurchases[key] && key !== 'PALAMIG' && key !== 'OTHERS') {
       setNumberCell(worksheet, map.storePurchases[key], item.amount);
     }
   });
 
-  // Consignment to Supplier - with OTHERS auto-sum
-  const knownConsignmentLabels = ['BIG BOY', 'AQUA', 'KITCHEN', 'PALAMIG', 'SCHOOL SUPPLIES'];
-  
-  // Sum OTHERS first (unmatched labels)
-  const othersConsignmentRows = (report.storeConsignmentRows ?? [])
-    .filter(item => !knownConsignmentLabels.includes(normalize(item.label)));
-  const othersTotal = othersConsignmentRows.reduce((sum, item) => sum + toNumberSafe(item.amount), 0);
-  setNumberCell(worksheet, map.consignmentToSupplier.OTHERS, othersTotal);
-  
-  let payableTotal = 0;
+
+
+  // Consignment to Supplier data; template handles subtotals/totals
   (report.storeConsignmentRows ?? []).forEach((item) => {
     const key = normalize(item.label);
-    if (map.consignmentToSupplier[key] && key !== 'OTHERS') {
+    if (map.consignmentToSupplier[key] && key !== 'OTHERS' && key !== 'PayableToSupplier') {
       setNumberCell(worksheet, map.consignmentToSupplier[key], item.amount);
     }
-    payableTotal += toNumberSafe(item.amount);
   });
-  setNumberCell(worksheet, map.consignmentToSupplier.PayableToSupplier, payableTotal);
+  // Template handles OTHERS G26, Payable G30
+
 
 // Operating Expenses - populate individual cells + total
   (report.operatingExpensesRows ?? []).forEach((item) => {
@@ -146,11 +143,10 @@ const applyTemplateData = (worksheet, report) => {
     }
   });
 
-  // Keep total computation (unchanged)
-  const opExRowsSum = (report.operatingExpensesRows ?? []).reduce((sum, i) => sum + toNumberSafe(i.amount), 0);
+  // Operating Expenses data populated; template handles totals
+
 
   // Salary Breakdown (index-based)
-  let salaryTotal = 0;
   (report.salaryBreakdownRows ?? []).slice(0,6).forEach((item, index) => {
     const idx = index + 1;
     const nameKey = `name${idx}`;
@@ -160,24 +156,12 @@ const applyTemplateData = (worksheet, report) => {
     }
     if (map.salaryBreakdown[amountKey]) {
       setNumberCell(worksheet, map.salaryBreakdown[amountKey], item.amount);
-      salaryTotal += toNumberSafe(item.amount);
     }
   });
-  setNumberCell(worksheet, map.salaryBreakdown.TOTAL, salaryTotal);
+  // Template handles I42 total
 
-  // Totals (use pre-calculated or compute fallback)
-  // Computed totals per spec
-  const totalSales = (report.cashSalesRows ?? []).reduce((sum, i) => sum + toNumberSafe(i.amount), 0);
 
-  const opExSum = (report.operatingExpensesRows ?? []).reduce((sum, i) => sum + toNumberSafe(i.amount), 0);
 
-  const totalExpenses = opExSum + payableTotal;
-
-  const netProfit = totalSales - totalExpenses;
-
-  setNumberCell(worksheet, map.totals.totalSales, totalSales);
-  setNumberCell(worksheet, map.totals.totalExpenses, totalExpenses);
-  setNumberCell(worksheet, map.totals.netProfit, netProfit);
 };
 
 // =========================

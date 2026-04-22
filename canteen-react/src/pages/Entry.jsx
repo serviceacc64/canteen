@@ -65,6 +65,21 @@ const Entry = () => {
     setter((prev) => [...prev, createRow(defaultLabel, 0)]);
   };
 
+  const addStoreRow = () => {
+    const newRow = createRow('New Store Item', 0, 'Store');
+    const lastStoreIndex = storePurchaseRows.reduce((last, row, i) => 
+      row.group === 'Store' ? i : last, -1);
+    setStorePurchaseRows(prev => {
+      const newRows = [...prev];
+      if (lastStoreIndex >= 0) {
+        newRows.splice(lastStoreIndex + 1, 0, newRow);
+      } else {
+        newRows.push(newRow);
+      }
+      return newRows;
+    });
+  };
+
   const removeRow = (setter, id) => {
     setter((prev) => prev.filter((row) => row.id !== id));
   };
@@ -173,7 +188,7 @@ const Entry = () => {
                   const showGroup = row.group && (index === 0 || row.group !== storePurchaseRows[index - 1].group);
                   return (
                     <div key={row.id}>
-                      {showGroup && <div className="group-label">{row.group}</div>}
+{showGroup && <div className="group-label">{row.group}</div>}
                       <div className="input-row">
                         <input
                           type="text"
@@ -186,6 +201,16 @@ const Entry = () => {
                         />
                         <Button variant="danger" onClick={() => removeRow(setStorePurchaseRows, row.id)}>Delete</Button>
                       </div>
+                      {row.group === 'Store' && index === storePurchaseRows.reduce((last, r, i) => r.group === 'Store' ? i : last, -1) && (
+                        <div className="group-add-row" style={{ display: 'flex', justifyContent: 'start', margin: '4px 0', gap: '8px' }}>
+                          <Button 
+                            variant="secondary" 
+                            onClick={addStoreRow}
+                          >
+                            + Add Store Item
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
