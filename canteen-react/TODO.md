@@ -1,10 +1,10 @@
-# Currency Precision Fix Progress
+# Task Progress
 
-## Steps:
-- [x] 1. Update InputCurrency.jsx (integer-cents input)
-- [x] 2. Update useFormCalc.js (/100 for sums)
-- [x] 3. Update utils/format.js (parseAmount /100)
-- [x] 4. Update utils/validation.js (handle cents)
-- [x] 5. Test Entry page inputs/sums (npm run dev)
-- [ ] 6. Update TODO-currency-precision.md (complete)
-- [ ] 7. Commit changes
+## Completed:
+- Created vercel.json with SPA rewrites to fix 404 on page refresh (e.g. /entry).
+
+## Next Steps:
+- Commit and push changes to your Git repo linked to Vercel for automatic redeploy.
+- Test page refresh on paths like /entry, /dashboard in production.
+- Command suggestion: `git add . && git commit -m "fix: add vercel.json for SPA routing" && git push`
+
