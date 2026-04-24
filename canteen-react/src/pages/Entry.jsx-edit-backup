@@ -1,10 +1,8 @@
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
 import Button from '../components/common/Button';
 import InputCurrency from '../components/common/InputCurrency';
 import { formatPeso } from '../utils/format';
 import { validateEntryMeta } from '../utils/validation';
-import { getReportById } from '../services/reportsApi';
 import useFormCalc from '../hooks/useFormCalc';
 import useReports from '../hooks/useReports';
 import '../css/Entry.css';
@@ -51,44 +49,9 @@ const Entry = () => {
   const [salaryBreakdownRows, setSalaryBreakdownRows] = useState([createRow('Name', 0)]);
   const [remarks, setRemarks] = useState('');
 
-  const [searchParams] = useSearchParams();
-  const editId = searchParams.get('edit');
-  const [editMode, setEditMode] = useState(false);
-  const [editLoading, setEditLoading] = useState(false);
-  const [editError, setEditError] = useState(null);
   const { createOrUpdateReport } = useReports();
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
-
-  useEffect(() => {
-    if (!editId) {
-      setEditMode(false);
-      return;
-    }
-
-    const loadReport = async () => {
-      setEditLoading(true);
-      setEditError(null);
-      try {
-        const report = await getReportById(editId);
-        setCanteenLocation(report.canteenLocation || 'Canteen 1');
-        setDate(report.date || new Date().toISOString().slice(0, 10));
-        setRemarks(report.remarks || '');
-        setCashSalesRows(report.cashSalesRows || []);
-        setStorePurchaseRows(report.storePurchaseRows || []);
-        setStoreConsignmentRows(report.storeConsignmentRows || []);
-        setOperatingExpensesRows(report.operatingExpensesRows || []);
-        setSalaryBreakdownRows(report.salaryBreakdownRows || []);
-        setEditMode(true);
-      } catch (err) {
-        setEditError('Failed to load report for editing.');
-      } finally {
-        setEditLoading(false);
-      }
-    };
-
-    loadReport();
-  }, [editId]);
 
   const totals = useFormCalc({
     cashSalesRows,
@@ -163,7 +126,7 @@ const Entry = () => {
       <div className="container">
         <header className="page-header">
           <div>
-            <h1>{editMode ? 'Edit Daily Entry' : 'New Daily Entry'}</h1>
+            <h1>New Daily Entry</h1>
             <p className="subtitle">Daily Canteen Report of Canteen Operation</p>
           </div>
         </header>
@@ -171,7 +134,7 @@ const Entry = () => {
         <form className="daily-entry-form" onSubmit={onSave}>
           <div className="top-fields">
             <div className="field-group">
-              <label htmlFor="canteenLocation" className="label">Canteen Location</label>
+              <label htmlFor="canteenLocation" className="label">Canteen Location Ascent Label</label>
               <select
                 id="canteenLocation"
                 value={canteenLocation}
@@ -361,29 +324,14 @@ const Entry = () => {
             </div>
           </div>
 
-{saveMessage && <p className="save-message">{saveMessage}</p>}
+          {saveMessage && <p className="save-message">{saveMessage}</p>}
           {saveError && <p className="error-message">{saveError}</p>}
-          {editLoading && <p className="save-message">Loading report for editing...</p>}
-          {editError && <p className="error-message">{editError}</p>}
 
           <div className="form-actions">
-            {editMode ? (
-              <>
-                <Button variant="secondary" type="button" onClick={() => window.history.back() || (window.location.href = '/daily')}>
-                  Cancel
-                </Button>
-                <Button variant="primary" type="submit" disabled={saving}>
-                  {saving ? 'Updating...' : 'Update Entry'}
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button variant="secondary" type="button">Cancel</Button>
-                <Button variant="primary" type="submit" disabled={saving}>
-                  {saving ? 'Saving...' : 'Save Entry'}
-                </Button>
-              </>
-            )}
+            <Button variant="secondary" type="button">Cancel</Button>
+            <Button variant="primary" type="submit" disabled={saving}>
+              {saving ? 'Saving...' : 'Save Entry'}
+            </Button>
           </div>
         </form>
       </div>

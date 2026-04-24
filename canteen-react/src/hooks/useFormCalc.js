@@ -10,7 +10,9 @@ const useFormCalc = ({ cashSalesRows, storePurchaseRows, storeConsignmentRows, o
     const payableToSupplier = sumByAmount(storeConsignmentRows);
     const totalOperatingExpenses = sumByAmount(operatingExpensesRows);
     const salaryBreakdownTotal = sumByAmount(salaryBreakdownRows);
-    const totalExpenses = totalCashPurchases + payableToSupplier + totalOperatingExpenses;
+    
+    // Updated per user spec: Total Expenses = Cash Purchases + Operating Expenses
+    const totalExpenses = totalCashPurchases + totalOperatingExpenses;
     const netProfit = totalSales - totalExpenses;
 
     return {

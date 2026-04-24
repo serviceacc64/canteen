@@ -300,7 +300,7 @@ const ViewReport = () => {
       </div>
 
       <div className="viewReport__actions">
-        <Link className="btn btn-secondary" to="/daily">Back to Daily Reports</Link>
+        <Link className="btn btn-secondary" to={`/entry?edit=${id}`}>Edit Report</Link>
         <button className="btn btn-primary" type="button" onClick={handleExport} disabled={exporting}>
           {exporting ? 'Exporting...' : 'Export As Excel'}
         </button>
