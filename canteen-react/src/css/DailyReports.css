@@ -38,6 +38,12 @@
   gap: 10px;
 }
 
+.dailyReports__toggleBtn {
+  min-width: 240px;
+  white-space: nowrap;
+  text-align: center;
+}
+
 .dailyReports__filterGroup {
   display: flex;
   align-items: center;
@@ -263,6 +269,10 @@
   }
 
   .dailyReports__primaryLink {
+    width: 100%;
+  }
+
+  .dailyReports__toggleBtn {
     width: 100%;
   }
 

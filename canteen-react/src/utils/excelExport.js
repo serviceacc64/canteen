@@ -1,6 +1,7 @@
 import ExcelJS from 'exceljs';
 
 const TEMPLATE_URL = '/report-template.xlsx';
+const MONTHLY_TEMPLATE_URL = '/Monthly-Report.xlsx';
 
 // =========================
 // 📌 MAPPING CONFIG
@@ -206,5 +207,158 @@ export const exportDailyReportToTemplate = async (report) => {
   } catch (error) {
     console.error('Export failed:', error);
     throw new Error('Unable to export report. Ensure the template file is in public/report-template.xlsx');
+  }
+};
+
+export const exportMonthlyCanteenSummaryToExcel = async ({ month, rows }) => {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Monthly Summary');
+
+  worksheet.columns = [
+    { header: 'Canteen', key: 'canteen', width: 18 },
+    { header: 'Wages', key: 'wages', width: 14, style: { numFmt: '#,##0.00' } },
+    { header: 'SSS', key: 'sss', width: 14, style: { numFmt: '#,##0.00' } },
+    { header: 'Store Supplies', key: 'storeSupplies', width: 18, style: { numFmt: '#,##0.00' } },
+    { header: 'Purchases', key: 'purchases', width: 14, style: { numFmt: '#,##0.00' } },
+    { header: 'Total Expenses', key: 'totalExpenses', width: 16, style: { numFmt: '#,##0.00' } },
+    { header: 'Gross Sales', key: 'grossSales', width: 14, style: { numFmt: '#,##0.00' } },
+    { header: 'Net Sales', key: 'netSales', width: 14, style: { numFmt: '#,##0.00' } },
+  ];
+
+  worksheet.getRow(1).font = { bold: true };
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }];
+
+  (rows ?? []).forEach((row) => {
+    worksheet.addRow({
+      canteen: row?.canteen ?? '',
+      wages: toNumber(row?.wages),
+      sss: toNumber(row?.sss),
+      storeSupplies: toNumber(row?.storeSupplies),
+      purchases: toNumber(row?.purchases),
+      totalExpenses: toNumber(row?.totalExpenses),
+      grossSales: toNumber(row?.grossSales),
+      netSales: toNumber(row?.netSales),
+    });
+  });
+
+  const totals = (rows ?? []).reduce(
+    (acc, r) => ({
+      wages: acc.wages + toNumber(r?.wages),
+      sss: acc.sss + toNumber(r?.sss),
+      storeSupplies: acc.storeSupplies + toNumber(r?.storeSupplies),
+      purchases: acc.purchases + toNumber(r?.purchases),
+      totalExpenses: acc.totalExpenses + toNumber(r?.totalExpenses),
+      grossSales: acc.grossSales + toNumber(r?.grossSales),
+      netSales: acc.netSales + toNumber(r?.netSales),
+    }),
+    { wages: 0, sss: 0, storeSupplies: 0, purchases: 0, totalExpenses: 0, grossSales: 0, netSales: 0 },
+  );
+
+  const totalRow = worksheet.addRow({
+    canteen: 'Total',
+    ...totals,
+  });
+  totalRow.font = { bold: true };
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  });
+
+  const fileName = `Monthly-Summary-${month || 'export'}.xlsx`;
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(link.href);
+};
+
+export const exportMonthlyReportToTemplate = async ({ month, rows }) => {
+  const workbook = new ExcelJS.Workbook();
+
+  // You can adjust these mappings later to match the template exactly.
+  const monthlyMap = {
+    meta: {
+      // "For the Period of NOVEMBER 2025" (merged cell area in template)
+      period: 'F6',
+    },
+    table: {
+      // Header row is 10; canteen rows start at 11
+      startRow: 11,
+      columns: {
+        canteen: 'A',
+        wages: 'B',
+        sss: 'C',
+        // Template has "Office Supplies" in D and "Store Supplies" in E
+        storeSupplies: 'E',
+        // Purchases column in template
+        purchases: 'J',
+        // Gross Sales column in template
+        grossSales: 'M',
+      },
+    },
+  };
+
+  try {
+    const response = await fetch(MONTHLY_TEMPLATE_URL);
+    if (!response.ok) throw new Error('Template not found');
+
+    const arrayBuffer = await response.arrayBuffer();
+    await workbook.xlsx.load(arrayBuffer);
+
+    const worksheet = workbook.worksheets[0];
+    if (!worksheet) throw new Error('No worksheet found in template');
+
+    // Meta
+    setStringCell(worksheet, monthlyMap.meta.period, month || '');
+
+    // Table
+    const startRow = monthlyMap.table.startRow;
+    const cols = monthlyMap.table.columns;
+
+    (rows ?? []).forEach((row, index) => {
+      const r = startRow + index;
+
+      const canteenLabel = String(row?.canteen ?? '')
+        .replace(/^canteen\s*/i, 'Canteen#')
+        .replace('# ', '#');
+
+      setStringCell(worksheet, `${cols.canteen}${r}`, canteenLabel);
+
+      // Fill only the input columns; template formulas (if any) can compute totals.
+      worksheet.getCell(`${cols.wages}${r}`).value = toNumber(row?.wages);
+      worksheet.getCell(`${cols.sss}${r}`).value = toNumber(row?.sss);
+      worksheet.getCell(`${cols.storeSupplies}${r}`).value = toNumber(row?.storeSupplies);
+      worksheet.getCell(`${cols.purchases}${r}`).value = toNumber(row?.purchases);
+      worksheet.getCell(`${cols.grossSales}${r}`).value = toNumber(row?.grossSales);
+    });
+
+    // Format numbers (if template doesn't already)
+    const numberCols = [cols.wages, cols.sss, cols.storeSupplies, cols.purchases, cols.grossSales];
+    for (let i = 0; i < (rows ?? []).length; i += 1) {
+      const r = startRow + i;
+      numberCols.forEach((c) => {
+        worksheet.getCell(`${c}${r}`).numFmt = '#,##0.00';
+      });
+    }
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+
+    const fileName = `Monthly-Report-${month || 'export'}.xlsx`;
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+  } catch (error) {
+    console.error('Monthly template export failed:', error);
+    throw new Error('Unable to export monthly report. Ensure the template file is in public/Monthly-Report.xlsx');
   }
 };

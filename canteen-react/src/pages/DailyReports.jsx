@@ -9,6 +9,19 @@ import '../css/DailyReports.css';
 const DailyReports = () => {
   const { reports, loading, removeReport } = useReports();
   const [selectedDate, setSelectedDate] = useState('');
+  const [viewMode, setViewMode] = useState('individual');
+
+  const sumTotals = (items) =>
+    items.reduce(
+      (acc, report) => {
+        const totals = report?.totals ?? {};
+        acc.totalSales += Number(totals.totalSales ?? 0);
+        acc.totalExpenses += Number(totals.totalExpenses ?? 0);
+        acc.netProfit += Number(totals.netProfit ?? 0);
+        return acc;
+      },
+      { totalSales: 0, totalExpenses: 0, netProfit: 0 },
+    );
 
   const getFilteredReports = () => {
     if (!selectedDate) {
@@ -19,11 +32,31 @@ const DailyReports = () => {
 
   const filteredReports = getFilteredReports();
 
+  const groupedReports =
+    filteredReports.length > 0
+      ? filteredReports.reduce((acc, report) => {
+          const date = report?.date || 'Unknown date';
+          if (!acc[date]) acc[date] = [];
+          acc[date].push(report);
+          return acc;
+        }, {})
+      : {};
 
+  const combinedDailyRows = Object.entries(groupedReports)
+    .map(([date, dayReports]) => {
+      const totals = sumTotals(dayReports);
+      const uniqueLocations = new Set(
+        dayReports.map((r) => (r?.canteenLocation ? String(r.canteenLocation) : 'Unknown location')),
+      );
 
-
-
-
+      return {
+        date,
+        reportCount: dayReports.length,
+        locationCount: uniqueLocations.size,
+        totals,
+      };
+    })
+    .sort((a, b) => String(b.date).localeCompare(String(a.date)));
 
   const onDelete = async (id) => {
     const confirmed = window.confirm('Delete this report permanently?');
@@ -69,6 +102,13 @@ const DailyReports = () => {
               </button>
             )}
           </div>
+          <Button 
+            variant={viewMode === 'individual' ? 'secondary' : 'primary'}
+            className="dailyReports__toggleBtn"
+            onClick={() => setViewMode(viewMode === 'individual' ? 'combined' : 'individual')}
+          >
+            {viewMode === 'individual' ? 'View Combined (per day)' : 'View Individual (per canteen)'}
+          </Button>
           <Link to="/entry" className="dailyReports__primaryLink">
             Create New Entry
           </Link>
@@ -85,7 +125,7 @@ const DailyReports = () => {
             </Link>
           </div>
         </div>
-      ) : filteredReports.length === 0 ? (
+      ) : !filteredReports.length ? (
         <div className="dailyReports__empty">
           <div className="dailyReports__emptyCard">
             <h3>No reports found</h3>
@@ -99,40 +139,85 @@ const DailyReports = () => {
             </button>
           </div>
         </div>
+      ) : viewMode === 'individual' ? (
+        filteredReports.length > 0 && (
+          <section className="dailyReports__tableCard">
+            <div className="dailyReports__tableWrap">
+              <table className="dailyReports__table" aria-label="Daily reports table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Total Sales</th>
+                    <th>Total Expenses</th>
+                    <th>Net Profit</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredReports.map((report) => (
+                    <tr key={report.id}>
+                      <td>{report.date || '-'}</td>
+                      <td>{report.canteenLocation || '-'}</td>
+                      <td>{formatPeso(report?.totals?.totalSales || 0)}</td>
+                      <td>{formatPeso(report?.totals?.totalExpenses || 0)}</td>
+                      <td>{formatPeso(report?.totals?.netProfit || 0)}</td>
+                      <td className="dailyReports__rowActions">
+                        <Link className="dailyReports__link" to={`/view/${report.id}`}>
+                          View
+                        </Link>
+                        <Button variant="danger" onClick={() => onDelete(report.id)} aria-label={`Delete report ${report.id}`}>
+                          Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )
+      ) : viewMode === 'combined' && combinedDailyRows.length === 0 ? (
+        <div className="dailyReports__empty">
+          <div className="dailyReports__emptyCard">
+            <h3>No combined data</h3>
+            <p>No reports available to combine for the selected date filter.</p>
+            <button
+              onClick={() => setSelectedDate('')}
+              className="dailyReports__primaryLink dailyReports__primaryLink--wide"
+              style={{ border: 'none', cursor: 'pointer' }}
+            >
+              View All
+            </button>
+          </div>
+        </div>
       ) : (
         <section className="dailyReports__tableCard">
           <div className="dailyReports__tableWrap">
-            <table className="dailyReports__table" aria-label="Daily reports table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Location</th>
-                <th>Total Sales</th>
-                <th>Total Expenses</th>
-                <th>Net Profit</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredReports.map((report) => (
-                <tr key={report.id}>
-                  <td>{report.date || '-'}</td>
-                  <td>{report.canteenLocation || '-'}</td>
-                  <td>{formatPeso(report?.totals?.totalSales || 0)}</td>
-                  <td>{formatPeso(report?.totals?.totalExpenses || 0)}</td>
-                  <td>{formatPeso(report?.totals?.netProfit || 0)}</td>
-                  <td className="dailyReports__rowActions">
-                    <Link className="dailyReports__link" to={`/view/${report.id}`}>
-                      View
-                    </Link>
-                    <Button variant="danger" onClick={() => onDelete(report.id)} aria-label={`Delete report ${report.id}`}>
-                      Delete
-                    </Button>
-                  </td>
+            <table className="dailyReports__table" aria-label="Combined daily reports table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Canteens</th>
+                  <th>Reports</th>
+                  <th>Total Sales</th>
+                  <th>Total Expenses</th>
+                  <th>Net Profit</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {combinedDailyRows.map((row) => (
+                  <tr key={row.date}>
+                    <td>{row.date}</td>
+                    <td>{row.locationCount}</td>
+                    <td>{row.reportCount}</td>
+                    <td>{formatPeso(row.totals.totalSales)}</td>
+                    <td>{formatPeso(row.totals.totalExpenses)}</td>
+                    <td>{formatPeso(row.totals.netProfit)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </section>
       )}

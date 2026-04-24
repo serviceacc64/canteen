@@ -101,6 +101,22 @@ const App = () => {
           )}
         />
         <Route
+          path="/view/monthly/:month"
+          element={(
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <Layout><ViewReport /></Layout>
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/view/yearly/:year"
+          element={(
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <Layout><ViewReport /></Layout>
+            </ProtectedRoute>
+          )}
+        />
+        <Route
           path="/view/:id"
           element={(
             <ProtectedRoute isAuthenticated={isAuthenticated}>

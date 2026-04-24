@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { getReportById } from '../services/reportsApi';
 import useReports from '../hooks/useReports';
-import { exportDailyReportToTemplate } from '../utils/excelExport';
+import { exportDailyReportToTemplate, exportMonthlyReportToTemplate } from '../utils/excelExport';
 import { formatPeso } from '../utils/format';
 import '../css/ViewReport.css';
 
@@ -25,6 +25,16 @@ const yearKey = (dateValue) => {
   const date = new Date(dateValue);
   if (Number.isNaN(date.getTime())) return 'Unknown';
   return `${date.getFullYear()}`;
+};
+
+const normalizeLabel = (value) => String(value ?? '').trim().toLowerCase();
+
+const sumRowsByLabel = (rows = [], wantedLabel) => {
+  const wanted = normalizeLabel(wantedLabel);
+  return (rows ?? []).reduce((sum, row) => {
+    if (normalizeLabel(row?.label) !== wanted) return sum;
+    return sum + toNumber(row?.amount);
+  }, 0);
 };
 
 const ReportTableSection = ({ title, rows = [], totalLabel = 'Total' }) => {
@@ -79,7 +89,7 @@ const ReportTableSection = ({ title, rows = [], totalLabel = 'Total' }) => {
 };
 
 const ViewReport = () => {
-  const { id } = useParams();
+  const { id, month, year } = useParams();
   const { reports: allReports, loading: reportsLoading } = useReports();
   const [report, setReport] = useState(null);
   const [reports, setReports] = useState([]);
@@ -89,6 +99,7 @@ const ViewReport = () => {
   const [period, setPeriod] = useState('');
   const [periodKey, setPeriodKey] = useState('');
   const [exporting, setExporting] = useState(false);
+  const [exportingMonthly, setExportingMonthly] = useState(false);
 
   useEffect(() => {
     if (reportsLoading) return;
@@ -96,23 +107,46 @@ const ViewReport = () => {
     setLoading(true);
     setError(null);
 
-    if (id.startsWith('monthly/')) {
+    if (month) {
       setIsAggregated(true);
       setPeriod('monthly');
-      const key = id.split('/')[1];
-      setPeriodKey(key);
-      const filtered = allReports.filter(r => monthKey(r.date) === key);
-      setReports(filtered);
-      setLoading(false);
-    } else if (id.startsWith('yearly/')) {
+      setPeriodKey(month);
+
+      const loadMonthly = async () => {
+        try {
+          const filtered = allReports.filter((r) => monthKey(r.date) === month);
+          const detailed = await Promise.all(
+            filtered.map(async (r) => {
+              try {
+                return await getReportById(r.id);
+              } catch {
+                return null;
+              }
+            }),
+          );
+          setReports(detailed.filter(Boolean));
+        } catch (err) {
+          setError(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      loadMonthly();
+      return;
+    }
+
+    if (year) {
       setIsAggregated(true);
       setPeriod('yearly');
-      const key = id.split('/')[1];
-      setPeriodKey(key);
-      const filtered = allReports.filter(r => yearKey(r.date) === key);
+      setPeriodKey(year);
+      const filtered = allReports.filter((r) => yearKey(r.date) === year);
       setReports(filtered);
       setLoading(false);
-    } else {
+      return;
+    }
+
+    {
       setIsAggregated(false);
       const loadReport = async () => {
         try {
@@ -126,7 +160,7 @@ const ViewReport = () => {
       };
       loadReport();
     }
-  }, [id, allReports, reportsLoading]);
+  }, [id, month, year, allReports, reportsLoading]);
 
   const aggregatedTotals = useMemo(() => {
     if (!isAggregated) return {};
@@ -136,6 +170,47 @@ const ViewReport = () => {
       netProfit: acc.netProfit + (r?.totals?.netProfit || 0),
     }), { totalSales: 0, totalExpenses: 0, netProfit: 0 });
   }, [reports, isAggregated]);
+
+  const monthlyByCanteen = useMemo(() => {
+    if (!isAggregated || period !== 'monthly') return [];
+
+    const map = new Map();
+
+    (reports ?? []).forEach((r) => {
+      const name = r?.canteenLocation || '-';
+      const current = map.get(name) || {
+        canteen: name,
+        wages: 0,
+        sss: 0,
+        storeSupplies: 0,
+        purchases: 0,
+        grossSales: 0,
+        totalExpenses: 0,
+        netSales: 0,
+      };
+
+      const op = r?.operatingExpensesRows ?? [];
+      current.wages += sumRowsByLabel(op, 'Salary of Helpers');
+      current.sss += sumRowsByLabel(op, 'SSS of Helpers');
+      current.storeSupplies +=
+        sumRowsByLabel(op, 'Utility Expenses') +
+        sumRowsByLabel(op, 'LPG') +
+        sumRowsByLabel(op, 'Others');
+
+      current.purchases += getSectionTotal(r?.storePurchaseRows ?? []);
+      current.grossSales += getSectionTotal(r?.cashSalesRows ?? []);
+
+      map.set(name, current);
+    });
+
+    const rows = [...map.values()].map((row) => {
+      const totalExpenses = row.wages + row.sss + row.storeSupplies + row.purchases;
+      const netSales = totalExpenses - row.grossSales;
+      return { ...row, totalExpenses, netSales };
+    });
+
+    return rows.sort((a, b) => a.canteen.localeCompare(b.canteen));
+  }, [isAggregated, period, reports]);
 
   const handleExport = async () => {
     if (!report) return;
@@ -147,6 +222,19 @@ const ViewReport = () => {
       alert('Unable to export report. Please try again.');
     } finally {
       setExporting(false);
+    }
+  };
+
+  const handleExportMonthly = async () => {
+    if (!isAggregated || period !== 'monthly') return;
+    setExportingMonthly(true);
+    try {
+      await exportMonthlyReportToTemplate({ month: periodKey, rows: monthlyByCanteen });
+    } catch (exportError) {
+      console.error('Failed to export monthly summary:', exportError);
+      alert('Unable to export monthly summary. Please try again.');
+    } finally {
+      setExportingMonthly(false);
     }
   };
 
@@ -165,6 +253,11 @@ const ViewReport = () => {
         </header>
         <div className="viewReport__actions">
           <Link className="btn btn-secondary" to={`/${period}`}>Back to {period.charAt(0).toUpperCase() + period.slice(1)} Reports</Link>
+          {period === 'monthly' ? (
+            <button className="btn btn-primary" type="button" onClick={handleExportMonthly} disabled={exportingMonthly}>
+              {exportingMonthly ? 'Exporting...' : 'Export As Excel'}
+            </button>
+          ) : null}
         </div>
       </div>
     );
@@ -212,41 +305,99 @@ const ViewReport = () => {
           </div>
         </section>
 
-        <section className="viewReport__tableCard">
-          <div className="viewReport__tableWrap">
-            <table className="viewReport__table" aria-label={`${period} reports table`}>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Location</th>
-                  <th>Total Sales</th>
-                  <th>Total Expenses</th>
-                  <th>Net Profit</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {reports.map((r) => (
-                  <tr key={r.id}>
-                    <td>{r.date || '-'}</td>
-                    <td>{r.canteenLocation || '-'}</td>
-                    <td>{formatPeso(r?.totals?.totalSales || 0)}</td>
-                    <td>{formatPeso(r?.totals?.totalExpenses || 0)}</td>
-                    <td>{formatPeso(r?.totals?.netProfit || 0)}</td>
-                    <td className="viewReport__rowActions">
-                      <Link className="viewReport__link" to={`/view/${r.id}`}>
-                        View
-                      </Link>
-                    </td>
+        {period === 'monthly' ? (
+          <section className="viewReport__tableCard">
+            <div className="viewReport__tableWrap">
+              <table className="viewReport__table" aria-label="Monthly canteen summary table">
+                <thead>
+                  <tr>
+                    <th>Canteen</th>
+                    <th className="is-right">Wages</th>
+                    <th className="is-right">SSS</th>
+                    <th className="is-right">Store Supplies</th>
+                    <th className="is-right">Purchases</th>
+                    <th className="is-right">Total Expenses</th>
+                    <th className="is-right">Gross Sales</th>
+                    <th className="is-right">Net Sales</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
+                </thead>
+                <tbody>
+                  {monthlyByCanteen.length ? (
+                    monthlyByCanteen.map((row) => (
+                      <tr key={row.canteen}>
+                        <td>{row.canteen}</td>
+                        <td className="is-right">{formatPeso(row.wages)}</td>
+                        <td className="is-right">{formatPeso(row.sss)}</td>
+                        <td className="is-right">{formatPeso(row.storeSupplies)}</td>
+                        <td className="is-right">{formatPeso(row.purchases)}</td>
+                        <td className="is-right">{formatPeso(row.totalExpenses)}</td>
+                        <td className="is-right">{formatPeso(row.grossSales)}</td>
+                        <td className="is-right">{formatPeso(row.netSales)}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={8} className="viewReport__empty">No reports found for this month.</td>
+                    </tr>
+                  )}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td>Total</td>
+                    <td className="is-right">{formatPeso(monthlyByCanteen.reduce((s, r) => s + r.wages, 0))}</td>
+                    <td className="is-right">{formatPeso(monthlyByCanteen.reduce((s, r) => s + r.sss, 0))}</td>
+                    <td className="is-right">{formatPeso(monthlyByCanteen.reduce((s, r) => s + r.storeSupplies, 0))}</td>
+                    <td className="is-right">{formatPeso(monthlyByCanteen.reduce((s, r) => s + r.purchases, 0))}</td>
+                    <td className="is-right">{formatPeso(monthlyByCanteen.reduce((s, r) => s + r.totalExpenses, 0))}</td>
+                    <td className="is-right">{formatPeso(monthlyByCanteen.reduce((s, r) => s + r.grossSales, 0))}</td>
+                    <td className="is-right">{formatPeso(monthlyByCanteen.reduce((s, r) => s + r.netSales, 0))}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </section>
+        ) : (
+          <section className="viewReport__tableCard">
+            <div className="viewReport__tableWrap">
+              <table className="viewReport__table" aria-label={`${period} reports table`}>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Total Sales</th>
+                    <th>Total Expenses</th>
+                    <th>Net Profit</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reports.map((r) => (
+                    <tr key={r.id}>
+                      <td>{r.date || '-'}</td>
+                      <td>{r.canteenLocation || '-'}</td>
+                      <td>{formatPeso(r?.totals?.totalSales || 0)}</td>
+                      <td>{formatPeso(r?.totals?.totalExpenses || 0)}</td>
+                      <td>{formatPeso(r?.totals?.netProfit || 0)}</td>
+                      <td className="viewReport__rowActions">
+                        <Link className="viewReport__link" to={`/view/${r.id}`}>
+                          View
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
 
         <div className="viewReport__actions">
           <Link className="btn btn-secondary" to={`/${period}`}>Back to {period.charAt(0).toUpperCase() + period.slice(1)} Reports</Link>
+          {period === 'monthly' ? (
+            <button className="btn btn-primary" type="button" onClick={handleExportMonthly} disabled={exportingMonthly}>
+              {exportingMonthly ? 'Exporting...' : 'Export As Excel'}
+            </button>
+          ) : null}
         </div>
       </div>
     );
