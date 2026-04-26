@@ -142,3 +142,61 @@
     max-width: 100%;
   }
 }
+
+/* Dark Mode Overrides */
+[data-theme='dark'] .yearlyReports {
+  background: var(--surface);
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+[data-theme='dark'] .yearlyReports__header {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .yearlyReports__title {
+  color: var(--canteen-ink);
+}
+
+[data-theme='dark'] .yearlyReports__subtitle {
+  color: var(--muted);
+}
+
+[data-theme='dark'] .yearlyReports__emptyCard {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.5));
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .yearlyReports__emptyCard h3 {
+  color: var(--canteen-ink);
+}
+
+[data-theme='dark'] .yearlyReports__tableCard {
+  background: var(--surface);
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+[data-theme='dark'] .yearlyReports__table thead th {
+  background: var(--surface);
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+  color: var(--canteen-700);
+}
+
+[data-theme='dark'] .yearlyReports__table tbody td {
+  background: var(--surface);
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+}
+
+[data-theme='dark'] .yearlyReports__table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .yearlyReports__link {
+  color: var(--canteen-700);
+}
+
+[data-theme='dark'] .yearlyReports__link:hover {
+  color: var(--canteen-ink);
+}

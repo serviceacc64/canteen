@@ -361,3 +361,109 @@
     flex-direction: column;
   }
 }
+
+/* Dark Mode Overrides */
+[data-theme='dark'] .entry-page {
+  background: var(--surface);
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+[data-theme='dark'] .entry-page .page-header {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .entry-page .page-header h1 {
+  color: var(--canteen-ink);
+}
+
+[data-theme='dark'] .entry-page .subtitle {
+  color: var(--muted);
+}
+
+[data-theme='dark'] .field-group select,
+[data-theme='dark'] .field-group input[type="date"] {
+  background: rgba(30, 41, 59, 0.6);
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+[data-theme='dark'] .section {
+  background: var(--surface);
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+[data-theme='dark'] .section-title {
+  color: var(--canteen-ink);
+}
+
+[data-theme='dark'] .group-label {
+  color: var(--canteen-700);
+}
+
+[data-theme='dark'] .input-row {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.5), rgba(15, 23, 42, 0.3));
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .input-row input[type="text"] {
+  background: rgba(15, 23, 42, 0.5);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+[data-theme='dark'] .input-currency {
+  background: rgba(15, 23, 42, 0.5);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .input-currency span {
+  background: rgba(30, 41, 59, 0.6);
+  color: var(--canteen-700);
+  border-right-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .input-currency input {
+  color: var(--text);
+}
+
+[data-theme='dark'] .highlight-row,
+[data-theme='dark'] .highlight-total,
+[data-theme='dark'] .payable-summary {
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1));
+  border-color: rgba(16, 185, 129, 0.3);
+  color: var(--canteen-ink);
+}
+
+[data-theme='dark'] .highlight-row span:first-child,
+[data-theme='dark'] .highlight-total span:first-child,
+[data-theme='dark'] .payable-summary span:first-child {
+  color: var(--canteen-700);
+}
+
+[data-theme='dark'] .summary-header {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .summary-header strong {
+  color: var(--canteen-ink);
+}
+
+[data-theme='dark'] .summary-row {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+  color: var(--muted);
+}
+
+[data-theme='dark'] .remarks-textarea {
+  background: rgba(15, 23, 42, 0.5);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+[data-theme='dark'] .save-message {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: var(--canteen-ink);
+}

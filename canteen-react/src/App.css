@@ -16,6 +16,22 @@
   --canteen-surface: #E7F2EF;
 }
 
+[data-theme='dark'] {
+  --bg: #0b1120;
+  --surface: #1e293b;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --border: #334155;
+  --primary: #3b82f6;
+  --primary-600: #2563eb;
+  
+  --canteen-ink: #f1f5f9;
+  --canteen-700: #047857;
+  --canteen-600: #059669;
+  --canteen-mint: #064e3b;
+  --canteen-surface: #0f172a;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -226,4 +242,33 @@ body {
   .page {
     min-height: auto;
   }
+}
+
+/* Dark Mode Button Overrides */
+[data-theme='dark'] .btn-secondary {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+  color: var(--text);
+}
+
+[data-theme='dark'] .btn-secondary:hover:not(:disabled) {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme='dark'] .btn-danger {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  box-shadow: none;
+}
+
+[data-theme='dark'] .btn-danger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+[data-theme='dark'] .btn-primary {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
 }

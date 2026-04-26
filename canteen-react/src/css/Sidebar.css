@@ -97,6 +97,7 @@
   text-decoration: none;
   color: rgba(9, 20, 19, 0.82);
   border: 1px solid transparent;
+  background: transparent;
 
   transition: background 140ms ease, border-color 140ms ease, transform 140ms ease, color 140ms ease;
 }
@@ -190,4 +191,72 @@
     width: 40px;
     height: 40px;
   }
+}
+
+/* Dark Mode Overrides */
+[data-theme='dark'] .sidebar {
+  background: var(--canteen-surface);
+  color: var(--canteen-ink);
+  border-right-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .sidebar__brand {
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.15), rgba(0, 0, 0, 0.2));
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .sidebar__mark {
+  background:
+    radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.4), transparent 55%),
+    linear-gradient(135deg, rgba(5, 150, 105, 0.6), rgba(4, 120, 87, 0.4));
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+[data-theme='dark'] .sidebar__title {
+  color: var(--canteen-ink);
+}
+
+[data-theme='dark'] .sidebar__subtitle {
+  color: var(--muted);
+}
+
+[data-theme='dark'] .sidebar__link {
+  color: var(--text);
+}
+
+[data-theme='dark'] .sidebar__icon {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(255, 255, 255, 0.05);
+  color: var(--canteen-700);
+}
+
+[data-theme='dark'] .sidebar__link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--canteen-ink);
+}
+
+[data-theme='dark'] .sidebar__link.is-active {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+[data-theme='dark'] .sidebar__link.is-active .sidebar__icon {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: var(--canteen-700);
+}
+
+[data-theme='dark'] .sidebar__footer {
+  background: var(--canteen-surface);
+  border-top-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .sidebar__link--danger {
+  color: #ef4444;
+}
+
+[data-theme='dark'] .sidebar__link--danger:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
 }

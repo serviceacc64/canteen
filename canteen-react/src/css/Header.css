@@ -61,3 +61,20 @@
     white-space: normal;
   }
 }
+
+/* Dark Mode Overrides */
+[data-theme='dark'] .top-header {
+  border-color: rgba(255, 255, 255, 0.05);
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95));
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+[data-theme='dark'] .top-header__title {
+  color: var(--canteen-ink);
+}
+
+[data-theme='dark'] .top-header__date {
+  color: var(--muted);
+  border-color: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.05);
+}

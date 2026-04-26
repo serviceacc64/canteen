@@ -90,7 +90,7 @@ const MonthlyReports = () => {
                   <td>{formatPeso(row.totalExpenses)}</td>
                   <td>{formatPeso(row.netProfit)}</td>
                   <td className="monthlyReports__rowActions">
-                    <Link className="monthlyReports__link" to={`/view/monthly/${row.month}`}>
+                    <Link className="btn btn-secondary" to={`/view/monthly/${row.month}`}>
                       View
                     </Link>
                     <Button variant="danger" onClick={() => onDelete(row.month)} aria-label={`Delete reports for ${row.month}`}>

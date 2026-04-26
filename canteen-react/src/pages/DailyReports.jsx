@@ -163,7 +163,7 @@ const DailyReports = () => {
                       <td>{formatPeso(report?.totals?.totalExpenses || 0)}</td>
                       <td>{formatPeso(report?.totals?.netProfit || 0)}</td>
                       <td className="dailyReports__rowActions">
-                        <Link className="dailyReports__link" to={`/view/${report.id}`}>
+                        <Link className="btn btn-secondary" to={`/view/${report.id}`}>
                           View
                         </Link>
                         <Button variant="danger" onClick={() => onDelete(report.id)} aria-label={`Delete report ${report.id}`}>
