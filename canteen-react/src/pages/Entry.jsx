@@ -80,7 +80,7 @@ const Entry = () => {
         setOperatingExpensesRows(report.operatingExpensesRows || []);
         setSalaryBreakdownRows(report.salaryBreakdownRows || []);
         setEditMode(true);
-      } catch (err) {
+      } catch {
         setEditError('Failed to load report for editing.');
       } finally {
         setEditLoading(false);
@@ -151,9 +151,9 @@ const Entry = () => {
       });
 
       setSaveMessage('Entry saved successfully.');
-    } catch (error) {
-      setSaveError('Unable to save entry. Please try again.');
-    } finally {
+      } catch {
+        setSaveError('Unable to save entry. Please try again.');
+      } finally {
       setSaving(false);
     }
   };

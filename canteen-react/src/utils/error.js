@@ -1,6 +1,5 @@
 export const logError = (context, error, details = {}) => {
   // keep structured logs for migration debugging
-  // eslint-disable-next-line no-console
   console.error(`[Canteen Error - ${context}]`, {
     error: error?.message || error,
     stack: error?.stack,

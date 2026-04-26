@@ -39,7 +39,7 @@ const Sidebar = () => {
         </div>
 
         <nav className="sidebar__nav" aria-label="Sections">
-          {navItems.map(({ path, label, Icon }) => (
+          {navItems.map(({ path, label, Icon: LucideIcon }) => (
             <NavLink
               key={path}
               to={path}
@@ -47,7 +47,7 @@ const Sidebar = () => {
               className={({ isActive }) => `sidebar__link${isActive ? ' is-active' : ''}`}
             >
               <span className="sidebar__icon" aria-hidden="true">
-                <Icon size={18} />
+                <LucideIcon size={18} />
               </span>
               <span className="sidebar__label">{label}</span>
             </NavLink>

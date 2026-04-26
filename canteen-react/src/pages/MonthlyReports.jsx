@@ -42,7 +42,7 @@ const MonthlyReports = () => {
       for (const report of reportsToDelete) {
         await removeReport(report.id);
       }
-    } catch (error) {
+    } catch {
       window.alert('Unable to delete the reports. Please try again.');
     }
   };

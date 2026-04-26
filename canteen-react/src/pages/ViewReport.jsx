@@ -5,6 +5,7 @@ import useReports from "../hooks/useReports";
 import {
   exportDailyReportToTemplate,
   exportMonthlyReportToTemplate,
+  exportYearlyReportToTemplate,
 } from "../utils/excelExport";
 import { formatPeso } from "../utils/format";
 import "../css/ViewReport.css";
@@ -115,6 +116,7 @@ const ViewReport = () => {
   const [periodKey, setPeriodKey] = useState("");
   const [exporting, setExporting] = useState(false);
   const [exportingMonthly, setExportingMonthly] = useState(false);
+  const [exportingYearly, setExportingYearly] = useState(false);
 
   useEffect(() => {
     if (reportsLoading) return;
@@ -330,6 +332,22 @@ const ViewReport = () => {
     }
   };
 
+  const handleExportYearly = async () => {
+    if (!isAggregated || period !== "yearly") return;
+    setExportingYearly(true);
+    try {
+      await exportYearlyReportToTemplate({
+        year: periodKey,
+        rows: yearlyByMonth,
+      });
+    } catch (exportError) {
+      console.error("Failed to export yearly summary:", exportError);
+      alert("Unable to export yearly summary. Please try again.");
+    } finally {
+      setExportingYearly(false);
+    }
+  };
+
   if (loading || reportsLoading) {
     return (
       <div className="page">
@@ -355,14 +373,14 @@ const ViewReport = () => {
           <Link className="btn btn-secondary" to={`/${period}`}>
             Back to {period.charAt(0).toUpperCase() + period.slice(1)} Reports
           </Link>
-          {period === "monthly" ? (
+          {period === "monthly" || period === "yearly" ? (
             <button
               className="btn btn-primary"
               type="button"
-              onClick={handleExportMonthly}
-              disabled={exportingMonthly}
+              onClick={period === "monthly" ? handleExportMonthly : handleExportYearly}
+              disabled={period === "monthly" ? exportingMonthly : exportingYearly}
             >
-              {exportingMonthly ? "Exporting..." : "Export As Excel"}
+              { (period === "monthly" ? exportingMonthly : exportingYearly) ? "Exporting..." : "Export As Excel" }
             </button>
           ) : null}
         </div>
@@ -591,14 +609,14 @@ const ViewReport = () => {
           <Link className="btn btn-secondary" to={`/${period}`}>
             Back to {period.charAt(0).toUpperCase() + period.slice(1)} Reports
           </Link>
-          {period === "monthly" ? (
+          {period === "monthly" || period === "yearly" ? (
             <button
               className="btn btn-primary"
               type="button"
-              onClick={handleExportMonthly}
-              disabled={exportingMonthly}
+              onClick={period === "monthly" ? handleExportMonthly : handleExportYearly}
+              disabled={period === "monthly" ? exportingMonthly : exportingYearly}
             >
-              {exportingMonthly ? "Exporting..." : "Export As Excel"}
+              { (period === "monthly" ? exportingMonthly : exportingYearly) ? "Exporting..." : "Export As Excel" }
             </button>
           ) : null}
         </div>

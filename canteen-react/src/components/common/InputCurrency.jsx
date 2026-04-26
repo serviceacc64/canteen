@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 
 const InputCurrency = ({
   value = 0,
@@ -6,14 +6,18 @@ const InputCurrency = ({
   className = '',
   ...props
 }) => {
-  const [rawInput, setRawInput] = useState('');
+  const [rawInput, setRawInput] = useState(() => {
+    const peso = value / 100;
+    return peso === 0 ? '' : peso.toFixed(2);
+  });
+  const [prevValue, setPrevValue] = useState(value);
   const inputRef = useRef(null);
 
-// Sync prop value to rawInput on mount/change (blank if 0)
-  useEffect(() => {
+  if (value !== prevValue) {
     const peso = value / 100;
     setRawInput(peso === 0 ? '' : peso.toFixed(2));
-  }, [value]);
+    setPrevValue(value);
+  }
 
   const handleChange = (e) => {
     // Allow digits, decimal only

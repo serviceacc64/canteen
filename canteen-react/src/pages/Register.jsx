@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Navigate, Link, useNavigate } from 'react-router-dom';
 import Button from '../components/common/Button';
-import useAuth from '../hooks/useAuth';
 import { getSession, updatePassword, signOut } from '../services/supabaseAuthApi';
 import '../css/Login.css';
 
 const Register = () => {
-  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -22,7 +20,7 @@ const Register = () => {
       try {
         const { session } = await getSession();
         setSessionExists(Boolean(session?.user));
-      } catch (error) {
+      } catch {
         setSessionExists(false);
       } finally {
         setIsLoadingSession(false);

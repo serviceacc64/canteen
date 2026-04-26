@@ -2,6 +2,7 @@ import ExcelJS from 'exceljs';
 
 const TEMPLATE_URL = '/report-template.xlsx';
 const MONTHLY_TEMPLATE_URL = '/Monthly-Report.xlsx';
+const YEARLY_TEMPLATE_URL = '/Yearly-Report.xlsx';
 
 // =========================
 // 📌 MAPPING CONFIG
@@ -360,5 +361,97 @@ export const exportMonthlyReportToTemplate = async ({ month, rows }) => {
   } catch (error) {
     console.error('Monthly template export failed:', error);
     throw new Error('Unable to export monthly report. Ensure the template file is in public/Monthly-Report.xlsx');
+  }
+};
+
+export const exportYearlyReportToTemplate = async ({ year, rows }) => {
+  const workbook = new ExcelJS.Workbook();
+
+  const yearlyMap = {
+    meta: {
+      period: 'F6',
+    },
+    table: {
+      startRow: 11,
+      columns: {
+        month: 'A',
+        wages: 'B',
+        sss: 'C',
+        storeSupplies: 'E',
+        purchases: 'J',
+        grossSales: 'M',
+      },
+    },
+  };
+
+  try {
+    const response = await fetch(YEARLY_TEMPLATE_URL);
+    if (!response.ok) throw new Error('Template not found');
+
+    const arrayBuffer = await response.arrayBuffer();
+    await workbook.xlsx.load(arrayBuffer);
+
+    const worksheet = workbook.worksheets[0];
+    if (!worksheet) throw new Error('No worksheet found in template');
+
+    // Meta
+    setStringCell(worksheet, yearlyMap.meta.period, year || '');
+
+    // Table
+    const startRow = yearlyMap.table.startRow;
+    const cols = yearlyMap.table.columns;
+
+    (rows ?? []).forEach((row) => {
+      const monthValue = parseInt(row.month.split("-")[1], 10);
+      const r = (startRow - 1) + monthValue; // Jan (01) -> Row 11, April (04) -> Row 14, etc.
+
+      // We only fill the data if we have a valid month number
+      if (!Number.isNaN(r) && r >= 11 && r <= 22) {
+        // We don't necessarily need to overwrite the month label if the template has them,
+        // but it's safer to ensure it matches the data.
+        const monthOnly = (row?.monthName ?? "").split(" ")[0];
+        setStringCell(worksheet, `${cols.month}${r}`, monthOnly);
+
+        // Fill only the input columns; template formulas (if any) can compute totals.
+        worksheet.getCell(`${cols.wages}${r}`).value = toNumber(row?.wages);
+        worksheet.getCell(`${cols.sss}${r}`).value = toNumber(row?.sss);
+        worksheet.getCell(`${cols.storeSupplies}${r}`).value =
+          toNumber(row?.storeSupplies);
+        worksheet.getCell(`${cols.purchases}${r}`).value =
+          toNumber(row?.purchases);
+        // Yearly view has 'totalSales' for aggregated months
+        worksheet.getCell(`${cols.grossSales}${r}`).value =
+          toNumber(row?.totalSales);
+
+        // Format numbers for this specific row
+        const numberCols = [
+          cols.wages,
+          cols.sss,
+          cols.storeSupplies,
+          cols.purchases,
+          cols.grossSales,
+        ];
+        numberCols.forEach((c) => {
+          worksheet.getCell(`${c}${r}`).numFmt = "#,##0.00";
+        });
+      }
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+
+    const fileName = `Yearly-Report-${year || 'export'}.xlsx`;
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+  } catch (error) {
+    console.error('Yearly template export failed:', error);
+    throw new Error('Unable to export yearly report. Ensure the template file is in public/Yearly-Report.xlsx');
   }
 };

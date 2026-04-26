@@ -64,7 +64,7 @@ const DailyReports = () => {
 
     try {
       await removeReport(id);
-    } catch (error) {
+    } catch {
       window.alert('Unable to delete the report. Please try again.');
     }
   };
