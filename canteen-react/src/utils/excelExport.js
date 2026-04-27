@@ -50,7 +50,8 @@ const map = {
     name3: "G38", amount3: "I38",
     name4: "G39", amount4: "I39",
     name5: "G40", amount5: "I40",
-    name6: "G41", amount6: "I41"
+    name6: "G41", amount6: "I41",
+    name7: "G42", amount7: "I42"
   }
 };
 
@@ -90,7 +91,7 @@ const applyTemplateData = (worksheet, report) => {
   setStringCell(worksheet, map.meta.canteenLocation, report.canteenLocation);
   setStringCell(worksheet, map.meta.remarks, report.remarks);
 
-// Cash Sales
+  // Cash Sales
   (report.cashSalesRows ?? []).forEach((item) => {
     const key = normalize(item.label);
     if (map.cashSales[key]) {
@@ -98,20 +99,20 @@ const applyTemplateData = (worksheet, report) => {
     }
   });
 
-// Store Purchases - with Palamig + Store OTHERS auto-sum
+  // Store Purchases - with Palamig + Store OTHERS auto-sum
   // 1. PALAMIG auto-sum (Ice + Water + Palamig group)
-  const palamigRows = (report.storePurchaseRows ?? []).filter(item => 
-    normalize(item.label) === 'ICE' || 
-    normalize(item.label) === 'WATER' || 
+  const palamigRows = (report.storePurchaseRows ?? []).filter(item =>
+    normalize(item.label) === 'ICE' ||
+    normalize(item.label) === 'WATER' ||
     normalize(item.group) === 'PALAMIG'
   );
   const palamigTotal = palamigRows.reduce((sum, item) => sum + Number(item.amount), 0);
   setNumberCell(worksheet, map.storePurchases.PALAMIG, palamigTotal);
 
   // 2. STORE OTHERS I17 = sum(ALL Store group *except* BIG BOY/AQUA)
-  const storeOthersRows = (report.storePurchaseRows ?? []).filter(item => 
-    item.group === 'Store' && 
-    normalize(item.label) !== 'BIG BOY' && 
+  const storeOthersRows = (report.storePurchaseRows ?? []).filter(item =>
+    item.group === 'Store' &&
+    normalize(item.label) !== 'BIG BOY' &&
     normalize(item.label) !== 'AQUA'
   );
   const storeOthersTotal = storeOthersRows.reduce((sum, item) => sum + Number(item.amount), 0);
@@ -137,7 +138,7 @@ const applyTemplateData = (worksheet, report) => {
   // Template handles OTHERS G26, Payable G30
 
 
-// Operating Expenses - populate individual cells + total
+  // Operating Expenses - populate individual cells + total
   (report.operatingExpensesRows ?? []).forEach((item) => {
     const key = normalize(item.label);
     if (map.operatingExpenses[key]) {
@@ -149,7 +150,7 @@ const applyTemplateData = (worksheet, report) => {
 
 
   // Salary Breakdown (index-based)
-  (report.salaryBreakdownRows ?? []).slice(0,6).forEach((item, index) => {
+  (report.salaryBreakdownRows ?? []).slice(0, 7).forEach((item, index) => {
     const idx = index + 1;
     const nameKey = `name${idx}`;
     const amountKey = `amount${idx}`;

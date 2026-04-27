@@ -154,338 +154,85 @@ alter table public.report_salary_breakdown enable row level security;
 -- Reports policies
 -- ------------------------------------------------------------
 drop policy if exists reports_select_own on public.reports;
-create policy reports_select_own
-on public.reports
-for select
-to authenticated
-using (user_id = auth.uid());
+create policy reports_select_all on public.reports for select to authenticated using (true);
 
 drop policy if exists reports_insert_own on public.reports;
-create policy reports_insert_own
-on public.reports
-for insert
-to authenticated
-with check (user_id = auth.uid());
+create policy reports_insert_all on public.reports for insert to authenticated with check (user_id = auth.uid());
 
 drop policy if exists reports_update_own on public.reports;
-create policy reports_update_own
-on public.reports
-for update
-to authenticated
-using (user_id = auth.uid())
-with check (user_id = auth.uid());
+create policy reports_update_all on public.reports for update to authenticated using (true) with check (user_id = auth.uid());
 
 drop policy if exists reports_delete_own on public.reports;
-create policy reports_delete_own
-on public.reports
-for delete
-to authenticated
-using (user_id = auth.uid());
+create policy reports_delete_all on public.reports for delete to authenticated using (true);
 
 -- ------------------------------------------------------------
--- Child table policies helper pattern:
--- user can access child rows only if they own parent report
+-- Child table policies
 -- ------------------------------------------------------------
 
 -- report_cash_sales policies
 drop policy if exists report_cash_sales_select_own on public.report_cash_sales;
-create policy report_cash_sales_select_own
-on public.report_cash_sales
-for select
-to authenticated
-using (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_cash_sales.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_cash_sales_select_all on public.report_cash_sales for select to authenticated using (true);
 
 drop policy if exists report_cash_sales_insert_own on public.report_cash_sales;
-create policy report_cash_sales_insert_own
-on public.report_cash_sales
-for insert
-to authenticated
-with check (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_cash_sales.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_cash_sales_insert_all on public.report_cash_sales for insert to authenticated with check (true);
 
 drop policy if exists report_cash_sales_update_own on public.report_cash_sales;
-create policy report_cash_sales_update_own
-on public.report_cash_sales
-for update
-to authenticated
-using (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_cash_sales.report_id
-      and r.user_id = auth.uid()
-  )
-)
-with check (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_cash_sales.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_cash_sales_update_all on public.report_cash_sales for update to authenticated using (true) with check (true);
 
 drop policy if exists report_cash_sales_delete_own on public.report_cash_sales;
-create policy report_cash_sales_delete_own
-on public.report_cash_sales
-for delete
-to authenticated
-using (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_cash_sales.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_cash_sales_delete_all on public.report_cash_sales for delete to authenticated using (true);
 
 -- report_store_purchases policies
 drop policy if exists report_store_purchases_select_own on public.report_store_purchases;
-create policy report_store_purchases_select_own
-on public.report_store_purchases
-for select
-to authenticated
-using (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_store_purchases.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_store_purchases_select_all on public.report_store_purchases for select to authenticated using (true);
 
 drop policy if exists report_store_purchases_insert_own on public.report_store_purchases;
-create policy report_store_purchases_insert_own
-on public.report_store_purchases
-for insert
-to authenticated
-with check (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_store_purchases.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_store_purchases_insert_all on public.report_store_purchases for insert to authenticated with check (true);
 
 drop policy if exists report_store_purchases_update_own on public.report_store_purchases;
-create policy report_store_purchases_update_own
-on public.report_store_purchases
-for update
-to authenticated
-using (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_store_purchases.report_id
-      and r.user_id = auth.uid()
-  )
-)
-with check (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_store_purchases.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_store_purchases_update_all on public.report_store_purchases for update to authenticated using (true) with check (true);
 
 drop policy if exists report_store_purchases_delete_own on public.report_store_purchases;
-create policy report_store_purchases_delete_own
-on public.report_store_purchases
-for delete
-to authenticated
-using (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_store_purchases.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_store_purchases_delete_all on public.report_store_purchases for delete to authenticated using (true);
 
 -- report_store_consignment policies
 drop policy if exists report_store_consignment_select_own on public.report_store_consignment;
-create policy report_store_consignment_select_own
-on public.report_store_consignment
-for select
-to authenticated
-using (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_store_consignment.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_store_consignment_select_all on public.report_store_consignment for select to authenticated using (true);
 
 drop policy if exists report_store_consignment_insert_own on public.report_store_consignment;
-create policy report_store_consignment_insert_own
-on public.report_store_consignment
-for insert
-to authenticated
-with check (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_store_consignment.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_store_consignment_insert_all on public.report_store_consignment for insert to authenticated with check (true);
 
 drop policy if exists report_store_consignment_update_own on public.report_store_consignment;
-create policy report_store_consignment_update_own
-on public.report_store_consignment
-for update
-to authenticated
-using (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_store_consignment.report_id
-      and r.user_id = auth.uid()
-  )
-)
-with check (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_store_consignment.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_store_consignment_update_all on public.report_store_consignment for update to authenticated using (true) with check (true);
 
 drop policy if exists report_store_consignment_delete_own on public.report_store_consignment;
-create policy report_store_consignment_delete_own
-on public.report_store_consignment
-for delete
-to authenticated
-using (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_store_consignment.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_store_consignment_delete_all on public.report_store_consignment for delete to authenticated using (true);
 
 -- report_operating_expenses policies
 drop policy if exists report_operating_expenses_select_own on public.report_operating_expenses;
-create policy report_operating_expenses_select_own
-on public.report_operating_expenses
-for select
-to authenticated
-using (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_operating_expenses.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_operating_expenses_select_all on public.report_operating_expenses for select to authenticated using (true);
 
 drop policy if exists report_operating_expenses_insert_own on public.report_operating_expenses;
-create policy report_operating_expenses_insert_own
-on public.report_operating_expenses
-for insert
-to authenticated
-with check (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_operating_expenses.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_operating_expenses_insert_all on public.report_operating_expenses for insert to authenticated with check (true);
 
 drop policy if exists report_operating_expenses_update_own on public.report_operating_expenses;
-create policy report_operating_expenses_update_own
-on public.report_operating_expenses
-for update
-to authenticated
-using (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_operating_expenses.report_id
-      and r.user_id = auth.uid()
-  )
-)
-with check (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_operating_expenses.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_operating_expenses_update_all on public.report_operating_expenses for update to authenticated using (true) with check (true);
 
 drop policy if exists report_operating_expenses_delete_own on public.report_operating_expenses;
-create policy report_operating_expenses_delete_own
-on public.report_operating_expenses
-for delete
-to authenticated
-using (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_operating_expenses.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_operating_expenses_delete_all on public.report_operating_expenses for delete to authenticated using (true);
 
 -- report_salary_breakdown policies
 drop policy if exists report_salary_breakdown_select_own on public.report_salary_breakdown;
-create policy report_salary_breakdown_select_own
-on public.report_salary_breakdown
-for select
-to authenticated
-using (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_salary_breakdown.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_salary_breakdown_select_all on public.report_salary_breakdown for select to authenticated using (true);
 
 drop policy if exists report_salary_breakdown_insert_own on public.report_salary_breakdown;
-create policy report_salary_breakdown_insert_own
-on public.report_salary_breakdown
-for insert
-to authenticated
-with check (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_salary_breakdown.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_salary_breakdown_insert_all on public.report_salary_breakdown for insert to authenticated with check (true);
 
 drop policy if exists report_salary_breakdown_update_own on public.report_salary_breakdown;
-create policy report_salary_breakdown_update_own
-on public.report_salary_breakdown
-for update
-to authenticated
-using (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_salary_breakdown.report_id
-      and r.user_id = auth.uid()
-  )
-)
-with check (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_salary_breakdown.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_salary_breakdown_update_all on public.report_salary_breakdown for update to authenticated using (true) with check (true);
 
 drop policy if exists report_salary_breakdown_delete_own on public.report_salary_breakdown;
-create policy report_salary_breakdown_delete_own
-on public.report_salary_breakdown
-for delete
-to authenticated
-using (
-  exists (
-    select 1 from public.reports r
-    where r.id = report_salary_breakdown.report_id
-      and r.user_id = auth.uid()
-  )
-);
+create policy report_salary_breakdown_delete_all on public.report_salary_breakdown for delete to authenticated using (true);
 
 -- ------------------------------------------------------------
 -- Grants (RLS still enforces ownership)
