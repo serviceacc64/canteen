@@ -138,6 +138,7 @@ const Entry = () => {
 
     try {
       await createOrUpdateReport({
+        ...(editId ? { id: editId } : {}),
         date,
         canteenLocation,
         cashSalesRows,
