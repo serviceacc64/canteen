@@ -349,3 +349,31 @@
 [data-theme='dark'] .dailyReports__link:hover {
   color: var(--canteen-ink);
 }
+
+/* Pagination Styles */
+.dailyReports__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px;
+  border-top: 1px solid rgba(40, 90, 72, 0.12);
+  background: #ffffff;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.dailyReports__pageInfo {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(9, 20, 19, 0.82);
+}
+
+[data-theme='dark'] .dailyReports__pagination {
+  background: var(--surface);
+  border-top-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .dailyReports__pageInfo {
+  color: var(--text);
+}
