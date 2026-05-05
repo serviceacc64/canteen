@@ -32,6 +32,7 @@ const Entry = () => {
     createRow('Big Boy', 0, 'Store'),
     createRow('Aqua', 0, 'Store'),
     createRow('Kitchen', 0, 'Kitchen'),
+    createRow('Palamig', 0, 'Palamig'),
     createRow('Ice', 0, 'Palamig'),
     createRow('Water', 0, 'Palamig'),
     createRow('School Supplies', 0, 'School Supplies'),
@@ -102,18 +103,17 @@ const Entry = () => {
     setter((prev) => [...prev, createRow(defaultLabel, 0)]);
   };
 
-  const addStorePurchaseGroupRow = (group, defaultLabel) => {
-    const newRow = createRow(defaultLabel, 0, group);
-    setStorePurchaseRows((prev) => {
-      const lastGroupIndex = prev.reduce((last, row, i) => (row.group === group ? i : last), -1);
+  const addStoreRow = () => {
+    const newRow = createRow('New Store Item', 0, 'Store');
+    const lastStoreIndex = storePurchaseRows.reduce((last, row, i) => 
+      row.group === 'Store' ? i : last, -1);
+    setStorePurchaseRows(prev => {
       const newRows = [...prev];
-
-      if (lastGroupIndex >= 0) {
-        newRows.splice(lastGroupIndex + 1, 0, newRow);
+      if (lastStoreIndex >= 0) {
+        newRows.splice(lastStoreIndex + 1, 0, newRow);
       } else {
         newRows.push(newRow);
       }
-
       return newRows;
     });
   };
@@ -241,22 +241,12 @@ const Entry = () => {
                         <Button variant="danger" onClick={() => removeRow(setStorePurchaseRows, row.id)}>Delete</Button>
                       </div>
                       {row.group === 'Store' && index === storePurchaseRows.reduce((last, r, i) => r.group === 'Store' ? i : last, -1) && (
-                        <div className="group-add-row">
-                          <Button
-                            variant="secondary"
-                            onClick={() => addStorePurchaseGroupRow('Store', 'New Store Item')}
+                        <div className="group-add-row" style={{ display: 'flex', justifyContent: 'start', margin: '4px 0', gap: '8px' }}>
+                          <Button 
+                            variant="secondary" 
+                            onClick={addStoreRow}
                           >
                             + Add Store Item
-                          </Button>
-                        </div>
-                      )}
-                      {row.group === 'Palamig' && index === storePurchaseRows.reduce((last, r, i) => r.group === 'Palamig' ? i : last, -1) && (
-                        <div className="group-add-row">
-                          <Button
-                            variant="secondary"
-                            onClick={() => addStorePurchaseGroupRow('Palamig', 'New Palamig Item')}
-                          >
-                            Add Entry
                           </Button>
                         </div>
                       )}

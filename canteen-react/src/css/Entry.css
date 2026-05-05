@@ -149,13 +149,6 @@
   color: rgba(40, 90, 72, 0.9);
 }
 
-.group-add-row {
-  display: flex;
-  justify-content: flex-start;
-  gap: 8px;
-  margin: 4px 0 12px;
-}
-
 .section {
   padding: 18px;
 }
