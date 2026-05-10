@@ -52,7 +52,7 @@ const Login = () => {
             <div className="login-logo">
               <TrendingUp size={32} />
             </div>
-            <h1 className="login-title">CanteenX</h1>
+            <h1 className="login-title">Recto MNHS</h1>
             <p className="login-subtitle">Advanced Financial Operations Suite</p>
           </div>
 
