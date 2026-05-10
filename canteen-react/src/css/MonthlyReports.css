@@ -1,202 +1,212 @@
-/* Monthly Reports - modern light UI using canteen palette */
-
-.monthlyReports {
-  background: #ffffff;
-  border: 1px solid rgba(40, 90, 72, 0.16);
-  border-radius: 16px;
-  box-shadow:
-    0 10px 28px rgba(9, 20, 19, 0.06),
-    0 2px 8px rgba(9, 20, 19, 0.04);
-}
-
-.monthlyReports__header {
+.monthly-reports {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 6px 0 18px;
-  border-bottom: 1px solid rgba(40, 90, 72, 0.12);
-  margin-bottom: 18px;
+  flex-direction: column;
 }
 
-.monthlyReports__title {
-  margin: 0;
-  font-size: 28px;
-  letter-spacing: -0.4px;
-  color: #091413;
-}
-
-.monthlyReports__subtitle {
-  margin: 6px 0 0;
-  color: rgba(9, 20, 19, 0.65);
-  font-size: 14px;
-}
-
-.monthlyReports__empty {
-  padding: 8px 0 4px;
-}
-
-.monthlyReports__emptyCard {
-  border-radius: 16px;
-  border: 1px solid rgba(64, 138, 113, 0.18);
-  background: linear-gradient(180deg, rgba(231, 242, 239, 0.9), rgba(231, 242, 239, 0.55));
-  padding: 18px;
+.monthly-reports__grid {
   display: grid;
-  gap: 10px;
-  max-width: 560px;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 24px;
 }
 
-.monthlyReports__emptyCard h3 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 900;
-  color: #091413;
-}
-
-.monthlyReports__emptyCard p {
-  margin: 0;
-  color: rgba(9, 20, 19, 0.65);
-}
-
-.monthlyReports__tableCard {
-  margin-top: 6px;
-  border-radius: 16px;
-  border: 1px solid rgba(40, 90, 72, 0.16);
-  background: #ffffff;
-  box-shadow: 0 10px 28px rgba(9, 20, 19, 0.05);
-}
-
-.monthlyReports__tableWrap {
-  overflow: auto;
-  border-radius: 16px;
-}
-
-.monthlyReports__table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  min-width: 760px;
-}
-
-.monthlyReports__table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  text-align: left;
-  padding: 12px 14px;
-  font-size: 12px;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-  color: rgba(40, 90, 72, 0.92);
-  background: linear-gradient(180deg, rgba(231, 242, 239, 1), rgba(231, 242, 239, 0.72));
-  border-bottom: 1px solid rgba(40, 90, 72, 0.14);
-}
-
-.monthlyReports__table tbody td {
-  padding: 12px 14px;
-  border-bottom: 1px solid rgba(40, 90, 72, 0.12);
-  color: rgba(9, 20, 19, 0.82);
-  background: #ffffff;
-}
-
-.monthlyReports__table tbody tr:hover td {
-  background: rgba(176, 228, 204, 0.22);
-}
-
-.monthlyReports__rowActions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.monthlyReports__link {
-  color: #285A48;
-  font-weight: 800;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(40, 90, 72, 0.25);
-}
-
-.monthlyReports__link:hover {
-  color: #091413;
-  border-bottom-color: rgba(64, 138, 113, 0.45);
-}
-
-.monthlyReports__link:focus-visible {
-  outline: none;
-  border-radius: 8px;
-  box-shadow: 0 0 0 3px rgba(176, 228, 204, 0.6);
-}
-
-@media (max-width: 720px) {
-  .monthlyReports__header {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .monthlyReports__title {
-    font-size: 24px;
-  }
-
-  .monthlyReports__emptyCard {
-    max-width: 100%;
-  }
-}
-
-/* Dark Mode Overrides */
-[data-theme='dark'] .monthlyReports {
+.monthly-card {
   background: var(--surface);
-  border-color: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-[data-theme='dark'] .monthlyReports__header {
-  border-bottom-color: rgba(255, 255, 255, 0.05);
+.monthly-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
 }
 
-[data-theme='dark'] .monthlyReports__title {
-  color: var(--canteen-ink);
+.monthly-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
-[data-theme='dark'] .monthlyReports__subtitle {
+.monthly-card__title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.monthly-card__icon {
+  width: 48px;
+  height: 48px;
+  background: var(--canteen-surface);
+  color: var(--primary);
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+}
+
+.monthly-card__title h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+
+.monthly-card__badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--muted);
+  background: var(--bg);
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid var(--border);
+}
+
+.monthly-card__stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  background: var(--bg);
+  padding: 16px;
+  border-radius: var(--radius-md);
+}
+
+.monthly-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.monthly-stat__label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.monthly-stat__value {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.monthly-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+}
+
+.monthly-card__profit {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.monthly-card__total-label {
+  font-size: 12px;
+  font-weight: 600;
   color: var(--muted);
 }
 
-[data-theme='dark'] .monthlyReports__emptyCard {
-  background: linear-gradient(180deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.5));
-  border-color: rgba(255, 255, 255, 0.05);
+.monthly-card__total-value {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--primary);
+  letter-spacing: -0.5px;
 }
 
-[data-theme='dark'] .monthlyReports__emptyCard h3 {
-  color: var(--canteen-ink);
+.monthly-card__actions {
+  display: flex;
+  gap: 8px;
 }
 
-[data-theme='dark'] .monthlyReports__tableCard {
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
   background: var(--surface);
-  border-color: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  color: var(--muted);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
 }
 
-[data-theme='dark'] .monthlyReports__table thead th {
+.btn-icon:hover {
+  background: var(--bg);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-icon--danger:hover {
+  background: #fff1f2;
+  color: #f43f5e;
+  border-color: #fecaca;
+}
+
+.stats-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
   background: var(--surface);
-  border-bottom-color: rgba(255, 255, 255, 0.05);
-  color: var(--canteen-700);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
 }
 
-[data-theme='dark'] .monthlyReports__table tbody td {
+.empty-state-card {
   background: var(--surface);
-  border-bottom-color: rgba(255, 255, 255, 0.05);
-  color: var(--text);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
 }
 
-[data-theme='dark'] .monthlyReports__table tbody tr:hover td {
-  background: rgba(255, 255, 255, 0.05);
+.empty-state-card__icon {
+  width: 80px;
+  height: 80px;
+  background: var(--bg);
+  color: var(--muted);
+  border-radius: 24px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 8px;
 }
 
-[data-theme='dark'] .monthlyReports__link {
-  color: var(--canteen-700);
+.empty-state-card h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
 }
 
-[data-theme='dark'] .monthlyReports__link:hover {
-  color: var(--canteen-ink);
+.empty-state-card p {
+  margin: 0;
+  max-width: 320px;
+  color: var(--muted);
 }
+
+@media (max-width: 768px) {
+  .monthly-reports__grid {
+    grid-template-columns: 1fr;
+  }
+}
+

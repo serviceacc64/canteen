@@ -1,5 +1,20 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { 
+  TrendingUp, 
+  TrendingDown, 
+  DollarSign, 
+  Receipt, 
+  PieChart,
+  Plus,
+  Calendar,
+  Filter,
+  X,
+  Eye,
+  Trash2,
+  Layers,
+  ArrowRight
+} from "lucide-react";
 import Button from "../components/common/Button";
 import useReports from "../hooks/useReports";
 import { formatPeso } from "../utils/format";
@@ -32,6 +47,8 @@ const DailyReports = () => {
   };
 
   const filteredReports = getFilteredReports();
+  
+  const stats = useMemo(() => sumTotals(filteredReports), [filteredReports]);
 
   const groupedReports =
     filteredReports.length > 0
@@ -62,216 +79,241 @@ const DailyReports = () => {
     .sort((a, b) => String(b.date).localeCompare(String(a.date)));
 
   const onDelete = async (id) => {
-    const confirmed = window.confirm("Delete this report permanently?");
+    const confirmed = window.confirm("Are you sure you want to delete this operational report? This action is permanent.");
     if (!confirmed) return;
 
     try {
       await removeReport(id);
     } catch {
-      window.alert("Unable to delete the report. Please try again.");
+      window.alert("Operational error. Unable to purge the report record.");
     }
   };
 
   if (loading) {
     return (
       <div className="page">
-        <p>Loading reports...</p>
+        <div className="loading-state">
+          <div className="loading-spinner"></div>
+          <p>Retrieving operational logs...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="page dailyReports">
-      <header className="dailyReports__header">
-        <div>
-          <h1 className="dailyReports__title">Daily Reports</h1>
-          <p className="dailyReports__subtitle">
-            Persisted entries in Supabase.
-          </p>
+    <div className="page daily-reports">
+      <header className="page-header">
+        <div className="page-header__left">
+          <div className="page-header__main">
+            <h1 className="page-header__title">Audit Journal</h1>
+            <p className="page-header__subtitle">Daily operational logs and fiscal breakdown</p>
+          </div>
         </div>
-        <div className="dailyReports__actions">
-          <div className="dailyReports__filterGroup">
-            <label htmlFor="dateFilter" className="dailyReports__filterLabel">
-              Filter by Date:
-            </label>
+        
+        <div className="page-header__actions">
+          <div className="header-search">
+            <Calendar size={14} className="header-search__icon" />
             <input
-              id="dateFilter"
               type="date"
               value={selectedDate}
               onChange={(e) => {
                 setSelectedDate(e.target.value);
                 setCurrentPage(1);
               }}
-              className="dailyReports__dateInput"
+              className="header-search__input"
             />
             {selectedDate && (
-              <button
-                onClick={() => setSelectedDate("")}
-                className="dailyReports__clearBtn"
-                title="Clear date filter"
-              >
-                Clear
+              <button onClick={() => setSelectedDate("")} className="header-search__clear">
+                <X size={14} />
               </button>
             )}
           </div>
-          <Button
-            variant={viewMode === "individual" ? "secondary" : "primary"}
-            className="dailyReports__toggleBtn"
-            onClick={() => {
-              setViewMode(
-                viewMode === "individual" ? "combined" : "individual",
-              );
-              setCurrentPage(1);
-            }}
-          >
-            {viewMode === "individual"
-              ? "View Combined (per day)"
-              : "View Individual (per canteen)"}
-          </Button>
-          <Link to="/entry" className="dailyReports__primaryLink">
-            Create New Entry
+
+          <div className="view-toggle">
+            <button 
+              className={`view-toggle__btn ${viewMode === 'individual' ? 'is-active' : ''}`}
+              onClick={() => {
+                setViewMode("individual");
+                setCurrentPage(1);
+              }}
+              title="Individual Logs"
+            >
+              <Filter size={14} />
+            </button>
+            <button 
+              className={`view-toggle__btn ${viewMode === 'combined' ? 'is-active' : ''}`}
+              onClick={() => {
+                setViewMode("combined");
+                setCurrentPage(1);
+              }}
+              title="Aggregated View"
+            >
+              <Layers size={14} />
+            </button>
+          </div>
+
+          <Link to="/entry" className="btn btn-primary">
+            <Plus size={16} />
+            <span>New Session</span>
           </Link>
         </div>
       </header>
 
-      {reports.length === 0 ? (
-        <div className="dailyReports__empty">
-          <div className="dailyReports__emptyCard">
-            <h3>No reports yet</h3>
-            <p>
-              Create a report from New Entry to start tracking daily operations.
-            </p>
-            <Link
-              to="/entry"
-              className="dailyReports__primaryLink dailyReports__primaryLink--wide"
-            >
-              Go to New Entry
-            </Link>
+      <section className="dashboard__statsGrid">
+        <div className="stats-card">
+          <div className="stats-card__icon stats-card__icon--sales">
+            <DollarSign size={20} />
           </div>
+          <div className="stats-card__content">
+            <span className="stats-card__label">Journal Revenue</span>
+            <div className="stats-card__value">{formatPeso(stats.totalSales)}</div>
+          </div>
+        </div>
+
+        <div className="stats-card">
+          <div className="stats-card__icon stats-card__icon--expenses">
+            <Receipt size={20} />
+          </div>
+          <div className="stats-card__content">
+            <span className="stats-card__label">Journal Costs</span>
+            <div className="stats-card__value">{formatPeso(stats.totalExpenses)}</div>
+          </div>
+        </div>
+
+        <div className="stats-card">
+          <div className="stats-card__icon stats-card__icon--profit">
+            <PieChart size={20} />
+          </div>
+          <div className="stats-card__content">
+            <span className="stats-card__label">Journal Yield</span>
+            <div className="stats-card__value">{formatPeso(stats.netProfit)}</div>
+          </div>
+        </div>
+
+        <div className="stats-card">
+          <div className="stats-card__icon stats-card__icon--reports">
+            <Calendar size={20} />
+          </div>
+          <div className="stats-card__content">
+            <span className="stats-card__label">Avg Session</span>
+            <div className="stats-card__value">{formatPeso(stats.netProfit / (filteredReports.length || 1))}</div>
+          </div>
+        </div>
+      </section>
+
+      {reports.length === 0 ? (
+        <div className="empty-state-card">
+          <div className="empty-state-card__icon">
+            <FileText size={48} />
+          </div>
+          <h3>Journal is empty</h3>
+          <p>Initialize your first operational session to begin data aggregation.</p>
+          <Link to="/entry" className="btn btn-primary">
+            Record Entry
+          </Link>
         </div>
       ) : !filteredReports.length ? (
-        <div className="dailyReports__empty">
-          <div className="dailyReports__emptyCard">
-            <h3>No reports found</h3>
-            <p>No reports match the selected date. Try a different date.</p>
-            <button
-              onClick={() => setSelectedDate("")}
-              className="dailyReports__primaryLink dailyReports__primaryLink--wide"
-              style={{ border: "none", cursor: "pointer" }}
-            >
-              View All Reports
-            </button>
+        <div className="empty-state-card">
+          <div className="empty-state-card__icon">
+            <Calendar size={48} />
           </div>
+          <h3>No records on this date</h3>
+          <p>No operational logs match your current temporal filter.</p>
+          <Button variant="secondary" onClick={() => setSelectedDate("")}>
+            Reset Journal View
+          </Button>
         </div>
       ) : viewMode === "individual" ? (
-        filteredReports.length > 0 && (
-          <section className="dailyReports__tableCard">
-            <div className="dailyReports__tableWrap">
-              <table
-                className="dailyReports__table"
-                aria-label="Daily reports table"
-              >
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Location</th>
-                    <th>Total Sales</th>
-                    <th>Total Expenses</th>
-                    <th>Net Profit</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredReports
-                    .slice(
-                      (currentPage - 1) * entriesPerPage,
-                      currentPage * entriesPerPage,
-                    )
-                    .map((report) => (
-                      <tr key={report.id}>
-                        <td>{report.date || "-"}</td>
-                        <td>{report.canteenLocation || "-"}</td>
-                        <td>{formatPeso(report?.totals?.totalSales || 0)}</td>
-                        <td>
-                          {formatPeso(report?.totals?.totalExpenses || 0)}
-                        </td>
-                        <td>{formatPeso(report?.totals?.netProfit || 0)}</td>
-                        <td className="dailyReports__rowActions">
-                          <Link
-                            className="btn btn-secondary"
-                            to={`/view/${report.id}`}
-                          >
-                            View
-                          </Link>
-                          <Button
-                            variant="danger"
-                            onClick={() => onDelete(report.id)}
-                            aria-label={`Delete report ${report.id}`}
-                          >
-                            Delete
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-            {filteredReports.length > entriesPerPage && (
-              <div className="dailyReports__pagination">
-                <Button
-                  variant="secondary"
-                  disabled={currentPage === 1}
-                  onClick={() => setCurrentPage((p) => p - 1)}
-                >
-                  Previous
-                </Button>
-                <span className="dailyReports__pageInfo">
-                  Page {currentPage} of{" "}
-                  {Math.ceil(filteredReports.length / entriesPerPage)}
-                </span>
-                <Button
-                  variant="secondary"
-                  disabled={
-                    currentPage ===
-                    Math.ceil(filteredReports.length / entriesPerPage)
-                  }
-                  onClick={() => setCurrentPage((p) => p + 1)}
-                >
-                  Next
-                </Button>
-              </div>
-            )}
-          </section>
-        )
-      ) : viewMode === "combined" && combinedDailyRows.length === 0 ? (
-        <div className="dailyReports__empty">
-          <div className="dailyReports__emptyCard">
-            <h3>No combined data</h3>
-            <p>No reports available to combine for the selected date filter.</p>
-            <button
-              onClick={() => setSelectedDate("")}
-              className="dailyReports__primaryLink dailyReports__primaryLink--wide"
-              style={{ border: "none", cursor: "pointer" }}
-            >
-              View All
-            </button>
-          </div>
-        </div>
-      ) : (
-        <section className="dailyReports__tableCard">
-          <div className="dailyReports__tableWrap">
-            <table
-              className="dailyReports__table"
-              aria-label="Combined daily reports table"
-            >
+        <div className="audit-table-card">
+          <div className="audit-table-wrap">
+            <table className="audit-table">
               <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>Canteens</th>
-                  <th>Reports</th>
-                  <th>Total Sales</th>
-                  <th>Total Expenses</th>
-                  <th>Net Profit</th>
+                  <th>Session Date</th>
+                  <th>Operating Node</th>
+                  <th>Gross Revenue</th>
+                  <th>Operational Costs</th>
+                  <th>Net Performance</th>
+                  <th className="text-right">Audit Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredReports
+                  .slice(
+                    (currentPage - 1) * entriesPerPage,
+                    currentPage * entriesPerPage,
+                  )
+                  .map((report) => (
+                    <tr key={report.id}>
+                      <td className="font-bold">{report.date || "-"}</td>
+                      <td>
+                        <span className="location-badge">
+                          {report.canteenLocation || "Unknown Node"}
+                        </span>
+                      </td>
+                      <td className="text-success">{formatPeso(report?.totals?.totalSales || 0)}</td>
+                      <td className="text-danger">
+                        {formatPeso(report?.totals?.totalExpenses || 0)}
+                      </td>
+                      <td className="text-primary font-bold">{formatPeso(report?.totals?.netProfit || 0)}</td>
+                      <td>
+                        <div className="audit-actions">
+                          <Link className="btn-icon" to={`/view/${report.id}`} title="View Details">
+                            <Eye size={16} />
+                          </Link>
+                          <button
+                            className="btn-icon btn-icon--danger"
+                            onClick={() => onDelete(report.id)}
+                            title="Purge Record"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+          
+          {filteredReports.length > entriesPerPage && (
+            <div className="audit-pagination">
+              <Button
+                variant="secondary"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((p) => p - 1)}
+              >
+                Previous
+              </Button>
+              <span className="pagination-info">
+                Page <strong>{currentPage}</strong> of{" "}
+                <strong>{Math.ceil(filteredReports.length / entriesPerPage)}</strong>
+              </span>
+              <Button
+                variant="secondary"
+                disabled={
+                  currentPage ===
+                  Math.ceil(filteredReports.length / entriesPerPage)
+                }
+                onClick={() => setCurrentPage((p) => p + 1)}
+              >
+                Next
+              </Button>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="audit-table-card">
+          <div className="audit-table-wrap">
+            <table className="audit-table">
+              <thead>
+                <tr>
+                  <th>Temporal Period</th>
+                  <th>Nodes Active</th>
+                  <th>Log Volume</th>
+                  <th>Aggregate Revenue</th>
+                  <th>Aggregate Costs</th>
+                  <th>Net Performance</th>
                 </tr>
               </thead>
               <tbody>
@@ -282,19 +324,24 @@ const DailyReports = () => {
                   )
                   .map((row) => (
                     <tr key={row.date}>
-                      <td>{row.date}</td>
-                      <td>{row.locationCount}</td>
-                      <td>{row.reportCount}</td>
-                      <td>{formatPeso(row.totals.totalSales)}</td>
-                      <td>{formatPeso(row.totals.totalExpenses)}</td>
-                      <td>{formatPeso(row.totals.netProfit)}</td>
+                      <td className="font-bold">{row.date}</td>
+                      <td>
+                        <span className="location-badge">{row.locationCount} Node(s)</span>
+                      </td>
+                      <td>
+                        <span className="badge">{row.reportCount} Logs</span>
+                      </td>
+                      <td className="text-success">{formatPeso(row.totals.totalSales)}</td>
+                      <td className="text-danger">{formatPeso(row.totals.totalExpenses)}</td>
+                      <td className="text-primary font-bold">{formatPeso(row.totals.netProfit)}</td>
                     </tr>
                   ))}
               </tbody>
             </table>
           </div>
+          
           {combinedDailyRows.length > entriesPerPage && (
-            <div className="dailyReports__pagination">
+            <div className="audit-pagination">
               <Button
                 variant="secondary"
                 disabled={currentPage === 1}
@@ -302,9 +349,9 @@ const DailyReports = () => {
               >
                 Previous
               </Button>
-              <span className="dailyReports__pageInfo">
-                Page {currentPage} of{" "}
-                {Math.ceil(combinedDailyRows.length / entriesPerPage)}
+              <span className="pagination-info">
+                Page <strong>{currentPage}</strong> of{" "}
+                <strong>{Math.ceil(combinedDailyRows.length / entriesPerPage)}</strong>
               </span>
               <Button
                 variant="secondary"
@@ -318,10 +365,11 @@ const DailyReports = () => {
               </Button>
             </div>
           )}
-        </section>
+        </div>
       )}
     </div>
   );
 };
 
 export default DailyReports;
+

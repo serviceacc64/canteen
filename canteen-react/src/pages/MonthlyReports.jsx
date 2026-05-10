@@ -1,11 +1,28 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { 
+  Calendar, 
+  Eye, 
+  Trash2, 
+  TrendingUp,
+  FileText,
+  BarChart3,
+  ArrowUpRight,
+  ChevronRight
+} from 'lucide-react';
 import Button from '../components/common/Button';
 import useReports from '../hooks/useReports';
 import { formatPeso } from '../utils/format';
 import '../css/MonthlyReports.css';
 
 const monthKey = (dateValue) => {
+  if (!dateValue) return 'Unknown';
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return 'Unknown';
+  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+};
+
+const monthId = (dateValue) => {
   if (!dateValue) return 'Unknown';
   const date = new Date(dateValue);
   if (Number.isNaN(date.getTime())) return 'Unknown';
@@ -20,7 +37,15 @@ const MonthlyReports = () => {
 
     reports.forEach((report) => {
       const key = monthKey(report.date);
-      const current = map.get(key) || { month: key, totalSales: 0, totalExpenses: 0, netProfit: 0, count: 0 };
+      const id = monthId(report.date);
+      const current = map.get(key) || { 
+        month: key, 
+        id: id,
+        totalSales: 0, 
+        totalExpenses: 0, 
+        netProfit: 0, 
+        count: 0 
+      };
 
       current.totalSales += report?.totals?.totalSales || 0;
       current.totalExpenses += report?.totals?.totalExpenses || 0;
@@ -30,82 +55,115 @@ const MonthlyReports = () => {
       map.set(key, current);
     });
 
-    return [...map.values()].sort((a, b) => a.month.localeCompare(b.month));
+    return [...map.values()].sort((a, b) => b.id.localeCompare(a.id));
   }, [reports]);
 
-  const onDelete = async (month) => {
-    const confirmed = window.confirm(`Delete all reports for ${month} permanently?`);
+  const onDelete = async (monthLabel, monthIdValue) => {
+    const confirmed = window.confirm(`Delete all records for ${monthLabel} permanently? This action cannot be undone.`);
     if (!confirmed) return;
 
     try {
-      const reportsToDelete = reports.filter((report) => monthKey(report.date) === month);
+      const reportsToDelete = reports.filter((report) => monthId(report.date) === monthIdValue);
       for (const report of reportsToDelete) {
         await removeReport(report.id);
       }
     } catch {
-      window.alert('Unable to delete the reports. Please try again.');
+      window.alert('Operational error. Unable to purge reports.');
     }
   };
 
   if (loading) {
-    return <div className="page"><p>Loading monthly reports...</p></div>;
+    return (
+      <div className="page">
+        <div className="loading-state">
+          <div className="loading-spinner"></div>
+          <p>Analyzing fiscal cycles...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="page monthlyReports">
-      <header className="monthlyReports__header">
-        <div>
-          <h1 className="monthlyReports__title">Monthly Reports</h1>
-          <p className="monthlyReports__subtitle">Monthly aggregation from saved daily reports.</p>
+    <div className="page monthly-reports">
+      <header className="page-header">
+        <div className="page-header__left">
+          <div className="page-header__main">
+            <h1 className="page-header__title">Monthly Analytics</h1>
+            <p className="page-header__subtitle">Periodic aggregation of operational performance</p>
+          </div>
+        </div>
+        <div className="page-header__actions">
+          <div className="stats-badge">
+            <BarChart3 size={14} />
+            <span>{grouped.length} Active Periods</span>
+          </div>
         </div>
       </header>
 
       {grouped.length === 0 ? (
-        <div className="monthlyReports__empty">
-          <div className="monthlyReports__emptyCard">
-            <h3>No monthly data yet</h3>
-            <p>Create daily reports first so monthly totals can be aggregated.</p>
+        <div className="empty-state-card">
+          <div className="empty-state-card__icon">
+            <FileText size={48} />
           </div>
+          <h3>No historical data found</h3>
+          <p>Establish operational logs to generate monthly analytical insights.</p>
+          <Button variant="primary" onClick={() => navigate('/entry')}>
+            Record First Session
+          </Button>
         </div>
       ) : (
-        <section className="monthlyReports__tableCard">
-          <div className="monthlyReports__tableWrap">
-            <table className="monthlyReports__table" aria-label="Monthly reports table">
-            <thead>
-              <tr>
-                <th>Month</th>
-                <th>Entries</th>
-                <th>Total Sales</th>
-                <th>Total Expenses</th>
-                <th>Net Profit</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {grouped.map((row) => (
-                <tr key={row.month}>
-                  <td>{row.month}</td>
-                  <td>{row.count}</td>
-                  <td>{formatPeso(row.totalSales)}</td>
-                  <td>{formatPeso(row.totalExpenses)}</td>
-                  <td>{formatPeso(row.netProfit)}</td>
-                  <td className="monthlyReports__rowActions">
-                    <Link className="btn btn-secondary" to={`/view/monthly/${row.month}`}>
-                      View
-                    </Link>
-                    <Button variant="danger" onClick={() => onDelete(row.month)} aria-label={`Delete reports for ${row.month}`}>
-                      Delete
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          </div>
-        </section>
+        <div className="monthly-reports__grid">
+          {grouped.map((row) => (
+            <div className="monthly-card" key={row.id}>
+              <div className="monthly-card__header">
+                <div className="monthly-card__title">
+                  <div className="monthly-card__icon">
+                    <Calendar size={20} />
+                  </div>
+                  <h2>{row.month}</h2>
+                </div>
+                <div className="monthly-card__badge">
+                  {row.count} Logs
+                </div>
+              </div>
+
+              <div className="monthly-card__stats">
+                <div className="monthly-stat">
+                  <span className="monthly-stat__label">Gross Revenue</span>
+                  <span className="monthly-stat__value text-success">{formatPeso(row.totalSales)}</span>
+                </div>
+                <div className="monthly-stat">
+                  <span className="monthly-stat__label">Operational Costs</span>
+                  <span className="monthly-stat__value text-danger">{formatPeso(row.totalExpenses)}</span>
+                </div>
+              </div>
+
+              <div className="monthly-card__footer">
+                <div className="monthly-card__profit">
+                  <span className="monthly-card__total-label">Net Performance</span>
+                  <span className="monthly-card__total-value">{formatPeso(row.netProfit)}</span>
+                </div>
+                <div className="monthly-card__actions">
+                  <Link to={`/view/monthly/${row.id}`} className="btn-icon" title="Audit Month">
+                    <Eye size={18} />
+                  </Link>
+                  <button 
+                    onClick={() => onDelete(row.month, row.id)} 
+                    className="btn-icon btn-icon--danger" 
+                    title="Purge Period"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
 };
 
 export default MonthlyReports;
+
+

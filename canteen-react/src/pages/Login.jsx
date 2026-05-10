@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
+import { Lock, Mail, Eye, EyeOff, ShieldCheck, TrendingUp } from "lucide-react";
 import Button from "../components/common/Button";
 import useAuth from "../hooks/useAuth";
 import { signIn } from "../services/supabaseAuthApi";
@@ -24,7 +25,6 @@ const Login = () => {
     setErrorMessage("");
     setIsLoading(true);
 
-    // Save the remember me preference so our custom Supabase storage knows where to persist the session
     window.localStorage.setItem('remember_me', rememberMe ? 'true' : 'false');
 
     try {
@@ -33,7 +33,7 @@ const Login = () => {
     } catch (error) {
       setErrorMessage(
         error?.message ||
-          "Unable to sign in. Please check your email and password.",
+          "Authentication failed. Please verify your credentials.",
       );
     } finally {
       setIsLoading(false);
@@ -45,146 +45,108 @@ const Login = () => {
       <div className="login-top-right">
         <ThemeToggle />
       </div>
-      <div className="login-card">
-        <div className="login-brand">
-          <h1 className="login-title" id="login-title">
-            Admin Login
-          </h1>
-          <p className="login-subtitle">
-            Secure administrator access for staff only.
-          </p>
+      
+      <div className="login-container">
+        <div className="login-card">
+          <div className="login-header">
+            <div className="login-logo">
+              <TrendingUp size={32} />
+            </div>
+            <h1 className="login-title">CanteenX</h1>
+            <p className="login-subtitle">Advanced Financial Operations Suite</p>
+          </div>
+
+          <div className="login-body">
+            <div className="login-intro">
+              <div className="intro-badge">
+                <ShieldCheck size={14} />
+                <span>Secure Administrator Access</span>
+              </div>
+            </div>
+
+            {errorMessage && (
+              <div className="error-alert" role="alert">
+                {errorMessage}
+              </div>
+            )}
+
+            <form onSubmit={onSubmit} className="login-form">
+              <div className="form-group">
+                <label htmlFor="email">Work Email</label>
+                <div className="input-wrapper">
+                  <Mail className="input-icon" size={18} />
+                  <input
+                    type="email"
+                    id="email"
+                    placeholder="name@company.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    autoComplete="email"
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <div className="label-row">
+                  <label htmlFor="password">Password</label>
+                </div>
+                <div className="input-wrapper">
+                  <Lock className="input-icon" size={18} />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    autoComplete="current-password"
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="form-options">
+                <label className="custom-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                  />
+                  <span className="checkmark"></span>
+                  <span className="label-text">Remember this device</span>
+                </label>
+              </div>
+
+              <Button
+                type="submit"
+                variant="primary"
+                className="login-submit"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <span className="loading-content">
+                    <span className="spinner"></span>
+                    Authenticating...
+                  </span>
+                ) : (
+                  "Sign In to Dashboard"
+                )}
+              </Button>
+            </form>
+          </div>
+
+          <div className="login-footer">
+            <p>© 2026 CanteenX. Authorized Personnel Only.</p>
+          </div>
         </div>
-
-        {errorMessage && (
-          <div className="error-message" role="alert" aria-live="polite">
-            {errorMessage}
-          </div>
-        )}
-
-        <form
-          onSubmit={onSubmit}
-          className="login-form"
-          role="form"
-          aria-labelledby="login-title"
-        >
-          <div className={`input-group ${errorMessage ? 'has-error' : ''}`}>
-            <svg
-              className="input-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-              <polyline points="22,6 12,13 2,6"></polyline>
-            </svg>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Email"
-              autoComplete="email"
-              aria-label="Admin Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className={`input-group ${errorMessage ? 'has-error' : ''}`}>
-            <svg
-              className="input-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-            <input
-              type={showPassword ? "text" : "password"}
-              id="password"
-              name="password"
-              placeholder="Password"
-              autoComplete="current-password"
-              aria-label="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button
-              type="button"
-              className="show-password-btn"
-              onClick={() => setShowPassword(!showPassword)}
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="eye-icon"
-                >
-                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                  <line x1="1" y1="1" x2="23" y2="23"></line>
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="eye-icon"
-                >
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-              )}
-            </button>
-          </div>
-
-          <div className="options">
-            <label className="checkbox-group">
-              <input
-                type="checkbox"
-                id="remember"
-                name="remember"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-              />
-              Keep me signed in
-            </label>
-          </div>
-
-          <Button
-            type="submit"
-            variant="primary"
-            className="btn-login"
-            id="login-btn"
-            aria-label="Login to admin panel"
-            disabled={isLoading}
-          >
-            {isLoading ? "Signing in..." : "Access Admin"}
-          </Button>
-        </form>
-
-        <p className="bottom-text">Authorized personnel only</p>
       </div>
     </div>
   );

@@ -1,5 +1,15 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
+import { 
+  Calendar, 
+  Eye, 
+  Trash2, 
+  FileText, 
+  TrendingUp, 
+  BarChart3,
+  Award,
+  ChevronRight
+} from "lucide-react";
 import Button from "../components/common/Button";
 import useReports from "../hooks/useReports";
 import { formatPeso } from "../utils/format";
@@ -71,12 +81,12 @@ const YearlyReports = () => {
       map.set(key, current);
     });
 
-    return [...map.values()].sort((a, b) => a.year.localeCompare(b.year));
+    return [...map.values()].sort((a, b) => b.year.localeCompare(a.year));
   }, [reports]);
 
   const onDelete = async (year) => {
     const confirmed = window.confirm(
-      `Delete all reports for ${year} permanently?`,
+      `Delete all records for fiscal year ${year} permanently? This action cannot be undone.`,
     );
     if (!confirmed) return;
 
@@ -88,90 +98,107 @@ const YearlyReports = () => {
         await removeReport(report.id);
       }
     } catch {
-      window.alert("Unable to delete the reports. Please try again.");
+      window.alert("Operational error. Unable to purge reports.");
     }
   };
 
   if (loading) {
     return (
       <div className="page">
-        <p>Loading yearly reports...</p>
+        <div className="loading-state">
+          <div className="loading-spinner"></div>
+          <p>Synthesizing annual performance data...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="page yearlyReports">
-      <header className="yearlyReports__header">
-        <div>
-          <h1 className="yearlyReports__title">Yearly Reports</h1>
-          <p className="yearlyReports__subtitle">
-            Yearly aggregation from saved daily reports.
-          </p>
+    <div className="page yearly-reports">
+      <header className="page-header">
+        <div className="page-header__left">
+          <div className="page-header__main">
+            <h1 className="page-header__title">Annual Performance</h1>
+            <p className="page-header__subtitle">Consolidated fiscal year auditing and trends</p>
+          </div>
+        </div>
+        <div className="page-header__actions">
+          <div className="stats-badge">
+            <Award size={14} />
+            <span>{grouped.length} Fiscal Years</span>
+          </div>
         </div>
       </header>
 
       {grouped.length === 0 ? (
-        <div className="yearlyReports__empty">
-          <div className="yearlyReports__emptyCard">
-            <h3>No yearly data yet</h3>
-            <p>
-              Create daily reports first so yearly totals can be aggregated.
-            </p>
+        <div className="empty-state-card">
+          <div className="empty-state-card__icon">
+            <FileText size={48} />
           </div>
+          <h3>No annual data archived</h3>
+          <p>Complete your daily logs to generate comprehensive yearly financial insights.</p>
         </div>
       ) : (
-        <section className="yearlyReports__tableCard">
-          <div className="yearlyReports__tableWrap">
-            <table
-              className="yearlyReports__table"
-              aria-label="Yearly reports table"
-            >
-              <thead>
-                <tr>
-                  <th>Year</th>
-                  <th>Entries</th>
-                  <th className="is-right">Total Expenses</th>
-                  <th className="is-right">Total Sales</th>
-                  <th className="is-right">Net Profit</th>
-                  <th className="is-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {grouped.map((row) => (
-                  <tr key={row.year}>
-                    <td>{row.year}</td>
-                    <td>{row.count}</td>
-                    <td className="is-right">
-                      {formatPeso(row.totalExpenses)}
-                    </td>
-                    <td className="is-right">{formatPeso(row.totalSales)}</td>
-                    <td className="is-right">{formatPeso(row.netProfit)}</td>
-                    <td className="yearlyReports__rowActions is-right">
-                      <Link
-                        className="btn btn-secondary"
-                        to={`/view/yearly/${row.year}`}
-                      >
-                        View
-                      </Link>
-                      <Button
-                        variant="danger"
-                        onClick={() => onDelete(row.year)}
-                        aria-label={`Delete reports for ${row.year}`}
-                      >
-                        Delete
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+        <div className="yearly-grid">
+          {grouped.map((row) => (
+            <div className="yearly-card" key={row.year}>
+              <div className="yearly-card__header">
+                <div className="yearly-card__year-badge">{row.year}</div>
+                <div className="yearly-card__badge">{row.count} Records</div>
+              </div>
 
-            </table>
-          </div>
-        </section>
+              <div className="yearly-card__summary">
+                <div className="summary-block">
+                  <span className="summary-block__label">Annual Revenue</span>
+                  <span className="summary-block__value">{formatPeso(row.totalSales)}</span>
+                </div>
+                <div className="summary-block">
+                  <span className="summary-block__label">Operational Costs</span>
+                  <span className="summary-block__value">{formatPeso(row.totalExpenses)}</span>
+                </div>
+              </div>
+
+              <div className="yearly-card__metrics">
+                <div className="metric-item">
+                  <span className="metric-item__label">Wages</span>
+                  <span className="metric-item__value">{formatPeso(row.wages)}</span>
+                </div>
+                <div className="metric-item">
+                  <span className="metric-item__label">SSS</span>
+                  <span className="metric-item__value">{formatPeso(row.sss)}</span>
+                </div>
+                <div className="metric-item">
+                  <span className="metric-item__label">Purchases</span>
+                  <span className="metric-item__value">{formatPeso(row.purchases)}</span>
+                </div>
+              </div>
+
+              <div className="yearly-card__profit">
+                <div className="profit-info">
+                  <span className="profit-label">Net Performance</span>
+                  <div className="profit-amount">{formatPeso(row.netProfit)}</div>
+                </div>
+                <div className="yearly-card__actions">
+                  <Link to={`/view/yearly/${row.year}`} className="btn-icon" title="Audit Year">
+                    <Eye size={18} />
+                  </Link>
+                  <button 
+                    onClick={() => onDelete(row.year)} 
+                    className="btn-icon btn-icon--danger" 
+                    title="Purge Year"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
 };
 
 export default YearlyReports;
+
+

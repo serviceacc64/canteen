@@ -1,5 +1,20 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
+import {
+  ArrowLeft,
+  Download,
+  Edit3,
+  FileText,
+  Calendar,
+  MapPin,
+  MessageSquare,
+  TrendingUp,
+  CreditCard,
+  ShoppingCart,
+  Package,
+  Activity,
+  Users,
+} from "lucide-react";
 import { getReportById } from "../services/reportsApi";
 import useReports from "../hooks/useReports";
 import {
@@ -45,59 +60,68 @@ const sumRowsByLabel = (rows = [], wantedLabel) => {
   }, 0);
 };
 
-const ReportTableSection = ({ title, rows = [], totalLabel = "Total" }) => {
+const ReportTableSection = ({
+  title,
+  rows = [],
+  totalLabel = "Total",
+  icon: Icon,
+}) => {
   const sectionTotal = useMemo(() => getSectionTotal(rows), [rows]);
 
   return (
-    <section className="viewReport__section" aria-label={title}>
-      <div className="viewReport__sectionHeader">
-        <h2 className="viewReport__sectionTitle">{title}</h2>
-        <p className="viewReport__sectionTotal">
-          {totalLabel}: {formatPeso(sectionTotal)}
-        </p>
+    <section className="view-section">
+      <div className="view-section__header">
+        <div className="view-section__title-group">
+          {Icon && <Icon className="view-section__icon" size={20} />}
+          <h2 className="view-section__title">{title}</h2>
+        </div>
+        <div className="view-section__total">
+          <span className="view-section__total-label">{totalLabel}</span>
+          <span className="view-section__total-value">
+            {formatPeso(sectionTotal)}
+          </span>
+        </div>
       </div>
 
-      <div className="viewReport__tableWrap">
-        <table className="viewReport__table">
+      <div className="view-section__content">
+        <table className="view-table">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Item</th>
-              <th className="is-right">Amount</th>
+              <th width="60">No.</th>
+              <th>Description</th>
+              <th className="text-right" width="150">
+                Amount
+              </th>
             </tr>
           </thead>
           <tbody>
             {rows.length ? (
               rows.map((row, index) => (
                 <tr key={row.id || `${title}-${index}`}>
-                  <td>{index + 1}</td>
+                  <td className="text-muted">{index + 1}</td>
                   <td>
-                    <div className="viewReport__itemCell">
-                      <span>{row.label || "-"}</span>
-                      {row.group ? (
-                        <small className="viewReport__muted">{row.group}</small>
-                      ) : null}
+                    <div className="view-table__item">
+                      <span className="view-table__label">
+                        {row.label || "-"}
+                      </span>
+                      {row.group && (
+                        <span className="view-table__group">{row.group}</span>
+                      )}
                     </div>
                   </td>
-                  <td className="is-right">
+                  <td className="text-right font-semibold">
                     {formatPeso(toNumber(row.amount))}
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={3} className="viewReport__empty">
-                  No rows saved for this section.
+                <td colSpan={3} className="text-center py-8 text-muted italic">
+                  No records found in this section
                 </td>
               </tr>
             )}
           </tbody>
-          <tfoot>
-            <tr>
-              <td colSpan={2}>{totalLabel}</td>
-              <td className="is-right">{formatPeso(sectionTotal)}</td>
-            </tr>
-          </tfoot>
         </table>
       </div>
     </section>
@@ -351,7 +375,10 @@ const ViewReport = () => {
   if (loading || reportsLoading) {
     return (
       <div className="page">
-        <p>Loading report...</p>
+        <div className="loading-state">
+          <div className="loading-spinner"></div>
+          <p>Retrieving financial records...</p>
+        </div>
       </div>
     );
   }
@@ -359,30 +386,22 @@ const ViewReport = () => {
   if (isAggregated && reports.length === 0) {
     return (
       <div className="page viewReport">
-        <header className="viewReport__header">
-          <div>
-            <h1 className="viewReport__title">
-              View {period.charAt(0).toUpperCase() + period.slice(1)} Report
+        <div className="view-header">
+          <div className="view-header__left">
+            <Link to={`/${period}`} className="back-link">
+              <ArrowLeft size={16} />
+              <span>Back to {period}</span>
+            </Link>
+            <h1 className="view-header__title">
+              {period.charAt(0).toUpperCase() + period.slice(1)} Summary
             </h1>
-            <p className="viewReport__subtitle">
-              No reports found for {period} {periodKey}.
-            </p>
           </div>
-        </header>
-        <div className="viewReport__actions">
-          <Link className="btn btn-secondary" to={`/${period}`}>
-            Back to {period.charAt(0).toUpperCase() + period.slice(1)} Reports
-          </Link>
-          {period === "monthly" || period === "yearly" ? (
-            <button
-              className="btn btn-primary"
-              type="button"
-              onClick={period === "monthly" ? handleExportMonthly : handleExportYearly}
-              disabled={period === "monthly" ? exportingMonthly : exportingYearly}
-            >
-              { (period === "monthly" ? exportingMonthly : exportingYearly) ? "Exporting..." : "Export As Excel" }
-            </button>
-          ) : null}
+        </div>
+        <div className="empty-state">
+          <FileText size={48} className="text-muted" />
+          <p>
+            No reports found for {period} {periodKey}.
+          </p>
         </div>
       </div>
     );
@@ -391,234 +410,18 @@ const ViewReport = () => {
   if (!isAggregated && (!report || error)) {
     return (
       <div className="page viewReport">
-        <header className="viewReport__header">
-          <div>
-            <h1 className="viewReport__title">View Report</h1>
-            <p className="viewReport__subtitle">
-              Report not found or may have been removed.
-            </p>
+        <div className="view-header">
+          <div className="view-header__left">
+            <Link to="/daily" className="back-link">
+              <ArrowLeft size={16} />
+              <span>Back to Reports</span>
+            </Link>
+            <h1 className="view-header__title">Report Error</h1>
           </div>
-        </header>
-        <div className="viewReport__actions">
-          <Link className="btn btn-secondary" to="/daily">
-            Back to Daily Reports
-          </Link>
-          <Link className="btn btn-primary" to="/entry">
-            Create New Entry
-          </Link>
         </div>
-      </div>
-    );
-  }
-
-  if (isAggregated) {
-    return (
-      <div className="page viewReport">
-        <header className="viewReport__header">
-          <div>
-            <h1 className="viewReport__title">
-              {period.charAt(0).toUpperCase() + period.slice(1)} Report for{" "}
-              {periodKey}
-            </h1>
-            <p className="viewReport__subtitle">
-              All daily reports aggregated for this {period}.
-            </p>
-          </div>
-        </header>
-
-        <section className="viewReport__totals" aria-label="Overall totals">
-          <div className="summary-card">
-            <h3>Total Sales</h3>
-            <p>{formatPeso(aggregatedTotals.totalSales)}</p>
-          </div>
-          <div className="summary-card">
-            <h3>Total Expenses</h3>
-            <p>{formatPeso(aggregatedTotals.totalExpenses)}</p>
-          </div>
-          <div className="summary-card">
-            <h3>Net Profit</h3>
-            <p>{formatPeso(aggregatedTotals.netProfit)}</p>
-          </div>
-        </section>
-
-        {period === "monthly" ? (
-          <section className="viewReport__tableCard">
-            <div className="viewReport__tableWrap">
-              <table
-                className="viewReport__table"
-                aria-label="Monthly canteen summary table"
-              >
-                <thead>
-                  <tr>
-                    <th>Canteen</th>
-                    <th className="is-right">Wages</th>
-                    <th className="is-right">SSS</th>
-                    <th className="is-right">Store Supplies</th>
-                    <th className="is-right">Purchases</th>
-                    <th className="is-right">Total Expenses</th>
-                    <th className="is-right">Gross Sales</th>
-                    <th className="is-right">Net Sales</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {monthlyByCanteen.length ? (
-                    monthlyByCanteen.map((row) => (
-                      <tr key={row.canteen}>
-                        <td>{row.canteen}</td>
-                        <td className="is-right">{formatPeso(row.wages)}</td>
-                        <td className="is-right">{formatPeso(row.sss)}</td>
-                        <td className="is-right">
-                          {formatPeso(row.storeSupplies)}
-                        </td>
-                        <td className="is-right">
-                          {formatPeso(row.purchases)}
-                        </td>
-                        <td className="is-right">
-                          {formatPeso(row.totalExpenses)}
-                        </td>
-                        <td className="is-right">
-                          {formatPeso(row.grossSales)}
-                        </td>
-                        <td className="is-right">{formatPeso(row.netSales)}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={8} className="viewReport__empty">
-                        No reports found for this month.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td>Total</td>
-                    <td className="is-right">
-                      {formatPeso(
-                        monthlyByCanteen.reduce((s, r) => s + r.wages, 0),
-                      )}
-                    </td>
-                    <td className="is-right">
-                      {formatPeso(
-                        monthlyByCanteen.reduce((s, r) => s + r.sss, 0),
-                      )}
-                    </td>
-                    <td className="is-right">
-                      {formatPeso(
-                        monthlyByCanteen.reduce(
-                          (s, r) => s + r.storeSupplies,
-                          0,
-                        ),
-                      )}
-                    </td>
-                    <td className="is-right">
-                      {formatPeso(
-                        monthlyByCanteen.reduce((s, r) => s + r.purchases, 0),
-                      )}
-                    </td>
-                    <td className="is-right">
-                      {formatPeso(
-                        monthlyByCanteen.reduce(
-                          (s, r) => s + r.totalExpenses,
-                          0,
-                        ),
-                      )}
-                    </td>
-                    <td className="is-right">
-                      {formatPeso(
-                        monthlyByCanteen.reduce((s, r) => s + r.grossSales, 0),
-                      )}
-                    </td>
-                    <td className="is-right">
-                      {formatPeso(
-                        monthlyByCanteen.reduce((s, r) => s + r.netSales, 0),
-                      )}
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          </section>
-        ) : (
-          <section className="viewReport__tableCard">
-            <div className="viewReport__tableWrap">
-              <table
-                className="viewReport__table"
-                aria-label={`${period} reports table`}
-              >
-                <thead>
-                  <tr>
-                    <th>Month</th>
-                    <th className="is-right">Wages</th>
-                    <th className="is-right">SSS</th>
-                    <th className="is-right">Store Supplies</th>
-                    <th className="is-right">Purchases</th>
-                    <th className="is-right">Total Expenses</th>
-                    <th className="is-right">Total Sales</th>
-                    <th className="is-right">Net Profit</th>
-                    <th className="is-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {yearlyByMonth.length ? (
-                    yearlyByMonth.map((row) => (
-                      <tr key={row.month}>
-                        <td>{row.monthName}</td>
-                        <td className="is-right">{formatPeso(row.wages)}</td>
-                        <td className="is-right">{formatPeso(row.sss)}</td>
-                        <td className="is-right">
-                          {formatPeso(row.storeSupplies)}
-                        </td>
-                        <td className="is-right">
-                          {formatPeso(row.purchases)}
-                        </td>
-                        <td className="is-right">
-                          {formatPeso(row.totalExpenses)}
-                        </td>
-                        <td className="is-right">
-                          {formatPeso(row.totalSales)}
-                        </td>
-                        <td className="is-right">
-                          {formatPeso(row.netProfit)}
-                        </td>
-                        <td className="viewReport__rowActions is-right">
-                          <Link
-                            className="btn btn-secondary"
-                            to={`/view/monthly/${row.month}`}
-                          >
-                            View
-                          </Link>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={9} className="viewReport__empty">
-                        No reports found for this year.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-
-              </table>
-            </div>
-          </section>
-        )}
-
-        <div className="viewReport__actions">
-          <Link className="btn btn-secondary" to={`/${period}`}>
-            Back to {period.charAt(0).toUpperCase() + period.slice(1)} Reports
-          </Link>
-          {period === "monthly" || period === "yearly" ? (
-            <button
-              className="btn btn-primary"
-              type="button"
-              onClick={period === "monthly" ? handleExportMonthly : handleExportYearly}
-              disabled={period === "monthly" ? exportingMonthly : exportingYearly}
-            >
-              { (period === "monthly" ? exportingMonthly : exportingYearly) ? "Exporting..." : "Export As Excel" }
-            </button>
-          ) : null}
+        <div className="empty-state">
+          <FileText size={48} className="text-muted" />
+          <p>Report not found or may have been removed.</p>
         </div>
       </div>
     );
@@ -626,90 +429,263 @@ const ViewReport = () => {
 
   return (
     <div className="page viewReport">
-      <header className="viewReport__header">
-        <div>
-          <h1 className="viewReport__title">Report Details</h1>
-          <p className="viewReport__subtitle">
-            Complete report information with all line items and totals.
-          </p>
+      <header className="view-header">
+        <div className="view-header__left">
+          <Link
+            to={isAggregated ? `/${period}` : "/daily"}
+            className="back-link"
+          >
+            <ArrowLeft size={16} />
+            <span>Back</span>
+          </Link>
+          <div className="view-header__main">
+            <h1 className="view-header__title">
+              {isAggregated
+                ? `${period.charAt(0).toUpperCase() + period.slice(1)} Analytics: ${periodKey}`
+                : "Financial Statement"}
+            </h1>
+            {!isAggregated && (
+              <div className="view-header__badges">
+                <div className="badge badge--neutral">
+                  <Calendar size={12} />
+                  <span>{report.date}</span>
+                </div>
+                <div className="badge badge--primary">
+                  <MapPin size={12} />
+                  <span>{report.canteenLocation}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="view-header__actions">
+          {!isAggregated ? (
+            <>
+              <Link
+                to={`/entry?edit=${id}`}
+                className="btn-icon btn-icon--secondary"
+                title="Edit Statement"
+              >
+                <Edit3 size={18} />
+                <span>Edit</span>
+              </Link>
+              <button
+                onClick={handleExport}
+                disabled={exporting}
+                className="btn-icon btn-icon--primary"
+                title="Export to Excel"
+              >
+                <Download size={18} />
+                <span>{exporting ? "Exporting..." : "Excel"}</span>
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={
+                period === "monthly" ? handleExportMonthly : handleExportYearly
+              }
+              disabled={
+                period === "monthly" ? exportingMonthly : exportingYearly
+              }
+              className="btn-icon btn-icon--primary"
+            >
+              <Download size={18} />
+              <span>
+                {(period === "monthly" ? exportingMonthly : exportingYearly)
+                  ? "Exporting..."
+                  : "Export Excel"}
+              </span>
+            </button>
+          )}
         </div>
       </header>
 
-      <section className="viewReport__meta" aria-label="Report metadata">
-        <div className="viewReport__metaItem">
-          <span className="viewReport__metaLabel">Date</span>
-          <span className="viewReport__metaValue">{report.date || "-"}</span>
+      <section className="stats-overview">
+        <div className="stat-card stat-card--success">
+          <div className="stat-card__icon">
+            <TrendingUp size={20} />
+          </div>
+          <div className="stat-card__content">
+            <span className="stat-card__label">Gross Revenue</span>
+            <span className="stat-card__value">
+              {formatPeso(
+                isAggregated
+                  ? aggregatedTotals.totalSales
+                  : report?.totals?.totalSales,
+              )}
+            </span>
+          </div>
         </div>
-        <div className="viewReport__metaItem">
-          <span className="viewReport__metaLabel">Canteen</span>
-          <span className="viewReport__metaValue">
-            {report.canteenLocation || "-"}
-          </span>
+        <div className="stat-card stat-card--danger">
+          <div className="stat-card__icon">
+            <Activity size={20} />
+          </div>
+          <div className="stat-card__content">
+            <span className="stat-card__label">Operational Costs</span>
+            <span className="stat-card__value">
+              {formatPeso(
+                isAggregated
+                  ? aggregatedTotals.totalExpenses
+                  : report?.totals?.totalExpenses,
+              )}
+            </span>
+          </div>
         </div>
-        <div className="viewReport__metaItem">
-          <span className="viewReport__metaLabel">Remarks</span>
-          <span className="viewReport__metaValue is-wrap">
-            {report.remarks || "-"}
-          </span>
+        <div className="stat-card stat-card--primary">
+          <div className="stat-card__icon">
+            <Activity size={20} />
+          </div>
+          <div className="stat-card__content">
+            <span className="stat-card__label">Net Performance</span>
+            <span className="stat-card__value">
+              {formatPeso(
+                isAggregated
+                  ? aggregatedTotals.netProfit
+                  : report?.totals?.netProfit,
+              )}
+            </span>
+          </div>
         </div>
       </section>
 
-      <section className="viewReport__totals" aria-label="Overall totals">
-        <div className="summary-card">
-          <h3>Total Sales</h3>
-          <p>{formatPeso(report?.totals?.totalSales || 0)}</p>
-        </div>
-        <div className="summary-card">
-          <h3>Total Expenses</h3>
-          <p>{formatPeso(report?.totals?.totalExpenses || 0)}</p>
-        </div>
-        <div className="summary-card">
-          <h3>Net Profit</h3>
-          <p>{formatPeso(report?.totals?.netProfit || 0)}</p>
-        </div>
-      </section>
+      {!isAggregated && report.remarks && (
+        <section className="remarks-card">
+          <div className="remarks-card__header">
+            <MessageSquare size={16} />
+            <span>Audit Remarks</span>
+          </div>
+          <p className="remarks-card__text">{report.remarks}</p>
+        </section>
+      )}
 
-      <div className="viewReport__sections">
-        <ReportTableSection
-          title="Cash Sales"
-          rows={report.cashSalesRows}
-          totalLabel="Cash Sales Total"
-        />
-        <ReportTableSection
-          title="Store Purchases"
-          rows={report.storePurchaseRows}
-          totalLabel="Store Purchases Total"
-        />
-        <ReportTableSection
-          title="Store Consignment"
-          rows={report.storeConsignmentRows}
-          totalLabel="Store Consignment Total"
-        />
-        <ReportTableSection
-          title="Operating Expenses"
-          rows={report.operatingExpensesRows}
-          totalLabel="Operating Expenses Total"
-        />
-        <ReportTableSection
-          title="Salary Breakdown"
-          rows={report.salaryBreakdownRows}
-          totalLabel="Salary Total"
-        />
-      </div>
-
-      <div className="viewReport__actions">
-        <Link className="btn btn-secondary" to={`/entry?edit=${id}`}>
-          Edit Report
-        </Link>
-        <button
-          className="btn btn-primary"
-          type="button"
-          onClick={handleExport}
-          disabled={exporting}
-        >
-          {exporting ? "Exporting..." : "Export As Excel"}
-        </button>
-      </div>
+      {isAggregated ? (
+        <div className="aggregated-content">
+          <div className="reports-table-card">
+            <div className="table-header">
+              <h3 className="table-header__title">
+                {period === "monthly"
+                  ? "Branch Breakdown"
+                  : "Monthly Trajectory"}
+              </h3>
+            </div>
+            <div className="reports-table-wrap">
+              <table className="reports-table">
+                {period === "monthly" ? (
+                  <>
+                    <thead>
+                      <tr>
+                        <th>Canteen Unit</th>
+                        <th className="text-right">Wages</th>
+                        <th className="text-right">Supplies</th>
+                        <th className="text-right">Purchases</th>
+                        <th className="text-right">Total Costs</th>
+                        <th className="text-right">Revenue</th>
+                        <th className="text-right">Net</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {monthlyByCanteen.map((row) => (
+                        <tr key={row.canteen} className="reports-table__row">
+                          <td className="font-bold">{row.canteen}</td>
+                          <td className="text-right">
+                            {formatPeso(row.wages)}
+                          </td>
+                          <td className="text-right">
+                            {formatPeso(row.storeSupplies)}
+                          </td>
+                          <td className="text-right">
+                            {formatPeso(row.purchases)}
+                          </td>
+                          <td className="text-right text-danger">
+                            {formatPeso(row.totalExpenses)}
+                          </td>
+                          <td className="text-right text-success">
+                            {formatPeso(row.grossSales)}
+                          </td>
+                          <td className="text-right font-bold">
+                            {formatPeso(row.netSales)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </>
+                ) : (
+                  <>
+                    <thead>
+                      <tr>
+                        <th>Month Period</th>
+                        <th className="text-right">Operational Costs</th>
+                        <th className="text-right">Gross Revenue</th>
+                        <th className="text-right">Net Performance</th>
+                        <th className="text-right" width="100">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {yearlyByMonth.map((row) => (
+                        <tr key={row.month} className="reports-table__row">
+                          <td className="font-bold">{row.monthName}</td>
+                          <td className="text-right text-danger">
+                            {formatPeso(row.totalExpenses)}
+                          </td>
+                          <td className="text-right text-success">
+                            {formatPeso(row.totalSales)}
+                          </td>
+                          <td className="text-right font-bold text-primary">
+                            {formatPeso(row.netProfit)}
+                          </td>
+                          <td className="text-right">
+                            <Link
+                              to={`/view/monthly/${row.month}`}
+                              className="action-btn action-btn--view"
+                            >
+                              Detail
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </>
+                )}
+              </table>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="statement-sections">
+          <ReportTableSection
+            title="Cash Revenue Streams"
+            rows={report.cashSalesRows}
+            totalLabel="Gross Sales"
+            icon={CreditCard}
+          />
+          <ReportTableSection
+            title="Store Purchases"
+            rows={report.storePurchaseRows}
+            totalLabel="Purchase Total"
+            icon={ShoppingCart}
+          />
+          <ReportTableSection
+            title="Stock Consignment"
+            rows={report.storeConsignmentRows}
+            totalLabel="Consignment Total"
+            icon={Package}
+          />
+          <ReportTableSection
+            title="Operating Overhead"
+            rows={report.operatingExpensesRows}
+            totalLabel="Overhead Total"
+            icon={Activity}
+          />
+          <ReportTableSection
+            title="Workforce Remuneration"
+            rows={report.salaryBreakdownRows}
+            totalLabel="Total Payroll"
+            icon={Users}
+          />
+        </div>
+      )}
     </div>
   );
 };
