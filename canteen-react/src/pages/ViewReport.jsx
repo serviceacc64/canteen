@@ -487,7 +487,7 @@ const ViewReport = () => {
               disabled={
                 period === "monthly" ? exportingMonthly : exportingYearly
               }
-              className="btn-icon btn-icon--primary"
+              className="btn-export"
             >
               <Download size={18} />
               <span>
@@ -562,11 +562,18 @@ const ViewReport = () => {
         <div className="aggregated-content">
           <div className="reports-table-card">
             <div className="table-header">
-              <h3 className="table-header__title">
-                {period === "monthly"
-                  ? "Branch Breakdown"
-                  : "Monthly Trajectory"}
-              </h3>
+              <div className="table-header__left">
+                <h3 className="table-header__title">
+                  {period === "monthly"
+                    ? "Branch Breakdown"
+                    : "Monthly Trajectory"}
+                </h3>
+              </div>
+              <div className="table-header__right">
+                <span className="table-subtitle">
+                  Values shown in Philippine Peso (₱)
+                </span>
+              </div>
             </div>
             <div className="reports-table-wrap">
               <table className="reports-table">
@@ -584,30 +591,94 @@ const ViewReport = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {monthlyByCanteen.map((row) => (
-                        <tr key={row.canteen} className="reports-table__row">
-                          <td className="font-bold">{row.canteen}</td>
-                          <td className="text-right">
-                            {formatPeso(row.wages)}
-                          </td>
-                          <td className="text-right">
-                            {formatPeso(row.storeSupplies)}
-                          </td>
-                          <td className="text-right">
-                            {formatPeso(row.purchases)}
-                          </td>
-                          <td className="text-right text-danger">
-                            {formatPeso(row.totalExpenses)}
-                          </td>
-                          <td className="text-right text-success">
-                            {formatPeso(row.grossSales)}
-                          </td>
-                          <td className="text-right font-bold">
-                            {formatPeso(row.netSales)}
-                          </td>
-                        </tr>
-                      ))}
+                      {monthlyByCanteen.map((row) => {
+                        const isLoss = row.netSales < 0;
+                        return (
+                          <tr key={row.canteen} className="reports-table__row">
+                            <td className="font-bold">{row.canteen}</td>
+                            <td className="text-right">
+                              {formatPeso(row.wages)}
+                            </td>
+                            <td className="text-right">
+                              {formatPeso(row.storeSupplies)}
+                            </td>
+                            <td className="text-right">
+                              {formatPeso(row.purchases)}
+                            </td>
+                            <td className="text-right text-muted">
+                              {formatPeso(row.totalExpenses)}
+                            </td>
+                            <td className="text-right font-medium">
+                              {formatPeso(row.grossSales)}
+                            </td>
+                            <td className="text-right">
+                              <span
+                                className={`net-badge ${
+                                  isLoss ? "net-badge--loss" : "net-badge--profit"
+                                }`}
+                              >
+                                {formatPeso(row.netSales)}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
+                    <tfoot>
+                      <tr className="reports-table__footer">
+                        <td className="font-bold">Grand Total</td>
+                        <td className="text-right font-bold">
+                          {formatPeso(
+                            monthlyByCanteen.reduce((s, r) => s + r.wages, 0),
+                          )}
+                        </td>
+                        <td className="text-right font-bold">
+                          {formatPeso(
+                            monthlyByCanteen.reduce(
+                              (s, r) => s + r.storeSupplies,
+                              0,
+                            ),
+                          )}
+                        </td>
+                        <td className="text-right font-bold">
+                          {formatPeso(
+                            monthlyByCanteen.reduce((s, r) => s + r.purchases, 0),
+                          )}
+                        </td>
+                        <td className="text-right font-bold">
+                          {formatPeso(
+                            monthlyByCanteen.reduce(
+                              (s, r) => s + r.totalExpenses,
+                              0,
+                            ),
+                          )}
+                        </td>
+                        <td className="text-right font-bold">
+                          {formatPeso(
+                            monthlyByCanteen.reduce(
+                              (s, r) => s + r.grossSales,
+                              0,
+                            ),
+                          )}
+                        </td>
+                        <td className="text-right">
+                          <span
+                            className={`net-badge ${
+                              monthlyByCanteen.reduce(
+                                (s, r) => s + r.netSales,
+                                0,
+                              ) < 0
+                                ? "net-badge--loss"
+                                : "net-badge--profit"
+                            }`}
+                          >
+                            {formatPeso(
+                              monthlyByCanteen.reduce((s, r) => s + r.netSales, 0),
+                            )}
+                          </span>
+                        </td>
+                      </tr>
+                    </tfoot>
                   </>
                 ) : (
                   <>

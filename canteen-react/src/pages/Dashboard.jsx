@@ -78,25 +78,33 @@ const Dashboard = () => {
           label: "Sales",
           data: sorted.map((r) => r?.totals?.totalSales || 0),
           borderColor: "#10b981",
-          backgroundColor: "rgba(16, 185, 129, 0.1)",
+          backgroundColor: "rgba(16, 185, 129, 0.05)",
+          borderWidth: 3,
           tension: 0.4,
           fill: true,
-          pointRadius: 4,
-          pointBackgroundColor: "#10b981",
+          pointRadius: 0,
+          pointHoverRadius: 6,
+          pointHoverBackgroundColor: "#10b981",
+          pointHoverBorderColor: "#fff",
+          pointHoverBorderWidth: 2,
         },
         {
           label: "Expenses",
           data: sorted.map((r) => r?.totals?.totalExpenses || 0),
           borderColor: "#f43f5e",
-          backgroundColor: "rgba(244, 63, 94, 0.1)",
+          backgroundColor: "rgba(244, 63, 94, 0.05)",
+          borderWidth: 3,
           tension: 0.4,
           fill: true,
-          pointRadius: 4,
-          pointBackgroundColor: "#f43f5e",
+          pointRadius: 0,
+          pointHoverRadius: 6,
+          pointHoverBackgroundColor: "#f43f5e",
+          pointHoverBorderColor: "#fff",
+          pointHoverBorderWidth: 2,
         },
       ],
     };
-  }, [reports]);
+  }, [filteredReports]);
 
   const chartOptions = {
     responsive: true,
@@ -107,30 +115,36 @@ const Dashboard = () => {
         align: 'end',
         labels: {
           usePointStyle: true,
+          pointStyle: 'circle',
           padding: 20,
-          font: { size: 12, weight: '600', family: 'Inter' }
+          boxWidth: 6,
+          boxHeight: 6,
+          font: { size: 12, weight: '600', family: 'Inter' },
+          color: '#71717a'
         }
       },
       tooltip: {
-        backgroundColor: '#0f172a',
+        backgroundColor: '#18181b',
+        borderColor: '#27272a',
+        borderWidth: 1,
         padding: 12,
         titleFont: { size: 14, weight: '700', family: 'Inter' },
         bodyFont: { size: 13, family: 'Inter' },
-        cornerRadius: 8,
-        displayColors: true
+        cornerRadius: 12,
+        displayColors: true,
+        usePointStyle: true
       }
     },
     scales: {
       x: {
         grid: { display: false },
-        ticks: { font: { size: 11, weight: '500' }, color: '#64748b' }
+        ticks: { font: { size: 11, weight: '500' }, color: '#71717a' }
       },
       y: {
-        grid: { color: 'rgba(226, 232, 240, 0.5)' },
-        border: { dash: [4, 4] },
+        grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
         ticks: { 
           font: { size: 11, weight: '500' }, 
-          color: '#64748b',
+          color: '#71717a',
           callback: (value) => '₱' + value.toLocaleString()
         }
       }
@@ -160,7 +174,7 @@ const Dashboard = () => {
         <div className="page-header__actions">
           <div className="live-indicator">
             <Activity size={14} className="pulse" />
-            <span>Live System</span>
+            <span>LIVE SYSTEM</span>
           </div>
           <div className="date-display">
             <Calendar size={14} />
@@ -175,7 +189,7 @@ const Dashboard = () => {
             <DollarSign size={20} />
           </div>
           <div className="stats-card__content">
-            <span className="stats-card__label">Gross Revenue</span>
+            <span className="stats-card__label">GROSS REVENUE</span>
             <div className="stats-card__value">{formatPeso(summary.totalSales)}</div>
             <div className="stats-card__trend stats-card__trend--up">
               <TrendingUp size={12} />
@@ -189,7 +203,7 @@ const Dashboard = () => {
             <Receipt size={20} />
           </div>
           <div className="stats-card__content">
-            <span className="stats-card__label">Operational Costs</span>
+            <span className="stats-card__label">OPERATIONAL COSTS</span>
             <div className="stats-card__value">{formatPeso(summary.totalExpenses)}</div>
             <div className="stats-card__trend stats-card__trend--down">
               <TrendingDown size={12} />
@@ -200,10 +214,10 @@ const Dashboard = () => {
 
         <div className="stats-card">
           <div className="stats-card__icon stats-card__icon--profit">
-            <PieChart size={20} />
+            <Activity size={20} />
           </div>
           <div className="stats-card__content">
-            <span className="stats-card__label">Net Performance</span>
+            <span className="stats-card__label">NET PERFORMANCE</span>
             <div className="stats-card__value">{formatPeso(summary.netProfit)}</div>
             <div className="stats-card__trend stats-card__trend--up">
               <TrendingUp size={12} />
@@ -217,7 +231,7 @@ const Dashboard = () => {
             <FileText size={20} />
           </div>
           <div className="stats-card__content">
-            <span className="stats-card__label">Reports Filed</span>
+            <span className="stats-card__label">REPORTS FILED</span>
             <div className="stats-card__value">{summary.reportCount}</div>
             <div className="stats-card__trend stats-card__trend--neutral">
               <span>Audited Records</span>

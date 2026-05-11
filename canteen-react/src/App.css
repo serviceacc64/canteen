@@ -37,19 +37,25 @@
 
 [data-theme='dark'] {
   --bg: #09090b;
-  --surface: #121214;
+  --surface: #111114;
   --text: #fafafa;
-  --muted: #a1a1aa;
-  --border: #27272a;
+  --muted: #71717a;
+  --border: #1d1d21;
   
   --primary: #10b981;
   --primary-600: #34d399;
   --primary-700: #6ee7b7;
   --primary-light: rgba(16, 185, 129, 0.1);
   
+  --secondary: #6366f1;
+  --secondary-light: rgba(99, 102, 241, 0.1);
+  
   --canteen-ink: #fafafa;
   --canteen-surface: #0a0a0a;
   --canteen-mint: #064e3b;
+
+  --card-bg: #16161a;
+  --card-border: #1f1f23;
 }
 
 * {
@@ -238,12 +244,18 @@ body {
 
 /* Dark Mode Extensions */
 [data-theme='dark'] .btn-secondary {
-  background: #1e293b;
-  border-color: #334155;
+  background: #16161a;
+  border-color: #1f1f23;
 }
 
 [data-theme='dark'] .btn-danger {
   background: rgba(244, 63, 94, 0.1);
+  border-color: rgba(244, 63, 94, 0.2);
+}
+
+[data-theme='dark'] .btn-back {
+  background: #16161a;
+  border-color: #1f1f23;
 }
 
 /* Responsive Utilities */

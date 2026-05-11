@@ -490,13 +490,58 @@
   100% { transform: scale(1); opacity: 1; }
 }
 
-@media (max-width: 1200px) {
-  .entry-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .entry-sidebar {
-    position: static;
-  }
+[data-theme='dark'] .form-card {
+  background: #16161a;
+  border-color: #1f1f23;
+}
+
+[data-theme='dark'] .form-card__header {
+  background: linear-gradient(to bottom, #111114, #16161a);
+  border-bottom-color: #1f1f23;
+}
+
+[data-theme='dark'] .form-card__footer {
+  background: #111114;
+  border-top-color: #1f1f23;
+}
+
+[data-theme='dark'] .entry-row:focus-within {
+  background: #09090b;
+}
+
+[data-theme='dark'] .form-input,
+[data-theme='dark'] .form-select,
+[data-theme='dark'] .form-textarea,
+[data-theme='dark'] .input-currency {
+  background: #09090b;
+  border-color: #1f1f23;
+}
+
+[data-theme='dark'] .input-currency:focus-within {
+  background: #111114;
+}
+
+[data-theme='dark'] .btn-add {
+  background: #111114;
+  border-color: #1f1f23;
+}
+
+[data-theme='dark'] .summary-card-bottom {
+  background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='dark'] .summary-card-bottom__header {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .btn-commit-full {
+  background: #fafafa !important;
+  color: #064e3b !important;
+}
+
+[data-theme='dark'] .btn-commit-full:hover {
+  background: #ffffff !important;
+  box-shadow: 0 15px 35px rgba(16, 185, 129, 0.3);
 }
 

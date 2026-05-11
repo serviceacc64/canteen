@@ -170,7 +170,32 @@
   }
 }
 
-[data-theme='dark'] .header-search { background: var(--surface); }
-[data-theme='dark'] .audit-table th { background: rgba(30, 41, 59, 0.5); }
-[data-theme='dark'] .audit-pagination { background: rgba(30, 41, 59, 0.5); }
+[data-theme='dark'] .header-search { 
+  background: #16161a; 
+  border-color: #1f1f23;
+}
+
+[data-theme='dark'] .audit-table-card {
+  background: #16161a;
+  border-color: #1f1f23;
+}
+
+[data-theme='dark'] .audit-table th { 
+  background: #09090b;
+  color: var(--muted);
+  border-bottom-color: #1f1f23;
+}
+
+[data-theme='dark'] .audit-table td {
+  border-bottom-color: #1f1f23;
+}
+
+[data-theme='dark'] .audit-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+[data-theme='dark'] .audit-pagination { 
+  background: #111114;
+  border-top-color: #1f1f23;
+}
 

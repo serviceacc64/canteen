@@ -3,10 +3,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg);
+  background: #09090b;
   background-image: 
     radial-gradient(circle at 10% 10%, rgba(16, 185, 129, 0.05), transparent 40%),
-    radial-gradient(circle at 90% 90%, rgba(5, 150, 105, 0.05), transparent 40%);
+    radial-gradient(circle at 90% 90%, rgba(5, 150, 105, 0.05), transparent 40%),
+    radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 24px 24px;
   position: relative;
   overflow: hidden;
   padding: 24px;
@@ -216,6 +218,11 @@
   border-radius: 6px;
   position: relative;
   transition: all 0.2s ease;
+}
+
+[data-theme='dark'] .checkmark {
+  background-color: #09090b;
+  border-color: #1d1d21;
 }
 
 .custom-checkbox:hover input ~ .checkmark {

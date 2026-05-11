@@ -149,19 +149,28 @@
   gap: 12px;
 }
 
-@media (max-width: 640px) {
-  .yearly-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .yearly-card__summary {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  
-  .yearly-card__metrics {
-    grid-template-columns: 1fr;
-    padding: 16px;
-  }
+
+
+[data-theme='dark'] .yearly-card {
+  background: #16161a;
+  border-color: #1f1f23;
+}
+
+[data-theme='dark'] .yearly-card__year-badge {
+  background: #09090b;
+}
+
+[data-theme='dark'] .yearly-card__badge {
+  background: #09090b;
+  border-color: #1f1f23;
+}
+
+[data-theme='dark'] .yearly-card__metrics {
+  background: #09090b;
+  border-color: #1f1f23;
+}
+
+[data-theme='dark'] .yearly-card__profit {
+  border-top-color: #1f1f23;
 }
 

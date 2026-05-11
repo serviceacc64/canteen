@@ -38,12 +38,12 @@ const Sidebar = () => {
           </div>
           <div className="sidebar__brandText">
             <div className="sidebar__title">Recto MNHS</div>
-            <div className="sidebar__subtitle">Financial Suite</div>
+            <div className="sidebar__subtitle">FINANCIAL SUITE</div>
           </div>
         </div>
 
         <nav className="sidebar__nav">
-          <div className="sidebar__navLabel">Main Menu</div>
+          <div className="sidebar__navLabel">MAIN MENU</div>
           {navItems.map(({ path, label, Icon: LucideIcon }) => (
             <NavLink
               key={path}
@@ -74,15 +74,13 @@ const Sidebar = () => {
             </div>
           </div>
 
-          <div className="sidebar__footerActions">
-            <button
-              onClick={handleLogout}
-              className="sidebar__footerBtn sidebar__footerBtn--danger"
-              title="Logout"
-            >
-              <LogOut size={18} />
-            </button>
-          </div>
+          <button
+            onClick={handleLogout}
+            className="sidebar__logoutBtn"
+          >
+            <LogOut size={16} />
+            <span>LOGOUT</span>
+          </button>
         </div>
       </div>
     </aside>
