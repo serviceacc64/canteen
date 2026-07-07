@@ -14,10 +14,10 @@ const map = {
     remarks: "B48"
   },
   cashSales: {
-    STORE: "I7",
-    KITCHEN: "I8",
-    PALAMIG: "I9",
-    "SCHOOL SUPPLIES": "I10"
+    label1: "B7", amount1: "I7",
+    label2: "B8", amount2: "I8",
+    label3: "B9", amount3: "I9",
+    label4: "B10", amount4: "I10",
   },
   storePurchases: {
     "BIG BOY": "I15",
@@ -91,11 +91,16 @@ const applyTemplateData = (worksheet, report) => {
   setStringCell(worksheet, map.meta.canteenLocation, report.canteenLocation);
   setStringCell(worksheet, map.meta.remarks, report.remarks);
 
-  // Cash Sales
-  (report.cashSalesRows ?? []).forEach((item) => {
-    const key = normalize(item.label);
-    if (map.cashSales[key]) {
-      setNumberCell(worksheet, map.cashSales[key], item.amount);
+  // Cash Sales (index-based)
+  (report.cashSalesRows ?? []).slice(0, 4).forEach((item, index) => {
+    const idx = index + 1;
+    const labelKey = `label${idx}`;
+    const amountKey = `amount${idx}`;
+    if (map.cashSales[labelKey]) {
+      setStringCell(worksheet, map.cashSales[labelKey], normalize(item.label));
+    }
+    if (map.cashSales[amountKey]) {
+      setNumberCell(worksheet, map.cashSales[amountKey], item.amount);
     }
   });
 
