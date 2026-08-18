@@ -5,6 +5,7 @@ import Button from "../components/common/Button";
 import useAuth from "../hooks/useAuth";
 import { signIn } from "../services/supabaseAuthApi";
 import ThemeToggle from "../components/common/ThemeToggle";
+import rectoLogo from "../assets/rectologo.png";
 import "../css/Login.css";
 
 const Login = () => {
@@ -49,7 +50,7 @@ const Login = () => {
       <div className="login-container">
         <div className="login-card">
           <div className="login-header">
-            <img src="/rectologo.png" alt="Recto MNHS logo" className="login-logo" />
+            <img src={rectoLogo} alt="Recto MNHS logo" className="login-logo" />
             <h1 className="login-title">Recto MNHS</h1>
             <p className="login-subtitle">Canteen financial records</p>
           </div>

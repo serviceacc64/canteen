@@ -4,6 +4,7 @@ import { Lock, ShieldCheck, CheckCircle2, ArrowRight } from 'lucide-react';
 import Button from '../components/common/Button';
 import { getSession, updatePassword, signOut } from '../services/supabaseAuthApi';
 import ThemeToggle from '../components/common/ThemeToggle';
+import rectoLogo from '../assets/rectologo.png';
 import '../css/Login.css';
 
 const Register = () => {
@@ -75,7 +76,7 @@ const Register = () => {
         <div className="login-container">
           <div className="login-card">
             <div className="login-header">
-              <img src="/rectologo.png" alt="Recto MNHS logo" className="login-logo" />
+              <img src={rectoLogo} alt="Recto MNHS logo" className="login-logo" />
               <h1 className="login-title">Access Restricted</h1>
               <p className="login-subtitle">No active invitation session was found.</p>
             </div>
@@ -105,7 +106,7 @@ const Register = () => {
       <div className="login-container">
         <div className="login-card">
           <div className="login-header">
-            <img src="/rectologo.png" alt="Recto MNHS logo" className="login-logo" />
+            <img src={rectoLogo} alt="Recto MNHS logo" className="login-logo" />
             <h1 className="login-title">Activate Account</h1>
             <p className="login-subtitle">Choose a password to activate your account</p>
           </div>

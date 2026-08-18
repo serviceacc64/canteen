@@ -9,6 +9,7 @@ import {
   User,
 } from "lucide-react";
 import useAuth from "../hooks/useAuth";
+import rectoLogo from "../assets/rectologo.png";
 import "../css/Sidebar.css";
 
 const Sidebar = () => {
@@ -32,7 +33,7 @@ const Sidebar = () => {
     <aside className="sidebar" aria-label="Main Navigation">
       <div className="sidebar__inner">
         <div className="sidebar__brand">
-          <img src="/rectologo.png" alt="Recto MNHS logo" className="sidebar__logo" />
+          <img src={rectoLogo} alt="Recto MNHS logo" className="sidebar__logo" />
           <div className="sidebar__brandText">
             <div className="sidebar__title">Recto MNHS</div>
             <div className="sidebar__subtitle">CANTEEN LEDGER</div>
