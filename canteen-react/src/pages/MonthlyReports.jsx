@@ -59,7 +59,7 @@ const MonthlyReports = () => {
   }, [reports]);
 
   const onDelete = async (monthLabel, monthIdValue) => {
-    const confirmed = window.confirm(`Delete all records for ${monthLabel} permanently? This action cannot be undone.`);
+    const confirmed = window.confirm(`Delete every record for ${monthLabel}? This can't be undone.`);
     if (!confirmed) return;
 
     try {
@@ -68,7 +68,7 @@ const MonthlyReports = () => {
         await removeReport(report.id);
       }
     } catch {
-      window.alert('Operational error. Unable to purge reports.');
+      window.alert("Couldn't delete the records. Try again.");
     }
   };
 
@@ -77,7 +77,7 @@ const MonthlyReports = () => {
       <div className="page">
         <div className="loading-state">
           <div className="loading-spinner"></div>
-          <p>Analyzing fiscal cycles...</p>
+          <p>Loading records…</p>
         </div>
       </div>
     );
@@ -88,14 +88,14 @@ const MonthlyReports = () => {
       <header className="page-header">
         <div className="page-header__left">
           <div className="page-header__main">
-            <h1 className="page-header__title">Monthly Analytics</h1>
-            <p className="page-header__subtitle">Periodic aggregation of operational performance</p>
+            <h1 className="page-header__title">Monthly reports</h1>
+            <p className="page-header__subtitle">A month at a glance</p>
           </div>
         </div>
         <div className="page-header__actions">
           <div className="stats-badge">
             <BarChart3 size={14} />
-            <span>{grouped.length} Active Periods</span>
+            <span>{grouped.length} months on file</span>
           </div>
         </div>
       </header>
@@ -105,11 +105,11 @@ const MonthlyReports = () => {
           <div className="empty-state-card__icon">
             <FileText size={48} />
           </div>
-          <h3>No historical data found</h3>
-          <p>Establish operational logs to generate monthly analytical insights.</p>
-          <Button variant="primary" onClick={() => navigate('/entry')}>
-            Record First Session
-          </Button>
+          <h3>No monthly records yet</h3>
+          <p>Record entries to build up your monthly reports.</p>
+          <Link to="/entry" className="btn btn-primary">
+            Record first entry
+          </Link>
         </div>
       ) : (
         <div className="monthly-reports__grid">
@@ -123,34 +123,34 @@ const MonthlyReports = () => {
                   <h2>{row.month}</h2>
                 </div>
                 <div className="monthly-card__badge">
-                  {row.count} Logs
+                  {row.count} entries
                 </div>
               </div>
 
               <div className="monthly-card__stats">
                 <div className="monthly-stat">
-                  <span className="monthly-stat__label">Gross Revenue</span>
+                  <span className="monthly-stat__label">Sales</span>
                   <span className="monthly-stat__value text-success">{formatPeso(row.totalSales)}</span>
                 </div>
                 <div className="monthly-stat">
-                  <span className="monthly-stat__label">Operational Costs</span>
+                  <span className="monthly-stat__label">Expenses</span>
                   <span className="monthly-stat__value text-danger">{formatPeso(row.totalExpenses)}</span>
                 </div>
               </div>
 
               <div className="monthly-card__footer">
                 <div className="monthly-card__profit">
-                  <span className="monthly-card__total-label">Net Performance</span>
+                  <span className="monthly-card__total-label">Net profit</span>
                   <span className="monthly-card__total-value">{formatPeso(row.netProfit)}</span>
                 </div>
                 <div className="monthly-card__actions">
-                  <Link to={`/view/monthly/${row.id}`} className="btn-icon" title="Audit Month">
+                  <Link to={`/view/monthly/${row.id}`} className="btn-icon" title="View">
                     <Eye size={18} />
                   </Link>
                   <button 
                     onClick={() => onDelete(row.month, row.id)} 
                     className="btn-icon btn-icon--danger" 
-                    title="Purge Period"
+                    title="Delete"
                   >
                     <Trash2 size={18} />
                   </button>

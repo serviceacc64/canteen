@@ -377,7 +377,7 @@ const ViewReport = () => {
       <div className="page">
         <div className="loading-state">
           <div className="loading-spinner"></div>
-          <p>Retrieving financial records...</p>
+          <p>Loading record…</p>
         </div>
       </div>
     );
@@ -390,17 +390,17 @@ const ViewReport = () => {
           <div className="view-header__left">
             <Link to={`/${period}`} className="back-link">
               <ArrowLeft size={16} />
-              <span>Back to {period}</span>
+              <span>Back to {period} reports</span>
             </Link>
             <h1 className="view-header__title">
-              {period.charAt(0).toUpperCase() + period.slice(1)} Summary
+              {period.charAt(0).toUpperCase() + period.slice(1)} summary
             </h1>
           </div>
         </div>
         <div className="empty-state">
           <FileText size={48} className="text-muted" />
           <p>
-            No reports found for {period} {periodKey}.
+            No records for {periodKey}.
           </p>
         </div>
       </div>
@@ -414,14 +414,14 @@ const ViewReport = () => {
           <div className="view-header__left">
             <Link to="/daily" className="back-link">
               <ArrowLeft size={16} />
-              <span>Back to Reports</span>
+              <span>Back to daily records</span>
             </Link>
-            <h1 className="view-header__title">Report Error</h1>
+            <h1 className="view-header__title">Record not found</h1>
           </div>
         </div>
         <div className="empty-state">
           <FileText size={48} className="text-muted" />
-          <p>Report not found or may have been removed.</p>
+          <p>Record not found or may have been removed.</p>
         </div>
       </div>
     );
@@ -441,8 +441,8 @@ const ViewReport = () => {
           <div className="view-header__main">
             <h1 className="view-header__title">
               {isAggregated
-                ? `${period.charAt(0).toUpperCase() + period.slice(1)} Analytics: ${periodKey}`
-                : "Financial Statement"}
+                ? `${period.charAt(0).toUpperCase() + period.slice(1)} analytics: ${periodKey}`
+                : "Daily record"}
             </h1>
             {!isAggregated && (
               <div className="view-header__badges">
@@ -463,8 +463,8 @@ const ViewReport = () => {
             <>
               <Link
                 to={`/entry?edit=${id}`}
-                className="btn-icon btn-icon--secondary"
-                title="Edit Statement"
+                className="view-action"
+                title="Edit record"
               >
                 <Edit3 size={18} />
                 <span>Edit</span>
@@ -472,11 +472,11 @@ const ViewReport = () => {
               <button
                 onClick={handleExport}
                 disabled={exporting}
-                className="btn-icon btn-icon--primary"
+                className="view-action view-action--primary"
                 title="Export to Excel"
               >
                 <Download size={18} />
-                <span>{exporting ? "Exporting..." : "Excel"}</span>
+                <span>{exporting ? "Exporting…" : "Excel"}</span>
               </button>
             </>
           ) : (
@@ -506,7 +506,7 @@ const ViewReport = () => {
             <TrendingUp size={20} />
           </div>
           <div className="stat-card__content">
-            <span className="stat-card__label">Gross Revenue</span>
+            <span className="stat-card__label">Sales</span>
             <span className="stat-card__value">
               {formatPeso(
                 isAggregated
@@ -521,7 +521,7 @@ const ViewReport = () => {
             <Activity size={20} />
           </div>
           <div className="stat-card__content">
-            <span className="stat-card__label">Operational Costs</span>
+            <span className="stat-card__label">Expenses</span>
             <span className="stat-card__value">
               {formatPeso(
                 isAggregated
@@ -536,7 +536,7 @@ const ViewReport = () => {
             <Activity size={20} />
           </div>
           <div className="stat-card__content">
-            <span className="stat-card__label">Net Performance</span>
+            <span className="stat-card__label">Net profit</span>
             <span className="stat-card__value">
               {formatPeso(
                 isAggregated
@@ -552,7 +552,7 @@ const ViewReport = () => {
         <section className="remarks-card">
           <div className="remarks-card__header">
             <MessageSquare size={16} />
-            <span>Audit Remarks</span>
+            <span>Remarks</span>
           </div>
           <p className="remarks-card__text">{report.remarks}</p>
         </section>
@@ -565,13 +565,13 @@ const ViewReport = () => {
               <div className="table-header__left">
                 <h3 className="table-header__title">
                   {period === "monthly"
-                    ? "Branch Breakdown"
-                    : "Monthly Trajectory"}
+                    ? "By canteen"
+                    : "Month by month"}
                 </h3>
               </div>
               <div className="table-header__right">
                 <span className="table-subtitle">
-                  Values shown in Philippine Peso (₱)
+                  All amounts in ₱
                 </span>
               </div>
             </div>
@@ -581,12 +581,12 @@ const ViewReport = () => {
                   <>
                     <thead>
                       <tr>
-                        <th>Canteen Unit</th>
-                        <th className="text-right">Wages</th>
+                        <th>Canteen</th>
+                        <th className="text-right">Payroll</th>
                         <th className="text-right">Supplies</th>
                         <th className="text-right">Purchases</th>
-                        <th className="text-right">Total Costs</th>
-                        <th className="text-right">Revenue</th>
+                        <th className="text-right">Total expenses</th>
+                        <th className="text-right">Sales</th>
                         <th className="text-right">Net</th>
                       </tr>
                     </thead>
@@ -626,7 +626,7 @@ const ViewReport = () => {
                     </tbody>
                     <tfoot>
                       <tr className="reports-table__footer">
-                        <td className="font-bold">Grand Total</td>
+                        <td className="font-bold">Grand total</td>
                         <td className="text-right font-bold">
                           {formatPeso(
                             monthlyByCanteen.reduce((s, r) => s + r.wages, 0),
@@ -684,10 +684,10 @@ const ViewReport = () => {
                   <>
                     <thead>
                       <tr>
-                        <th>Month Period</th>
-                        <th className="text-right">Operational Costs</th>
-                        <th className="text-right">Gross Revenue</th>
-                        <th className="text-right">Net Performance</th>
+                        <th>Month</th>
+                        <th className="text-right">Expenses</th>
+                        <th className="text-right">Sales</th>
+                        <th className="text-right">Net profit</th>
                         <th className="text-right" width="100">
                           Actions
                         </th>
@@ -707,11 +707,11 @@ const ViewReport = () => {
                             {formatPeso(row.netProfit)}
                           </td>
                           <td className="text-right">
-                            <Link
+<Link
                               to={`/view/monthly/${row.month}`}
-                              className="action-btn action-btn--view"
+                              className="action-btn--view"
                             >
-                              Detail
+                              View
                             </Link>
                           </td>
                         </tr>
@@ -726,33 +726,33 @@ const ViewReport = () => {
       ) : (
         <div className="statement-sections">
           <ReportTableSection
-            title="Cash Revenue Streams"
+            title="Cash sales"
             rows={report.cashSalesRows}
-            totalLabel="Gross Sales"
+            totalLabel="Sales total"
             icon={CreditCard}
           />
           <ReportTableSection
-            title="Store Purchases"
+            title="Store purchases"
             rows={report.storePurchaseRows}
-            totalLabel="Purchase Total"
+            totalLabel="Purchase total"
             icon={ShoppingCart}
           />
           <ReportTableSection
-            title="Stock Consignment"
+            title="Consignments"
             rows={report.storeConsignmentRows}
-            totalLabel="Consignment Total"
+            totalLabel="Consignment total"
             icon={Package}
           />
           <ReportTableSection
-            title="Operating Overhead"
+            title="Operating expenses"
             rows={report.operatingExpensesRows}
-            totalLabel="Overhead Total"
+            totalLabel="Overhead total"
             icon={Activity}
           />
           <ReportTableSection
-            title="Workforce Remuneration"
+            title="Staff payroll"
             rows={report.salaryBreakdownRows}
-            totalLabel="Total Payroll"
+            totalLabel="Payroll total"
             icon={Users}
           />
         </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { Lock, Mail, Eye, EyeOff, ShieldCheck, TrendingUp } from "lucide-react";
+import { Lock, Mail, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import Button from "../components/common/Button";
 import useAuth from "../hooks/useAuth";
 import { signIn } from "../services/supabaseAuthApi";
@@ -49,18 +49,16 @@ const Login = () => {
       <div className="login-container">
         <div className="login-card">
           <div className="login-header">
-            <div className="login-logo">
-              <TrendingUp size={32} />
-            </div>
+            <img src="/rectologo.png" alt="Recto MNHS logo" className="login-logo" />
             <h1 className="login-title">Recto MNHS</h1>
-            <p className="login-subtitle">Advanced Financial Operations Suite</p>
+            <p className="login-subtitle">Canteen financial records</p>
           </div>
 
           <div className="login-body">
             <div className="login-intro">
               <div className="intro-badge">
                 <ShieldCheck size={14} />
-                <span>Secure Administrator Access</span>
+                <span>Authorized personnel</span>
               </div>
             </div>
 
@@ -137,14 +135,14 @@ const Login = () => {
                     Authenticating...
                   </span>
                 ) : (
-                  "Sign In to Dashboard"
+                  "Sign in"
                 )}
               </Button>
             </form>
           </div>
 
           <div className="login-footer">
-            <p>© 2026 CanteenX. Authorized Personnel Only.</p>
+            <p>© 2026 Recto MNHS Canteen. Authorized personnel only.</p>
           </div>
         </div>
       </div>

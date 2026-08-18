@@ -1,6 +1,6 @@
 export const formatPeso = (value) => {
   const amount = Number.isFinite(value) ? value : 0;
-  return '₱' + new Intl.NumberFormat('en-PH', {
+  return '₱ ' + new Intl.NumberFormat('en-PH', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(amount);

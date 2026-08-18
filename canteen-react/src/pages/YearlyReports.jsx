@@ -86,7 +86,7 @@ const YearlyReports = () => {
 
   const onDelete = async (year) => {
     const confirmed = window.confirm(
-      `Delete all records for fiscal year ${year} permanently? This action cannot be undone.`,
+      `Delete every record for ${year}? This can't be undone.`,
     );
     if (!confirmed) return;
 
@@ -98,7 +98,7 @@ const YearlyReports = () => {
         await removeReport(report.id);
       }
     } catch {
-      window.alert("Operational error. Unable to purge reports.");
+      window.alert("Couldn't delete the records. Try again.");
     }
   };
 
@@ -107,7 +107,7 @@ const YearlyReports = () => {
       <div className="page">
         <div className="loading-state">
           <div className="loading-spinner"></div>
-          <p>Synthesizing annual performance data...</p>
+          <p>Loading records…</p>
         </div>
       </div>
     );
@@ -118,14 +118,14 @@ const YearlyReports = () => {
       <header className="page-header">
         <div className="page-header__left">
           <div className="page-header__main">
-            <h1 className="page-header__title">Annual Performance</h1>
-            <p className="page-header__subtitle">Consolidated fiscal year auditing and trends</p>
+            <h1 className="page-header__title">Yearly reports</h1>
+            <p className="page-header__subtitle">A year at a glance</p>
           </div>
         </div>
         <div className="page-header__actions">
           <div className="stats-badge">
             <Award size={14} />
-            <span>{grouped.length} Fiscal Years</span>
+            <span>{grouped.length} years on file</span>
           </div>
         </div>
       </header>
@@ -135,8 +135,8 @@ const YearlyReports = () => {
           <div className="empty-state-card__icon">
             <FileText size={48} />
           </div>
-          <h3>No annual data archived</h3>
-          <p>Complete your daily logs to generate comprehensive yearly financial insights.</p>
+          <h3>No yearly records yet</h3>
+          <p>Record entries to build up your yearly reports.</p>
         </div>
       ) : (
         <div className="yearly-grid">
@@ -144,16 +144,16 @@ const YearlyReports = () => {
             <div className="yearly-card" key={row.year}>
               <div className="yearly-card__header">
                 <div className="yearly-card__year-badge">{row.year}</div>
-                <div className="yearly-card__badge">{row.count} Records</div>
+                <div className="yearly-card__badge">{row.count} entries</div>
               </div>
 
               <div className="yearly-card__summary">
                 <div className="summary-block">
-                  <span className="summary-block__label">Annual Revenue</span>
+                  <span className="summary-block__label">Sales</span>
                   <span className="summary-block__value">{formatPeso(row.totalSales)}</span>
                 </div>
                 <div className="summary-block">
-                  <span className="summary-block__label">Operational Costs</span>
+                  <span className="summary-block__label">Expenses</span>
                   <span className="summary-block__value">{formatPeso(row.totalExpenses)}</span>
                 </div>
               </div>
@@ -175,17 +175,17 @@ const YearlyReports = () => {
 
               <div className="yearly-card__profit">
                 <div className="profit-info">
-                  <span className="profit-label">Net Performance</span>
+                  <span className="profit-label">Net profit</span>
                   <div className="profit-amount">{formatPeso(row.netProfit)}</div>
                 </div>
                 <div className="yearly-card__actions">
-                  <Link to={`/view/yearly/${row.year}`} className="btn-icon" title="Audit Year">
+                  <Link to={`/view/yearly/${row.year}`} className="btn-icon" title="View">
                     <Eye size={18} />
                   </Link>
                   <button 
                     onClick={() => onDelete(row.year)} 
                     className="btn-icon btn-icon--danger" 
-                    title="Purge Year"
+                    title="Delete"
                   >
                     <Trash2 size={18} />
                   </button>

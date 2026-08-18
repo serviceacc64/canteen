@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate, Link, useNavigate } from 'react-router-dom';
-import { Lock, ShieldCheck, TrendingUp, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Lock, ShieldCheck, CheckCircle2, ArrowRight } from 'lucide-react';
 import Button from '../components/common/Button';
 import { getSession, updatePassword, signOut } from '../services/supabaseAuthApi';
 import ThemeToggle from '../components/common/ThemeToggle';
@@ -46,7 +46,7 @@ const Register = () => {
 
     try {
       await updatePassword(password);
-      setInfoMessage('Account secured successfully.');
+      setInfoMessage('Password set. Redirecting to sign in…');
       setTimeout(async () => {
         await signOut();
         navigate('/login', { replace: true });
@@ -63,7 +63,7 @@ const Register = () => {
       <div className="login-page">
         <div className="loading-state">
           <div className="loading-spinner"></div>
-          <p>Verifying invitation...</p>
+          <p>Checking your invitation…</p>
         </div>
       </div>
     );
@@ -75,9 +75,7 @@ const Register = () => {
         <div className="login-container">
           <div className="login-card">
             <div className="login-header">
-              <div className="login-logo">
-                <AlertCircle size={32} />
-              </div>
+              <img src="/rectologo.png" alt="Recto MNHS logo" className="login-logo" />
               <h1 className="login-title">Access Restricted</h1>
               <p className="login-subtitle">No active invitation session was found.</p>
             </div>
@@ -107,18 +105,16 @@ const Register = () => {
       <div className="login-container">
         <div className="login-card">
           <div className="login-header">
-            <div className="login-logo">
-              <TrendingUp size={32} />
-            </div>
+            <img src="/rectologo.png" alt="Recto MNHS logo" className="login-logo" />
             <h1 className="login-title">Activate Account</h1>
-            <p className="login-subtitle">Establish your secure administrative password</p>
+            <p className="login-subtitle">Choose a password to activate your account</p>
           </div>
 
           <div className="login-body">
             <div className="login-intro">
               <div className="intro-badge">
                 <ShieldCheck size={14} />
-                <span>One-Time Activation</span>
+                <span>One-time setup</span>
               </div>
             </div>
 
@@ -137,7 +133,7 @@ const Register = () => {
 
             <form onSubmit={onSubmit} className="login-form">
               <div className="form-group">
-                <label htmlFor="password">New Password</label>
+                <label htmlFor="password">New password</label>
                 <div className="input-wrapper">
                   <Lock className="input-icon" size={18} />
                   <input
@@ -153,7 +149,7 @@ const Register = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm Password</label>
+                <label htmlFor="confirmPassword">Confirm password</label>
                 <div className="input-wrapper">
                   <Lock className="input-icon" size={18} />
                   <input
@@ -177,17 +173,17 @@ const Register = () => {
                 {isLoading ? (
                   <span className="loading-content">
                     <span className="spinner"></span>
-                    Securing Account...
+                    Saving…
                   </span>
                 ) : (
-                  "Complete Activation"
+                  "Activate account"
                 )}
               </Button>
             </form>
           </div>
 
           <div className="login-footer">
-            <p>© 2026 CanteenX. Security Protocol Active.</p>
+            <p>© 2026 Recto MNHS Canteen. Invitation only.</p>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import '../../css/Header.css';
 import ThemeToggle from '../common/ThemeToggle';
 import UserGuide from '../common/UserGuide';
 
-const Header = ({ title = 'Canteen Financial Management System' }) => {
+const Header = ({ title = 'Canteen ledger' }) => {
   const [showGuide, setShowGuide] = useState(false);
   const now = new Date();
   const dateLabel = now.toLocaleDateString('en-US', {

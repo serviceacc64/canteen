@@ -1,10 +1,10 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
-  Receipt, 
+import {
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  Receipt,
   PieChart,
   Plus,
   Calendar,
@@ -13,7 +13,8 @@ import {
   Eye,
   Trash2,
   Layers,
-  ArrowRight
+  ArrowRight,
+  FileText
 } from "lucide-react";
 import Button from "../components/common/Button";
 import useReports from "../hooks/useReports";
@@ -79,13 +80,13 @@ const DailyReports = () => {
     .sort((a, b) => String(b.date).localeCompare(String(a.date)));
 
   const onDelete = async (id) => {
-    const confirmed = window.confirm("Are you sure you want to delete this operational report? This action is permanent.");
+    const confirmed = window.confirm("Delete this record? This can't be undone.");
     if (!confirmed) return;
 
     try {
       await removeReport(id);
     } catch {
-      window.alert("Operational error. Unable to purge the report record.");
+      window.alert("Couldn't delete the record. Try again.");
     }
   };
 
@@ -94,7 +95,7 @@ const DailyReports = () => {
       <div className="page">
         <div className="loading-state">
           <div className="loading-spinner"></div>
-          <p>Retrieving operational logs...</p>
+          <p>Loading records…</p>
         </div>
       </div>
     );
@@ -105,8 +106,8 @@ const DailyReports = () => {
       <header className="page-header">
         <div className="page-header__left">
           <div className="page-header__main">
-            <h1 className="page-header__title">Audit Journal</h1>
-            <p className="page-header__subtitle">Daily operational logs and fiscal breakdown</p>
+            <h1 className="page-header__title">Daily records</h1>
+            <p className="page-header__subtitle">Every day's sales and costs</p>
           </div>
         </div>
         
@@ -154,7 +155,7 @@ const DailyReports = () => {
 
           <Link to="/entry" className="btn btn-primary">
             <Plus size={16} />
-            <span>New Session</span>
+            <span>New entry</span>
           </Link>
         </div>
       </header>
@@ -165,7 +166,7 @@ const DailyReports = () => {
             <DollarSign size={20} />
           </div>
           <div className="stats-card__content">
-            <span className="stats-card__label">Journal Revenue</span>
+            <span className="stats-card__label">Sales</span>
             <div className="stats-card__value">{formatPeso(stats.totalSales)}</div>
           </div>
         </div>
@@ -175,7 +176,7 @@ const DailyReports = () => {
             <Receipt size={20} />
           </div>
           <div className="stats-card__content">
-            <span className="stats-card__label">Journal Costs</span>
+            <span className="stats-card__label">Expenses</span>
             <div className="stats-card__value">{formatPeso(stats.totalExpenses)}</div>
           </div>
         </div>
@@ -185,7 +186,7 @@ const DailyReports = () => {
             <PieChart size={20} />
           </div>
           <div className="stats-card__content">
-            <span className="stats-card__label">Journal Yield</span>
+            <span className="stats-card__label">Net profit</span>
             <div className="stats-card__value">{formatPeso(stats.netProfit)}</div>
           </div>
         </div>
@@ -195,7 +196,7 @@ const DailyReports = () => {
             <Calendar size={20} />
           </div>
           <div className="stats-card__content">
-            <span className="stats-card__label">Avg Session</span>
+            <span className="stats-card__label">Avg. per day</span>
             <div className="stats-card__value">{formatPeso(stats.netProfit / (filteredReports.length || 1))}</div>
           </div>
         </div>
@@ -206,10 +207,10 @@ const DailyReports = () => {
           <div className="empty-state-card__icon">
             <FileText size={48} />
           </div>
-          <h3>Journal is empty</h3>
-          <p>Initialize your first operational session to begin data aggregation.</p>
+          <h3>No records yet</h3>
+          <p>Start a new entry to log today's sales.</p>
           <Link to="/entry" className="btn btn-primary">
-            Record Entry
+            Record first entry
           </Link>
         </div>
       ) : !filteredReports.length ? (
@@ -218,9 +219,9 @@ const DailyReports = () => {
             <Calendar size={48} />
           </div>
           <h3>No records on this date</h3>
-          <p>No operational logs match your current temporal filter.</p>
+          <p>There are no records for this date.</p>
           <Button variant="secondary" onClick={() => setSelectedDate("")}>
-            Reset Journal View
+            Clear date
           </Button>
         </div>
       ) : viewMode === "individual" ? (
@@ -229,12 +230,12 @@ const DailyReports = () => {
             <table className="audit-table">
               <thead>
                 <tr>
-                  <th>Session Date</th>
-                  <th>Operating Node</th>
-                  <th>Gross Revenue</th>
-                  <th>Operational Costs</th>
-                  <th>Net Performance</th>
-                  <th className="text-right">Audit Actions</th>
+                  <th>Date</th>
+                  <th>Canteen</th>
+                  <th>Sales</th>
+                  <th>Expenses</th>
+                  <th>Net profit</th>
+                  <th className="text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -248,7 +249,7 @@ const DailyReports = () => {
                       <td className="font-bold">{report.date || "-"}</td>
                       <td>
                         <span className="location-badge">
-                          {report.canteenLocation || "Unknown Node"}
+                          {report.canteenLocation || "Unknown"}
                         </span>
                       </td>
                       <td className="text-success">{formatPeso(report?.totals?.totalSales || 0)}</td>
@@ -258,13 +259,13 @@ const DailyReports = () => {
                       <td className="text-primary font-bold">{formatPeso(report?.totals?.netProfit || 0)}</td>
                       <td>
                         <div className="audit-actions">
-                          <Link className="btn-icon" to={`/view/${report.id}`} title="View Details">
+                          <Link className="btn-icon" to={`/view/${report.id}`} title="View">
                             <Eye size={16} />
                           </Link>
                           <button
                             className="btn-icon btn-icon--danger"
                             onClick={() => onDelete(report.id)}
-                            title="Purge Record"
+                            title="Delete"
                           >
                             <Trash2 size={16} />
                           </button>
@@ -308,12 +309,12 @@ const DailyReports = () => {
             <table className="audit-table">
               <thead>
                 <tr>
-                  <th>Temporal Period</th>
-                  <th>Nodes Active</th>
-                  <th>Log Volume</th>
-                  <th>Aggregate Revenue</th>
-                  <th>Aggregate Costs</th>
-                  <th>Net Performance</th>
+                  <th>Date</th>
+                  <th>Canteens</th>
+                  <th>Entries</th>
+                  <th>Sales</th>
+                  <th>Expenses</th>
+                  <th>Net profit</th>
                 </tr>
               </thead>
               <tbody>
@@ -326,10 +327,10 @@ const DailyReports = () => {
                     <tr key={row.date}>
                       <td className="font-bold">{row.date}</td>
                       <td>
-                        <span className="location-badge">{row.locationCount} Node(s)</span>
+                        <span className="location-badge">{row.locationCount} canteen(s)</span>
                       </td>
                       <td>
-                        <span className="badge">{row.reportCount} Logs</span>
+                        <span className="badge">{row.reportCount} entries</span>
                       </td>
                       <td className="text-success">{formatPeso(row.totals.totalSales)}</td>
                       <td className="text-danger">{formatPeso(row.totals.totalExpenses)}</td>

@@ -99,7 +99,7 @@ const Entry = () => {
         setSalaryBreakdownRows(report.salaryBreakdownRows || []);
         setEditMode(true);
       } catch {
-        setEditError("Failed to load report for editing.");
+        setEditError("Couldn't load that record. Try again.");
       } finally {
         setEditLoading(false);
       }
@@ -171,10 +171,10 @@ const Entry = () => {
         updatedAt: new Date().toISOString(),
       });
 
-      setSaveMessage("Statement recorded successfully.");
+      setSaveMessage("Record saved.");
       setTimeout(() => navigate("/daily"), 1500);
     } catch {
-      setSaveError("Transaction processing failed. Please retry.");
+      setSaveError("Couldn't save. Try again.");
     } finally {
       setSaving(false);
     }
@@ -185,7 +185,7 @@ const Entry = () => {
       <div className="page">
         <div className="loading-state">
           <div className="loading-spinner"></div>
-          <p>Syncing report data...</p>
+          <p>Loading record…</p>
         </div>
       </div>
     );
@@ -200,17 +200,17 @@ const Entry = () => {
           </button>
           <div className="page-header__main">
             <h1 className="page-header__title">
-              {editMode ? "Refine Transaction" : "Record New Session"}
+              {editMode ? "Edit record" : "New daily record"}
             </h1>
             <p className="page-header__subtitle">
-              Precision accounting for canteen operations
+              Cash sales, expenses, and payroll
             </p>
           </div>
         </div>
 
         <div className="page-header__actions">
           <Button variant="secondary" onClick={() => navigate("/daily")}>
-            Discard
+            Cancel
           </Button>
           <Button
             variant="primary"
@@ -221,10 +221,10 @@ const Entry = () => {
             <Save size={18} />
             <span>
               {saving
-                ? "Processing..."
+                ? "Saving…"
                 : editMode
-                  ? "Sync Changes"
-                  : "Commit Session"}
+                  ? "Save changes"
+                  : "Save record"}
             </span>
           </Button>
         </div>
@@ -236,11 +236,11 @@ const Entry = () => {
           <section className="form-card metadata-card">
             <div className="form-card__header">
               <Info size={18} />
-              <h3>Session Details</h3>
+              <h3>Record details</h3>
             </div>
             <div className="form-card__body grid-2">
               <div className="form-group">
-                <label>Operational Unit</label>
+                <label>Canteen</label>
                 <select
                   value={canteenLocation}
                   onChange={(e) => setCanteenLocation(e.target.value)}
@@ -253,7 +253,7 @@ const Entry = () => {
                 </select>
               </div>
               <div className="form-group">
-                <label>Statement Date</label>
+                <label>Date</label>
                 <input
                   type="date"
                   value={date}
@@ -268,7 +268,7 @@ const Entry = () => {
           <section className="form-card">
             <div className="form-card__header">
               <CreditCard size={18} />
-              <h3>Cash Revenue Streams</h3>
+              <h3>Cash sales</h3>
             </div>
             <div className="form-card__body">
               <div className="entry-rows">
@@ -286,7 +286,7 @@ const Entry = () => {
                           e.target.value,
                         )
                       }
-                      placeholder="Source description"
+                      placeholder="Item or canteen"
                     />
                     <InputCurrency
                       value={row.amount}
@@ -315,11 +315,11 @@ const Entry = () => {
                 onClick={() => addRow(setCashSalesRows, "New Sale")}
               >
                 <Plus size={16} />
-                <span>Add Revenue Stream</span>
+                <span>Add sale</span>
               </button>
             </div>
             <div className="form-card__footer">
-              <span>Section Total</span>
+              <span>Section total</span>
               <strong>{formatPeso(totals.totalSales)}</strong>
             </div>
           </section>
@@ -328,7 +328,7 @@ const Entry = () => {
           <section className="form-card">
             <div className="form-card__header">
               <ShoppingCart size={18} />
-              <h3>Inventory Procurement</h3>
+              <h3>Store purchases</h3>
             </div>
             <div className="form-card__body">
               <div className="entry-rows">
@@ -402,11 +402,11 @@ const Entry = () => {
                 onClick={() => addRow(setStorePurchaseRows, "New Purchase")}
               >
                 <Plus size={16} />
-                <span>Add General Purchase</span>
+                <span>Add purchase</span>
               </button>
             </div>
             <div className="form-card__footer">
-              <span>Procurement Total</span>
+              <span>Purchase total</span>
               <strong>{formatPeso(totals.totalCashPurchases)}</strong>
             </div>
           </section>
@@ -415,7 +415,7 @@ const Entry = () => {
           <section className="form-card">
             <div className="form-card__header">
               <Activity size={18} />
-              <h3>Operational Overhead</h3>
+              <h3>Operating expenses</h3>
             </div>
             <div className="form-card__body">
               <div className="entry-rows">
@@ -463,11 +463,11 @@ const Entry = () => {
                 onClick={() => addRow(setOperatingExpensesRows, "New Expense")}
               >
                 <Plus size={16} />
-                <span>Add Expense Item</span>
+                <span>Add expense</span>
               </button>
             </div>
             <div className="form-card__footer">
-              <span>Overhead Total</span>
+              <span>Overhead total</span>
               <strong>{formatPeso(totals.totalOperatingExpenses)}</strong>
             </div>
           </section>
@@ -479,7 +479,7 @@ const Entry = () => {
           <section className="form-card">
             <div className="form-card__header">
               <Users size={18} />
-              <h3>Workforce Payroll</h3>
+              <h3>Staff payroll</h3>
             </div>
             <div className="form-card__body">
               <div className="entry-rows">
@@ -589,14 +589,14 @@ const Entry = () => {
           <section className="form-card">
             <div className="form-card__header">
               <MessageSquare size={18} />
-              <h3>Audit Remarks</h3>
+              <h3>Remarks</h3>
             </div>
             <div className="form-card__body">
               <textarea
                 className="form-textarea"
                 value={remarks}
                 onChange={(e) => setRemarks(e.target.value)}
-                placeholder="Internal notes regarding this session..."
+                placeholder="Notes about this record…"
               />
             </div>
           </section>
@@ -608,7 +608,7 @@ const Entry = () => {
         <div className="summary-card-bottom__header">
           <div className="summary-card-bottom__title-group">
             <Activity size={20} />
-            <h3>Live Performance Audit</h3>
+            <h3>Running total</h3>
             <div className="live-tag">
               <span className="dot"></span>
               LIVE
@@ -618,19 +618,19 @@ const Entry = () => {
         <div className="summary-card-bottom__body">
           <div className="summary-grid">
             <div className="summary-stat">
-              <span className="summary-stat__label">Total Revenue</span>
+              <span className="summary-stat__label">Sales</span>
               <span className="summary-stat__value text-success">
                 {formatPeso(totals.totalSales)}
               </span>
             </div>
             <div className="summary-stat">
-              <span className="summary-stat__label">Operational Costs</span>
+              <span className="summary-stat__label">Expenses</span>
               <span className="summary-stat__value text-danger">
                 {formatPeso(totals.totalExpenses)}
               </span>
             </div>
             <div className="summary-stat summary-stat--highlight">
-              <span className="summary-stat__label">Projected Net Performance</span>
+              <span className="summary-stat__label">Net profit</span>
               <span className="summary-stat__value">
                 {formatPeso(totals.netProfit)}
               </span>
@@ -644,7 +644,7 @@ const Entry = () => {
               className="btn-commit-full"
             >
               <Save size={18} />
-              <span>{saving ? "Processing..." : "Commit Transaction"}</span>
+              <span>{saving ? "Saving…" : "Save record"}</span>
             </Button>
           </div>
         </div>

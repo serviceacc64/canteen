@@ -86,7 +86,59 @@ export const getReports = async () => {
     .order('created_at', { ascending: false });
 
   if (error) throw error;
-  return (data ?? []).map(fromDbReport);
+
+  const reports = (data ?? []).map(fromDbReport);
+  if (!reports.length) return reports;
+
+  const ids = reports.map((report) => report.id);
+
+  const fetchRows = (tableName) =>
+    supabase
+      .from(tableName)
+      .select('*')
+      .in('report_id', ids)
+      .order('sort_order', { ascending: true });
+
+  const [
+    { data: cashSales, error: cashSalesError },
+    { data: storePurchases, error: storePurchasesError },
+    { data: storeConsignment, error: storeConsignmentError },
+    { data: operatingExpenses, error: operatingExpensesError },
+    { data: salaryBreakdown, error: salaryBreakdownError },
+  ] = await Promise.all([
+    fetchRows(TABLE_CASH_SALES),
+    fetchRows(TABLE_STORE_PURCHASES),
+    fetchRows(TABLE_STORE_CONSIGNMENT),
+    fetchRows(TABLE_OPERATING_EXPENSES),
+    fetchRows(TABLE_SALARY_BREAKDOWN),
+  ]);
+
+  if (cashSalesError) throw cashSalesError;
+  if (storePurchasesError) throw storePurchasesError;
+  if (storeConsignmentError) throw storeConsignmentError;
+  if (operatingExpensesError) throw operatingExpensesError;
+  if (salaryBreakdownError) throw salaryBreakdownError;
+
+  const groupByReportId = (rows) =>
+    (rows ?? []).reduce((acc, row) => {
+      (acc[row.report_id] ??= []).push(row);
+      return acc;
+    }, {});
+
+  const cashSalesByReport = groupByReportId(cashSales);
+  const storePurchasesByReport = groupByReportId(storePurchases);
+  const storeConsignmentByReport = groupByReportId(storeConsignment);
+  const operatingExpensesByReport = groupByReportId(operatingExpenses);
+  const salaryBreakdownByReport = groupByReportId(salaryBreakdown);
+
+  return reports.map((report) => ({
+    ...report,
+    cashSalesRows: mapRowsFromDb(cashSalesByReport[report.id]),
+    storePurchaseRows: mapRowsFromDb(storePurchasesByReport[report.id]),
+    storeConsignmentRows: mapRowsFromDb(storeConsignmentByReport[report.id]),
+    operatingExpensesRows: mapRowsFromDb(operatingExpensesByReport[report.id]),
+    salaryBreakdownRows: mapRowsFromDb(salaryBreakdownByReport[report.id], 'helper_name'),
+  }));
 };
 
 export const getReportById = async (id) => {

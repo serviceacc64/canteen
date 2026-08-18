@@ -1,32 +1,30 @@
 .monthly-reports {
   display: flex;
   flex-direction: column;
+  gap: 28px;
 }
 
 .monthly-reports__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-  gap: 24px;
+  gap: 20px;
 }
 
 .monthly-card {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
   padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
   box-shadow: var(--shadow-sm);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
+  transition: all 0.2s ease;
 }
 
 .monthly-card:hover {
-  transform: translateY(-4px);
   box-shadow: var(--shadow-md);
-  border-color: var(--primary);
+  border-color: var(--line-strong);
 }
 
 .monthly-card__header {
@@ -38,46 +36,48 @@
 .monthly-card__title {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
 }
 
 .monthly-card__icon {
-  width: 48px;
-  height: 48px;
-  background: var(--canteen-surface);
-  color: var(--primary);
-  border-radius: 14px;
+  width: 44px;
+  height: 44px;
+  background: var(--citrus-soft);
+  color: var(--citrus-strong);
+  border-radius: 12px;
   display: grid;
   place-items: center;
 }
 
 .monthly-card__title h2 {
   margin: 0;
+  font-family: var(--font-display);
   font-size: 18px;
-  font-weight: 800;
-  color: var(--text);
-  letter-spacing: -0.3px;
+  font-weight: 600;
+  color: var(--ink);
 }
 
 .monthly-card__badge {
+  font-family: var(--font-mono);
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--muted);
-  background: var(--bg);
+  background: var(--faint);
   padding: 4px 10px;
   border-radius: 6px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--line);
 }
 
 .monthly-card__stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  background: var(--bg);
+  gap: 20px;
+  background: var(--faint);
   padding: 16px;
   border-radius: var(--radius-md);
+  border: 1px solid var(--line);
 }
 
 .monthly-stat {
@@ -87,23 +87,26 @@
 }
 
 .monthly-stat__label {
-  font-size: 11px;
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
   color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
 }
 
 .monthly-stat__value {
+  font-family: var(--font-mono);
   font-size: 15px;
-  font-weight: 800;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .monthly-card__footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 8px;
+  padding-top: 4px;
 }
 
 .monthly-card__profit {
@@ -119,10 +122,12 @@
 }
 
 .monthly-card__total-value {
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--primary);
-  letter-spacing: -0.5px;
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--leaf-strong);
+  letter-spacing: -0.3px;
+  font-variant-numeric: tabular-nums;
 }
 
 .monthly-card__actions {
@@ -131,62 +136,64 @@
 }
 
 .btn-icon {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 10px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--line);
   background: var(--surface);
   color: var(--muted);
   display: grid;
   place-items: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   text-decoration: none;
 }
 
 .btn-icon:hover {
-  background: var(--bg);
-  color: var(--primary);
-  border-color: var(--primary);
+  background: var(--faint);
+  color: var(--citrus-strong);
+  border-color: var(--citrus);
 }
 
 .btn-icon--danger:hover {
-  background: #fff1f2;
-  color: #f43f5e;
-  border-color: #fecaca;
+  background: var(--tomato-soft);
+  color: var(--tomato-strong);
+  border-color: var(--tomato);
 }
 
 .stats-badge {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
+  padding: 8px 14px;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--line);
   border-radius: 100px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--leaf-strong);
+  box-shadow: var(--shadow-xs);
 }
 
 .empty-state-card {
   background: var(--surface);
-  border: 2px dashed var(--border);
-  border-radius: var(--radius-lg);
-  padding: 64px;
+  border: 2px dashed var(--line);
+  border-radius: var(--radius-xl);
+  padding: 64px 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 20px;
+  gap: 16px;
 }
 
 .empty-state-card__icon {
-  width: 80px;
-  height: 80px;
-  background: var(--bg);
+  width: 72px;
+  height: 72px;
+  background: var(--faint);
   color: var(--muted);
-  border-radius: 24px;
+  border-radius: 20px;
   display: grid;
   place-items: center;
   margin-bottom: 8px;
@@ -194,8 +201,10 @@
 
 .empty-state-card h3 {
   margin: 0;
+  font-family: var(--font-display);
   font-size: 20px;
-  font-weight: 800;
+  font-weight: 600;
+  color: var(--ink);
 }
 
 .empty-state-card p {
